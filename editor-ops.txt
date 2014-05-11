@@ -1,0 +1,37 @@
+summary of relational operators
+from /a relational program for a syntax directed editor/
+----------------------------------------------------------------
+x | y        union
+x & y        intersection
+x - y        difference
+x : y        ordered pair
+x = y        equality
+x := y       assignment to variable
+x / y        extension, = x | ( non. dom x -> y )
+(py)         bind right argument of p to y
+(xp)         bind left argument of p to x
+(p)          operator used as operand
+f^_1         inverse/converse
+non x        complement of set or function
+f . g        composition of f and g
+f ; g        relative product (reverse composition)
+f x          functional application
+x , y        sequence construction
+f $ r        isomorphic image of a relation ((f inv) R f)
+while(x,y)   iterative application
+x X y        cartesian product
+x -> f       restrict domain
+f <- x       restrict codomain
+f <> x       restrict both domains
+img f        image function
+f*           reflexive transitive closure
+f+           transitive closure
+un           unit-set constructor
+f||g         parallel application
+f#g          construction
+Id           identity function (equivalent to =)
+f@x          f reduction with initial value x
+first        first member of a relation (also second, etc.)
+dom f        domain of function or relation
+x≍y          define x to be y
+x∈y          set memembership
