@@ -1,0 +1,2551 @@
+#+title: PROGRAMMING WITH A RELATIONAL CALCULUS 
+#+author: B. J. MacLennan
+#+date: 1980/10/21
+
+* PROGRAMMING WITH A RELATIONAL CALCULUS 
+
+B. J. MacLennan. 30/10/21. 
+
+Naval Postgraduate School 
+
+Monterey, CA 93940 
+
+publication number: NPS52-81-013 
+
+*keywords*: Relational Programming, Functional Programming, Relational Algebra, Relational Calculus, Relations, Applicative Languages, Combinators, Very-High-Level Languages, Logic Programming. 
+
+* Abstract
+
+This report describes the concept of programming in a relational calculus. This is a style of programming in which entire relations are manipulated rather than individual data, and in which the program itself is represented as a relation. Thus relational programming is more general than functional programming in three respects. First, it is more general because relations subsume functions. Second, it is more general because the same objects, viz. relations, are used to represent both the program and the data. Finally, since complex data structures are easily represented as relations, relational programming can manipulate with facility a much wider class of structures than other very-high-level languages. 
+
+* 1. Introduction
+
+In this report[fn:report] we discuss /relational programming/, i.e. a style of programming in which entire relations are manipulated rather than individual data. This is analogous to functional programming [1], wherein entire functions are the values manipulated by the operators. We will see that relational programming subsumes functional programming because every function is also a relation. It is appropriate at this point to discuss why we have chosen to investigate relational programming. The reader can find a shorter introduction to relational programming in [12]. 
+
+As we have noted, relational programming subsumes functional programming; hence, anything that can be done with functional programming can be done with relational programming, Furthermore, relational programming has many of the advantages of functional programming: for instance, the ability to derive and manipulate programs by algebraic manipulation. A well developed algebra of relations dates back to Boole's original work and has been extensively studied since then. Although relations are more general than functions, their laws are often simpler.
+
+For instance, =(fg)⁻¹ = g⁻¹ f⁻¹= is true for all relations, but only for functions that are one-to-one. Also, relational programming more directly supports non-linear data structures, such as trees and graphs, than does functional programming.
+
+In relational programming the basic data values are themselves relations, whereas in functional programming there is a separate class of objects (lists) used for data structures.
+
+One final reason for investigating relational programming is that provides a possible paradigm for utilizing associative and active memories.
+
+As a teaser for what is to come, we present the following example of a relational program. We will take a text, =T=, represented by an array of words (i.e., =T:i= is the =i=-th word), and generate a frequency table =F= so that =F:w= is the number of occurences of word =w= in =T=. Now we will see ([[id:s5kcfdd1fig0][section 4]]) that =T:w= is the set of all indices of the word =w=. If we let =#:C= be the cardinality of a class, then the number of indices (occurences) of =w= is just =#:(T:w)=. Therefore we can write =F = #T= ([[id:srfahcd1fig0][section 7]]).
+
+* 2. Classes and Relations 
+** 2.1 basic concepts 
+
+Our relational calculus will deal with three sorts of things: individuals, classes and relations. These can best be illustrated by example. If =x= is the name of an individual and =C= is the name of a class, then =x ∈ C= means that the individual denoted by =x= is a member of the class denoted by =C= (i.e., that =x= has property =C=). Thus =Aristotle ∈ man= would indicate that Aristotle is a man, and =2 ∈ even= would mean that 2 is an even number. (The symbol =∈= is an abbreviation for /εστι/, which is the Greek word for 'is'.) 
+
+If =x= and =y= are names of individuals and =R= is the name of a relation, then =x R y= means that =x= bears the relation =R= to =y=. For example, 
+
+: Aristotle student Plato 
+
+means that Aristotle is a student of Plato. Also, =2 < 3= means that =2= bears the less-than relation to =3=, i.e., that =2<3=. Where there is little chance of confusion, =x R y= will be written =xRy= and =x∈P=' will be written =xP=. The notation that we have introduced above will be extended to classes of classes, classes of relations, relations among classes, relations among relations. 
+
+** 2.2 relational descriptions 
+:PROPERTIES:
+:ID: 4vb4xp40hig0
+:END:
+
+If =S(x)= is a sentence involving =x=, then a /class description/ is an expression of the form =x̂(S(x))=. This denotes the class of all individuals, a, for which S(a) is true, i.e., 
+
+: a ∈ x̂(S(x)) ⇔ S(a) 
+
+Similarly, if =S(x,y)= is a sentence involving =x= and =y=, then =x̂ŷ(S(x,y))= is a /relation description/ which holds between =a= and =b= whenever =S(a,b)= is true, i.e., 
+
+: a [ x̂ŷ(S(x,y)) ] b ⇔ S(a,b) 
+
+To illustrate this notation we will define the converse of a relation. 
+
+** 2.3 converse 
+
+The relation =R⁻¹= is called the /converse/ of =R=, i.e. 
+
+: xR⁻¹y ⇔ yRx. 
+
+Using our notation for descriptions we can define,
+
+: R⁻¹ = x̂ŷ(yRx) 
+
+As an example of a relation among relations, we define =′= as the relation that holds between converses: 
+
+: r′s ⇔ r=s⁻¹
+
+Hence, 
+
+: ′ = r̂ŝ(r=s⁻¹) 
+
+Some examples of converses are: 
+
+: parent⁻¹ = child 
+:      ≤⁻¹ = ≥
+
+The following are easily proved properties of the converse: 
+
+: (r⁻¹)⁻¹ = r 
+: r's ⇔ s'r 
+: ′⁻¹ = ′  
+
+** TODO 2.4 arrow diagrams 
+
+Relations can be portrayed by "arrow diagrams" (Haase diagrams). In such a diagram there is a node for each individual related by the relation and an arrow from =x= to =y= whenever =xRy=. 
+
+For instance, 
+
+#+begin_src dot
+  graph {
+    b -> a
+    b -> e
+    c -> b
+    d -> b
+    e -> d
+    e -> e
+  }
+#+end_src
+
+represents the relation =R= such that 
+
+: bRa, cRb, dRb, eRd, eRe, bRe 
+
+and =¬xRy= for all other cases. The effect of the converse operator is to reverse all of the arrows. Hence, =R⁻¹= is diagrammed: 
+
+#+begin_src dot
+  graph {
+    b <- a
+    b <- e
+    c <- b
+    d <- b
+    e <- d
+    e <- e
+  }
+#+end_src
+
+** 2.5 tables 
+
+Relations can often be viewed as tables. For instance, relation R of the previous section can be shown as a table: 
+
+| b | a |
+| c | b |
+| d | b |
+| e | d |
+| e | e |
+| b | e |
+
+Of course, it makes no difference in what order we write the rows of the table. 
+
+The converse of a relation is obtained by simply exchanging the columns of the table: 
+
+| a | b |
+| b | c |
+| b | d |
+| d | i |
+| e | e |
+| e | b |
+
+Of course, classes are represented by one column tables, instance the class C of primes less than ten is: 
+
+| 2 |
+| 3 |
+| 5 |
+| 7 |
+
+* 3. Domains 
+:PROPERTIES:
+:ID: wiq4nm30gig0
+:END:
+
+We often need to talk of the individuals that can occur on the right or left of a relation. We say that =x= is a /left-member/ of =R= whenever there is a =y= such that =xRy=.
+
+: x Lm R ⇔ ∃y(xRy)
+
+For instance, if =x parent y= means that =x= is a parent of =y=, then =Socrates Lm parent= means that Socrates is a parent. /Right-member/ and /member/ are defined analogously: 
+
+: y Rm R ⇔ ∃x(xRy) 
+: z Mm R ⇔ z Lm R ∨ z Rm R 
+
+These satisfy the identities: 
+
+: x Lm R ⇔ x Rm R⁻¹
+: y Rm R ⇔ y Lm R⁻¹
+
+* 4. Functions 
+:PROPERTIES:
+:ID: s5kcfdd1fig0
+:END:
+** TODO 4.1 basic concepts 
+
+Functions and relations are closely related. Consider the predecessor relation, =pred=: 
+
+: x pred y ⇔ x = y-1 
+
+Thus, x pred y says that x is the predecessor of y corresponding arrow diagram is: 
+
+#+begin_src dot
+graph { 
+1 -> 2
+2 -> 3
+3 -> 4
+4 -> 5 
+5 -> ...
+}
+#+end_src
+
+and the corresponding table is: 
+
+|   1 |   2 |
+|   2 |   3 |
+|   3 |   4 |
+|   4 |   5 |
+| ... | ... |
+
+since =1 pred 2=, =2 pred 3=, etc. Notice that, in this case, for each right member =x= there is a unique left member =y= such that =y pred x=. This =y= can be written using Whitehead and Russell's [16] /definite description/: 
+
+: Ɂy (y pred x) 
+
+This can be read: /the/ =y= such that =y= is a predecessor of =x=. A more convenient way to write this is: 
+
+: pred:x 
+
+In general, =R:x= means "the unique =y= such that =y R x=", i.e. 
+
+: R:x = Ɂy(yRx) 
+
+This notation is meaningful only if there is a unique =y= such that =yRx= , i.e. 
+
+: yRx ∧ zRx ⇒ y=z
+
+That is, there is only one arrow leading to =x=. When this condition is satisfied for all =x= we call =R= /left univalent/ , symbolized by =lun=: 
+
+: R∈lun ⇔ ∀xyz[ yRx ∧ zRx ⇒ y=z ]
+
+The left univalent relations are more commonly called /functions/. In a left univalent relation there is exactly one arrow leading to each node. Consider the "absolute reciprocal" relation: 
+
+: xRy ⇔ x = |l/y|
+
+This is diagrammed: 
+
+| 1   |   1 |
+| 1   |  -1 |
+| ½   |   2 |
+| ½   |  -2 |
+| ⅓   |   3 |
+| ⅓   |  -3 |
+| ... | ... |
+
+Since =R∈lun= it is meaningful to write =R:x=, so we observe =R:(-3) = ⅓=. We can find =R:x= by following back the arrow pointing to =x= or by looking down the right column for =x= and taking the corresponding element from the left column. 
+
+The concepts of right univalence and bi-univalence are defined analogously: 
+
+: R∈run ⇔ ∀xyz[ xRy ∧ xRz ⇒ y=z ]
+: R∈bun ⇔ R∈lun ∧ R∈run 
+
+Bi-univalent relations are also called bijections and one-one mappings. 
+
+** 4.2 higher level functions 
+
+Of course, the converse of a function is not necessarily a function. The =sin= relation, defined so that =y sin x= means that =y= is the sine of =x=, is left univalent but not right univalent. Hence, we can write either =y=sin:x= or =y sin x=, but can express the arcsine only by: 
+
+: x sin⁻¹ y 
+
+The notation =sin⁻¹:y= is meaningless. Since =f:x= is meaningful only when =f∈lun= we will be careful to write =f:x= only when we have previously shown (or it is obvious) that =f∈lun= and =x Rm f=. 
+
+The fact that =f:x= may be meaningless makes it convenient to use several other relations derived from =f=. One of these is the =plural description=. If =F= is any relation and =C= is a class then =F!:C= is the set of all =y= such that =yFx= for some =x= in =C=, i.e., 
+
+: F! = ẑĈ{z = ŷ[ ∃x(yFx ∧ x∈C )]} 
+
+The tabular interpretation of =F!:C= is simple: 
+
+*F*
+| y1  | x1  |
+| y2  | x2  |
+| ... | ... |
+| yᵢ  | xᵢ  |
+
+*C*
+| x₁  |
+| x₂  |
+| ... |
+| xᵢ  |
+
+*F!:C*
+| y₁  |
+| y₂  |
+| ... |
+| yᵢ  |
+
+
+We see that, if =F= is any function, then =F!:S= is the image of the class =S= under that function. Notice that the operation =F!:S= is defined for all relations =F= and classes =S=, regardless of whether =F∈lun= or the members of =S= are right members of =F=. For these reasons, it is generally safer to write =F!:C= than =F:x=.
+
+Related ideas are the image and converse image of an individual. If =R= is a relation, then =c R x= means that =c= is the class of individuals related to =x=. This class is called the /referents/ of =x=, and is defined: 
+
+: R⃗:x = ŷ(yRx) 
+
+The converse idea is that of the /relata/ of y: 
+
+: R⃖:y = x̂(yRx) 
+
+Like the plural description, =R⃖= and =R⃗= are defined for all =R= and all arguments. 
+
+Consider now the function ~=⃗~: 
+
+: =⃗:x = ŷ(y=x) 
+
+Hence, ~=⃗:y~ is just the /unit class/ containing =y=. Russell and Whitehead [16] write this =i:y=. Conversely, if =C= is a single element class, then ~(=⃗⁻¹):C~ selects the unique member of that class: 
+
+: (=⃗⁻¹):C = Ɂx(x∈C) 
+
+It is thus a uniqueness filter. We will write this as =Θ:C=:
+
+: Θ = =⃗⁻¹
+
+The expression =Θ:C= can be read "the C".
+
+We will occasionally need to refer to the relations that hold between =R= and =R⃗= or =R= and =R⃖=, which we write =-⃗= and =-⃖=, respectively: 
+
+: R -⃗ S ⇔ R = S⃗
+: R -⃖ S ⇔ R = S⃖
+
+The following are some properties of these operations: 
+
+: →(R⁻¹) = R⃖
+: ←(R⁻¹) = R⃗
+: R⃗:y   = R!:(=⃗:y)
+: R⃗  = -⃗:R
+: R⃖  = -⃖:R
+
+It is often convenient to have names for domain extracting functions, e.g., =lem:R= is the class of left members of =R=. These are simply defined using images:
+
+: lem = →(Lm)
+: rim = →(Rm)
+: mem = →(Mm)
+
+Of course the right and left members of a relation can be obtained by taking its right and left columns, respectively, and deleting duplicates. 
+
+** TODO diagram to illustrate lem and rim 
+
+
+* 5. Boolean Operations 
+** 5.1 logical connectives 
+
+We will next investigate ways of /combining/ relations and classes. The simplest methods are just abstractions of the logical connectives used between propositions: Therefore, we define the intersection, union, negation and difference of classes and relations : 
+
+: x(S ∧ T) ⇔ xS ∧ xT 
+: x(R ∧ S)y ⇔ xRy ∧ xSy 
+
+: x (S ∨ T) ⇔ xS ∨ xT 
+: x (R ∨ S)y ⇔ xRy ∨ xSy 
+
+: x(¬S) ⇔ ¬(xS) 
+: x(¬R)y ⇔ ¬(xRy) 
+
+: x (S-T) ⇔ xS  ∧ ¬(xT) 
+: x(R-S)y ⇔ xRy ∧ ¬(xSy) 
+
+: x(S→T) ⇔ xS → xT 
+: x(R→S)y ⇔ xRy → xSy 
+
+As an example of the use of these operations, consider our [[id:wiq4nm30gig0][previous definition]] of =Mm=: 
+
+: z Mm R ⇔ z Lm R ∨ z Rm R 
+
+Using the union operation this can be written: 
+
+: Mm = Lm ∨ Rm 
+
+Similarly, 
+
+: bun = lun ∧ run 
+
+The logical connectives satisfy the usual properties of a Boolean algebra (e.g., DeMorgan's theorem). 
+
+As an example of the use of these operations, we will define the /closed interval/ function, =m..n=, which is the set of integers =m, m+1, ..., n=. It is just: 
+
+: m .. n = ≥⃗:m ∧ ≤⃗:m
+
+where ≥ and ≤ are the relations on integers. 
+
+** 5.2 empty classes and relations 
+
+It is useful to have names for the empty class and relation: 
+
+: Φ = x̂(x≠x)
+: ⊜ = x̂ŷ(x≠x)
+
+Hence, =xΦ= is always false, as is =x⊜y=. These are most often used for stating properties of relations and classes. For instance, 
+
+: S∧T = Φ
+
+means that classes =S= and =T= have no members in common. 
+
+The universal classes and relations are also useful: 
+
+: Φ̅̅ = ¬Φ
+: ⊜̅ = ¬⊜
+
+For instance, 
+
+: S ∨ T = ⊜̅
+
+means that every individual is either a member of S or of T.
+
+Notice that the class of the right members of a relation is just the image of the universe under that relation, i.e., 
+
+: rim:R = R!:Φ̅̅
+: lem:R = (R⁻¹) !: I 
+: mem:R = (R ∨ R⁻¹) !: Φ̅̅
+
+** 5.3 Cartesian product 
+
+It is often useful to have the maximum relation that can hold between two classes, i.e., the /Cartesian product/ of those classes. This is defined: 
+
+: S$T = x̂ŷ(xS A yT) 
+
+The Cartesian product satisfies the following properties: 
+
+: (s$t)⁻¹ = t$s 
+: lem:(s$t) = s 
+: rim:(s$t) = t 
+: mem:(s$t) = s ∨ t 
+: 
+: s$(t ∧ u) = (s$t) ∧ (s$u) 
+: s$(t ∨ u) = (s$t) ∨ (s$u) 
+: s$(t - u) = (s$t) ∧ (s$¬u) 
+: s$(t → u) = (s$¬t) ∨ (s$u) 
+: 
+: θ̅ = Φ̅$Φ̅̅ 
+: 
+: s$Φ̅̅ = Φ$s = Φ$Φ = θ̅
+: s$t = (s$Φ̅) ∧ (Φ̅ $ t) 
+
+** 5.4 subset relation 
+
+Finally, we define the subclass and subrelation operations: 
+
+: S⊂T ⇔ ∀x(xS → xT) 
+: R⊂S ⇔ ∀xy(xRy → xSy) 
+
+The following are true: 
+
+: s⊆t ⇒ (s$u)⊆(t$u) 
+: s⊆t ⇒ (r$s)⊆(r$t) 
+: s⊆t ∧ u⊆v ⇒ (s$u)⊆(t$v) 
+: r∈Rel ⇒ r⊆θ 
+: r∈Rel ⇒ θ⊆r 
+: s∈Cls ⇒ s⊆Φ
+: s∈Cls ⇒ Φ⊆s 
+
+where =Cls= is the class of all classes and =Rel= is the class of all relations (we are ignoring typing here). These can be defined: 
+
+: Rel = ⊆⃗:θ̅ = ⊆⃖:θ
+: Cls = ⊆⃗:Φ̅ = ⊆⃖:Φ
+
+* 6. Limiting and Restriction 
+
+It is often useful to limit the left or right domain of a relation. Consider the relation =x sin⁻¹ y=, which means that =x= is an arcsine of =y=. We cannot write =x = sin⁻¹:y= because =sin⁻¹= is not left univalent (i.e. it is not a function). If we restrict =y=, the argument of =sin=, to the range -π/4 to π/4, then there is a unique =x= such that =x sin⁻¹ y=. Let =S= be the class of reals in the range —π/4 to π/4: 
+
+: xS ⇔ (-π/4<x) A (x<π/4) 
+
+then we will write 
+
+: sin}S 
+
+for the sine function with its arguments restricted to S. This function is bi-univalent, so it is invertible. If we call the inverse of this restricted sine =Arcsin=: 
+
+: Arcsin = (sin}S)⁻¹
+
+then it is perfectly meaningful to write =Arcsin:x= (if =x Lm sin=). 
+
+The right-restriction operation is defined: 
+
+: x (R}S)y ⇔ xRy ∧ yS 
+
+The left-restriction is defined analogously: 
+
+: x (S{R)y ⇔ xS ∧ xRy 
+
+These notations can be combined to restrict both domains: 
+
+: x (S{R}T) y ⇔ xS ∧ xRy ∧ yT 
+
+The combination =s{R}s= is so common that a special notation is provided for it: 
+
+: R|s = (s{R}s)
+
+For instance, =<|P=, where =xP ⇔ x>0=, is the less-than relation restricted to positive numbers. 
+
+The restriction operations are easily defined in terms of intersection and Cartesian product: 
+
+: s{r}t = r ∧ (s$t) 
+: r|s = r ∧ (s$s) 
+: s{r = r ∧ (s$Φ̅) 
+: r}s = r ∧ (Φ̅$s) 
+
+Other properties satisfied by these operations are 
+
+: s$t = s{⊜̅}t 
+: lem:(s{r) = s ∧ lem:r 
+: rim:(r}s) = s ∧ rim:r 
+: lem:(r}s) = r!:s 
+: rim:(s{r) = r⁻¹!:s 
+
+: (s{r)⁻¹   = (r⁻¹)}s 
+: (s{r}t)⁻¹ = t{(r⁻¹)}s 
+: (r|s)⁻¹   =(r⁻¹)|s 
+
+: (r}s)⃗ = r⃗}s
+: (s{r)⃖ = s{r⃖
+
+: r}s ∧ r}t = r}(s ∧ t) 
+: r}s ∨ r}t = r}(s ∨ t) 
+: (r$Φ̅̅)}s = r$s 
+
+* 7. Relative Product 
+:PROPERTIES:
+:ID: srfahcd1fig0
+:END:
+
+# maclennan used '|' here, but since the relative product symbol is usually omitted, i'm going to use '&' for it, freeing '|' for s{R}s
+
+If =xRy= is the relation "x is a son of y" and =xSy= is the relation "x is a brother of y" , then the /relative product/, =R&S=, is the relation "x is a son of a brother of y." More formally, 
+
+: R&S = x̂ẑ{ ∃y(xRy ∧ ySz) } 
+
+Where there is little chance of confusion, we will write =RS= for =R&S=. If =f= and =g= are functions it is easy to see that =f&g= is the composition of these functions: 
+
+: x =  fg:z 
+: ⇔ x fg z 
+: ⇔ ∃y(x f y ∧ y g z) 
+: ⇔ ∃y(x=f:y ∧ y=g:z) 
+: ⇔ x = f:(g:z) 
+
+Hence, =fg:x = f:(g:x)=. 
+
+It is convenient to have a notation for relative products of a relation with itself. For instance, the "grandparent" relation can be written =parent|parent=, which we abbreviate =parent²=. In general,
+
+: R⁰ = |(mem:R)
+: R¹ = R
+: Rⁿ⁺¹ = (Rⁿ)R = R(Rⁿ)
+: R⁻ⁿ = (Rⁿ)⁻¹
+
+Some obvious properties of the relative product are 
+
+: (rs)t = r(st)
+: r(s∨t) = rs ∨ rt
+: (r∨s)t = rt ∨ st
+: r(s∧t) ⊆ rs ∧ rt 
+: (r∧s)t ⊆ rt ∧ st 
+: ∃(rs) ⇔ ∃(rim:r ∧ lem:s) 
+
+: (r⁻¹)⁻¹ = r
+: (rs)⁻¹ = (s⁻¹)(r⁻¹)
+: rⁿrⁱ  = rⁿ⁺ⁱ (n,i>0) 
+: (rⁿ)ⁱ = rⁿⁱ n(n,i>0, or r∈bun) 
+: rⁿrⁱ ⊆ rⁿ⁺ⁱ (r∈bun)
+: rr⁻¹ = r⁻¹r = r⁰(r∈bun)
+
+: lem:rs ⊆ lem:r
+: rim:rs ⊆ rim:s
+: Lm = Rm′
+: Rm = Lm′
+: rθ = θr = θ
+: rI = Ir = r  where I = x̂ŷ(x=y)
+
+* 8. Structures 
+
+We have previously seen the use of arrow diagrams to present a relation. For instance, 
+
+#+begin_src dot
+  graph {
+    a -> g
+    g -> h
+    g -> f
+    b -> f
+    f -> f
+    f -> i
+    e -> i
+    d -> e
+    d -> d
+    c -> e
+  }
+#+end_src
+
+presents the relation R: 
+
+| a | g |
+| b | f |
+| c | e |
+| d | d |
+| d | e |
+| e | i |
+| f | f |
+| f | i |
+| g | f |
+| g | h |
+
+** 8.1 initial and terminal members 
+
+Now, notice that the left and right members of R are: 
+
+: lem:R = {a,b, c, d, e, f, g} 
+: rim:R = {g, f, e, d, i, h} 
+
+We define the /initial/ members of =R= to be those members which are not pointed at by an arrow. Therefore, the initial members of =R= are the left members that are not right members. 
+
+: init:R = →(Lm-Rm):R = {a, b, c} 
+
+The terminal members of a relation are defined analogously: 
+
+: term:R = →(Rm-Lm):R = {h, i} 
+
+When a relation is used to represent a data structure, the above functions become important. 
+
+For instance, a sequence is represented by a relation with the structure: 
+
+: S = a₁ → a₂ → a₃ → ... → aᵢ₋₁ → aᵢ 
+
+In this case =init:S= is the unit class containing the head (first element) of the relation (i.e., =a₁=) and =term:S= is the unit class 
+containing the last element of the sequence (i.e., =aᵢ=). Similarly, =S⊁(¬init:S)= is the sequence with its first element deleted : 
+
+:          a₂ → a₃ → ... → aᵢ₋₁ → aᵢ
+
+Hence, the following common sequence manipulation functions can be defined (represented by lower and upper case alphas and omegas) : 
+
+: α:S = ⊜ init: S        "first" 
+: ω:S = ⊜ term: S        "last" 
+: Ω:S = S}(¬init:S)      "final" 
+: Α:S = (¬term:S){S      "initial" 
+
+The following properties of these relations are easy to show: 
+
+: α = ω′
+: ω = α′
+: Α′ = ′Ω
+: Ω′ = ′Α
+
+More operations on sequences are discussed in the next section. 
+
+As another example of the use of =init= and =term=, consider this relation representing a tree: 
+
+#+begin_src dot
+  T = graph {
+    a -> b
+    a -> c
+    b -> d
+    b -> e
+    b -> f
+    e -> h
+    e -> i
+    c -> j
+    c -> k
+  }
+#+end_src 
+
+Then, =⊜ init: T= is 'a', the root of the tree, and =term:T= is ={d, i, f, j, k }=, the leaves of the tree.
+
+The result is analogous for forests. Given 
+
+#+begin_src dot
+  F = graph {
+    a -> b
+    b -> c
+    b -> d
+    d -> e
+    d -> f
+    d -> g
+    
+    i -> j
+    i -> o
+    i -> p
+    o -> k
+    o -> l
+    p -> m
+    p -> n
+    
+    q -> r
+    r -> s
+    r -> v
+    r -> w
+    s -> t
+    s -> u
+  }
+#+end_src 
+
+The set of roots is =init:F= and the set of leaves is =term:F= :
+
+: init:F = { a, i, g }
+: term:F = { c, e, f, g, h, j, k, 1, m, n, t, u, v, w } 
+
+** 8.2 higher level operations 
+
+The set of nodes whose parent is =n= is just =→(F⁻¹):n= . For instance, the set of nodes directly descended from a root is 
+
+: F⁻¹ !: (init:F) = { b, h, j, o, p, r } 
+
+The set of nodes that point to leaves is 
+
+: F!:(term:F) = { b, d, a, i, o, p, s, r } 
+
+These operations can be used for obtaining the maximum and minimum of sets. Suppose =<= is the less-than relation on integers and =S= is some set of integers, say ={3,5,9}=. Then 
+
+#+begin_src dot
+<|S =  graph {
+  3 -> 5
+  5 -> 9
+  3 -> 9
+}
+#+end_src
+
+Now note that
+
+: init:(<|S) = { 3 }
+: term:(<|S) = { 9 }
+
+Hence, if S is any set of numbers, then the minimum and maximum of this set are: 
+
+: min:S = α:(<|S)
+: max:S = ω:(<|S)
+
+These operations are only defined if =S= has two or more elements, since an irreflexive relation cannot relate less than two elements. That is, an irreflexive relation when restricted to a unit or empty class becomes the empty relation. Notice that we can select the maximum and minimum based on any relation that is a /series/ (i.e., transitive, irreflexive and connected). If R is any series then =α:(R|S)= is the minimum (relative to =R=) and =ω:(R|S)= is the maximum. 
+
+The following are simple properties of these operations 
+
+: init:r = term:(r⁻¹)
+: term:r = init:(r⁻¹)
+: init ⊆ lem
+: term ⊆ rim
+: init (r|s) = term:(r⁻¹|s)
+
+: init:(r∨s) ⊆ init:r ∨ init:s 
+: init:r ∧ init:s ⊆ init: (r∧s) 
+: term:(r∨s) ⊆ term:r V term:s 
+: term:r ∧ term:s ⊆ term: (r∧s) 
+: init:(s$t) = s-t 
+: term:(s$t) = init:(s$t)⁻¹  = init(t$s) = t-s
+
+* 9. Sequences 
+** 9. 1 ordinal couples 
+
+In this section we will continue the discussion of sequences begun in the last section. We saw that it was easy to define the following operations on sequences: 
+
+: α:S = ⊜ init: S
+: ω:S = ⊜ term: S
+: Ω:S = (¬init:S)⊀S
+: Α:S = S⊁(¬term:S)
+
+This provides us with functions for taking sequences apart. We will define the /ordinal couple/ or /pair/, which puts them together.
+
+If =x= and =y= are two objects, then =x,y= is the relation that relates =x= and =y= but no other objects. 
+
+: (x,y)  =   x → y
+
+That is, =u(x,y)v= if and only if =u=x= and =y=v=. This is formally defined by: 
+
+: x,y = ûv̂(u=x ∧ v=y) 
+
+This notation will be taken to be right associative, i.e., 
+
+: x,y,z = x,(y,z) 
+
+Observe that
+
+: α:(x,y) = x 
+: ω:(x,y) = y 
+
+It will occasionally be convenient to write ordinal couples in a vertical format: 
+
+: ┏ ┓
+: ┃x┃ = (x,y) 
+: ┃y┃
+: ┗ ┛
+
+This notation is extended for relations of more than one pair: 
+
+: ┏            ┓   ┏  ┓   ┏  ┓   ┏  ┓
+: ┃x₁ x₂ ... xᵢ┃ = ┃x₁┃ ∨ ┃x₂┃ ∨ ┃xᵢ┃
+: ┃y₁ y₂ ... yᵢ┃   ┃y₁┃   ┃y₂┃   ┃yᵢ┃
+: ┗            ┛   ┗  ┛   ┗  ┛   ┗  ┛
+
+The class of all the ordinal couples (or pairs) that can be made from the classes =S= and =T= is: 
+
+: S×T = p̂(∃xy[x∈s ∧ y∈T ∧ P=(x,y) ])
+
+There is obviously a close relation between =s×t= and =s$t=. Later we will say that =s$t= is a /Currying/ of =s×t=. Note that 
+
+: (x,y)∈S×T ⇔ x [S$T] y 
+
+We will define a convenient notation for sequences of two or more elements: 
+
+: < x₁, x₂, ... xᵢ > = (x₁, x₂) ∨ (x₂,x₃) ∨ ... ∨ (xᵢ₋₁,xᵢ)
+
+Therefore the sequence =<a,b,c,d,e>= is just 
+
+:  a → b → c → d → e
+
+Also, note that, 
+
+
+:                      ┏              ┓
+: < x₁, x₂, ... xᵢ > = ┃x₁ x₂ ... xᵢ₋₁┃
+:                      ┃x₂ x₃ ... xᵢ  ┃
+:                      ┗              ┛
+
+= 
+
+| x₁   | x₂  |
+| x₂   | x₃  |
+| ...  | ... |
+| xᵢ₋₁ | xᵢ  |
+
+** 9. 2 catenation and consing 
+
+If =s= and =t= are sequences then we can define an operation =s^t=, which is the catenation of =s= and =t=. To form this catenation we must hook the last element of =s= to the first element of =t=: 
+
+
+:  s₁ → ⋯ → sₘ ^ t₁ → ⋯ → tₙ = s₁ → ⋯ → sₘ → t₁ → ⋯ → tₙ
+
+
+Therefore =x [s^t] y= if and only if =x s y=, or =x t y=, or =x=ω:s= and =y=α:t=. Hence, 
+
+: s^t = s ∨ (ω:s, α:t) ∨ t 
+
+The catenation operation is only defined for sequences, which are required to have at least two elements (since an irreflexive relation with less than two elements is the empty relation). Note that we can extend the definition of sequences so as to allow length one sequences by making the relation reflexive. 
+
+: s ∨ (= | mem:s) 
+
+#+begin_src dot
+  graph {
+    s1 -> s1
+    s1 -> s2
+    s2 -> s2
+    s2 -> s3
+    s3 -> s3
+    s3 -> ...
+    ... -> sn
+    sn -> sn  }
+#+end_src
+
+The one element sequence is then: 
+
+#+begin_src dot
+  graph { s0 -> s0 } = (s0, s0)
+#+end_src
+
+The full ramifications of this definition of sequence have not been investigated. 
+
+How do we add a single element to the left or right of a sequence? The =cons left= and =cons right= operations are easy to define: 
+
+: x cl s₁ → ⋯ → sₙ  ⇒  x → s₁ → ⋯ → sₙ
+: x cl s = (x, α:s) ∨ s 
+: s cr s = s ∨ (ω:s, y) 
+
+It is easy to show that if =s= is a sequence, then: 
+
+: α:(x cl s) = x 
+: Ω:(x cl s) = s 
+
+: ω:(s cr y) = y 
+: Α:(s cr y) = s
+
+: (α:s) cl (Ω:s) = s,  if #:s > 2
+: (Α:s) cr (ω:s) = s,  if #:s > 2
+
+Also, if =s= is a sequence, then =s ∨ (ω:s, α:s)= is a ring formed by joining the last element of =s= to the first element. 
+
+If =s= is a sequence, then =s⁻¹= is the reverse of =s=. Hence, 
+
+: rev:s = s⁻¹
+
+: α:s = ω:s⁻¹
+: ω:s = α:s⁻¹
+
+: Α:s = (Ω:s⁻¹)⁻¹
+: Ω:s = (Α:s⁻¹)
+
+: (s^t)⁻¹ = t⁻¹ ^ s⁻¹
+: (x cl s)⁻¹ = s⁻¹ cr x
+: (s cr x)⁻¹ = x cl s⁻¹ 
+
+: (x, y)⁻¹ = (y, x)
+: <x₁, x₂, … xₙ>⁻¹ = <xₙ, …, x₂, x₁>⁻¹
+
+: ┏            ┓   ┏            ┓
+: ┃x₁ x₂ ... xₙ┃ = ┃y₁ y₂ ... yₙ┃
+: ┃y₁ y₂ ... yₙ┃ = ┃x₁ x₂ ... xₙ┃
+: ┗            ┛   ┗            ┛
+
+If =S= is a sequence and =x Mm S=, then =S⁻¹:x= is the successor of =x= in =S= and =S:x= is the predecessor of =x= in =S= (if these exist).
+
+: S⁻¹:x = successor of x in S 
+: S:x = predecessor of x in S 
+
+These are convenient ways of moving around within a sequence. Also, note that if =s= is a subsequence of =t= then =s⊆t=. 
+
+Some additional identities are: 
+
+
+: ┏ ┓ ┏ ┓   ┏ ┓
+: ┃x┃ ┃y┃ = ┃x┃
+: ┃y┃ ┃z┃   ┃z┃
+: ┗ ┛ ┗ ┛   ┗ ┛
+
+: α:(S×T) = S
+: ω:(S×T) = T
+
+Finally, we will state the formal definition of a sequence: a relation is a sequence if it is a connected irreflexive bijection. That is, 
+
+: sequence = connex ∧ irrefl ∧ bun 
+: s∈irrefl ⇔ s⁰ ⊆ s⁻¹ 
+: s∈connex ⇔ lem:s = init:s ∨ rim:s 
+:          ∧ rim:s = term:s ∨ lem:s 
+
+* 10. Binary Operations 
+** 10.1 basic concepts 
+
+In this section we will discuss our approach to binary operations - that is, to functions with two arguments and one result. We have already seen how unary functions are connected to relations. For instance, we can write the fact that =y= is the sine of =x= by either: 
+
+: y sin x
+
+or 
+
+: y = sin:x 
+
+Since we only deal with binary relations, we will have to have a new convention for handling binary functions. This convention is: we will combine the two arguments of an operation into a pair. For instance, we can define a relation =sum= such that 
+
+: x sum (y, z) 
+
+if and only if =x= is the sum of =y= and =z=. More formally: 
+
+: sum = x̂â(a=(y,z) ∧ x=y+z) 
+
+We can use our colon convention as usual, e.g., 
+
+: x = sum:(y,z) ⇔ x sum (y,z) 
+
+Now, it would be inconvenient to have to invent names, such as =sum=, for each operation, such as =+=. Hence, we will adopt a systematic convention for making such names: either placing the conventional infix symbol for the operation in parentheses or underlining the symbol. For instance, 
+
+: x+̲(y,z) ⇔ x = +̲:(y,z) ⇔ x = y+z 
+
+In fact, if =π= is any infix operation symbol, we will explicitly define its meaning by:
+
+: xπy = π̲:(x,y)
+
+This notation will permit us to manipulate in a more regular fashion the usual arithmetic operations =(+, -, *, /)= as well as the relational operations (e.g. =∧, ∨, ×, ⊀, ⊁, ',', |, $=). For instance, if =S= is a class of classes, then 
+
+: (∧) !: S×S 
+
+is the class of all pairwise intersections of members of S. 
+
+** 10.2 operations on binary operations 
+
+It is often convenient to be able to generate simple relations from a binary operation. Following Russell and Whitehead, let π represent any binary operation. We define: 
+
+: πz = x̂ŷ(x = yπz) 
+: yπ = x̂ẑ(x = yπz) 
+
+Hence, 
+
+: x(-1)y ⇔ x = y-1 
+
+therefore (-1) is the predecessor relation. Similarly, 
+
+: x(+1)y ⇔ x = y+1 
+
+therefore (1+) (or (+1)) is the successor relation. These can be used as functions: 
+
+: (-1):x = x-1 
+: (+1):x = x+1 
+
+This convention makes it very easy to form more complex functions. For instance, if we want 
+
+: f:x = sin:(1/x) 
+
+then we can define 
+
+: f = sin(1/) 
+
+To see that this works: 
+
+: f:x = [sin (1/) ] : x 
+:     =  sin:[ (1/) : x ] 
+:     =  sin:[ 1/x ] 
+
+Now observe the action of the =(x,)= and =(,y)= functions: 
+
+: (x,):y = (x,y) 
+: (,y):x = (x,y) 
+
+Therefore, for any binary operation =π= (except ',') we can define 
+
+: πz = π(,z) 
+: yπ = π(y,)
+
+Let's see why this works: 
+
+: (yπ):z = [π(y,)] :z 
+:        = π:[(y,):z] 
+:        = π:[y,z] 
+:        = yπz 
+
+=(πz):y= is analogous. In general, if =f= is a binary function, then =f(x,)= and =f(,y)= are the "partially instantiated" unary functions. This is the effect of Curry and Feys "B" combinator [5]. 
+
+Since =S⁻¹= is the reverse of a sequence, =π|′= is the reverse form of an operation. For instance, =-′= is the reverse subtract operation : 
+
+: -′:(x,y) = -̲:(′:(x,y))
+:          = -̲:(y,x)
+:          = y-x
+
+Thus =-′= can be read "subtract from" and =/′= can be read "divide into". This is Curry and Feys "C" combinator (see the next section). 
+
+* 11. Combinators 
+
+In this section we will discuss several powerful operations for manipulating relations. These are called combinators because of their similarity to the combinators of Curry and Feys [5].
+
+The first combinator we will discuss is the paralleling relations, (=R= % =S=), which is defined: 
+
+# note: maclellan's version of 'R%S' is the letter 'R' over the letter 'S' with a vertical bar in between.
+
+: ┏ ┓┏ ┓┏ ┓
+: ┃u┃┃R┃┃x┃  ⇔  uRx ∧ vSy
+: ┃v┃┃S̅┃┃y┃
+: ┗ ┛┗ ┛┗ ┛
+
+So, if =f= and =g= are functions, 
+
+: ┏ ┓ ┏ ┓ ┏   ┓
+: ┃f┃:┃x┃=┃f:x┃
+: ┃̅g̅┃ ┃y┃ ┃g:y┃
+: ┗ ┛ ┗ ┛ ┗   ┛
+
+Hence, (=f % g=) is the element-wise combination of =f= and =g=. For example, if we want =f:(x,y) = sin:x + sin:y=, we can write 
+
+: f = (+)(sin % cos)
+
+since 
+
+: f:(x,y) = (+)(sin % cos):(x,y)
+:         = (+):( (sin % cos):(x,y) )
+:         = (+):(sin:x, cos:y)
+:         = sin:x + cos:y
+
+One of the simplest combinators described by Curry and Feys is the /elementary cancellator/, =K=, defined so that =K:x= is a function such that =(K:x):y = x= for all =y=. That is, =K= generates constant functions. Since =K:x= is a relation that relates =x= to everything, we can define it: 
+
+: K̲ = ($Φ̅)i 
+
+where =i=⊜⁻¹= is the unit class generator. To see that this works, note that
+
+: K̲:x = ($Φ̅)i:x = (i:x)$Φ̅
+
+and therefore that 
+
+: u(K̲:x)v ⇔ u[(i:x))$Φ̅] v 
+:          ⇔ u∈(i:x) ∧ v∈(Φ̅)
+:          ⇔ u = x
+
+Therefore, =(K̲:x):v = x=. 
+
+Another combinator is the /elementary duplicator/, =W=, defined so that 
+
+: (W:f):x = f:(x,x) 
+
+If we define =△:x = (x,x)= then it is easy to see that =W:f= is just =f△.= For instance, =(*)△= is the squaring function:
+
+: (*)△:n = (*):(△:n) 
+:        = (*):(n,n)
+:        = n*n
+:        = n²
+
+It should be clear that Backus' =[f,g]= combining form is just our =(f % g)△= since 
+
+:    (f % g)△:x
+:  = (f % g):(x; x)
+:  = (f:x ; g:x)
+
+
+Since this combination is so common we will adopt a special notation for it: 
+
+: f @ g = (f % g)△
+
+# note: again, maclellan uses a 2d syntax that isn't easy to duplicate
+
+Hence, =f@g:x = (f:x ; g:x)=.
+
+Some of the properties satisfied by these combinators are: 
+
+: R%S T%U  = RT % SU 
+: (R%S)ⁿ = Rⁿ % Sⁿ
+: (R@S) T = RT % ST
+: R%S T@U = RT % SU
+: △R = R@R
+: (R%S)′ = S%R = ′(R%S)
+: ′(R@S) = (S@R)
+: α(R@S) = R ⊁ (Rm⃗:S)
+: ω(R@S) = S ⊁ (Rm⃗:R)
+: R%S = Rα @ Sω
+: cl = (α@Ω)⁻¹
+: cr = (Α@ω)⁻¹
+
+As an example of these combinators it is easy to show that 
+
+:   f = (+)(((*)△)@(2*))
+
+is the function =f:t = t² + 2t=. 
+
+Another combinator is the meta-application operator, =::=, which corresponds to Curry and Feys' S combinator: 
+
+: (f::g):x  = (f:x):(g:x)
+
+For instance, =[(!)′]::init= is the operation that gives the set of descendents of roots of a forest, F, since 
+
+: ([(!)′]::init):F = (F⁻¹!):(init:F) . 
+
+The /formalizing combinator/, =Φ=, is defined so that
+
+: (Φ : (f, a, b)) : x = f:(a:x,b:x) 
+
+It is easy to see that 
+
+: Φ:(f,a,b) = f(a % b)
+
+For instance, 
+
+: f = Φ:((+), (*)△, 2*)
+
+is just the function =f:x = x²+2x=
+
+This can be written more clearly using the notation of our relational calculus: 
+
+:   f = (+)(((*)△)@(2*))
+
+Another combinator defined by Curry and Feys is the =ψ= combi- 
+nator : 
+
+: [ψ:(f,g)]:(x,y) = f:(g:x,g:y) 
+
+This is simply defined by 
+
+: ψ:(f,g) = f (g@g)
+
+so that 
+
+: ψ = (|)( I % (/)△)
+
+Therefore, if 
+
+: f = ψ:((+), (*)△)
+
+then =f:x = x²+y²=. 
+
+One final operation we wish to define in this section is"Currying". This relates a relation to the correponding class of pairs. If =S= is a class of pairs, then =Curry:S=, the Currying of =S=, is the relation =R= such that =xRy= if and only if =(x,y)∈S=. Formally, 
+
+: Curry:S = x̂ŷ[(x,y)∈S]
+
+The inverse operation, =Curry⁻¹:R=, is also useful. 
+
+Some properties satisfied by these combinators are: 
+
+: Curry: (S×T) = S*T 
+: (K̲:x)f = K̲:x 
+: f(K̲:x) = K̲:(f:x) = K̲f:x 
+: △△ = I
+
+* 12. Ancestral Relations 
+** 12.1 definition 
+
+Carnap [2] defines the relation of a property =p= being hereditary with respect to a relation =r=: 
+
+: p Her r ⇔ ∀xy{x∈p ∧ x r y ⇒ y∈p} 
+:         ⇔ r⁻¹ !:p ⊆ p 
+
+Ihis leads to the definition of the /ancestral of R of the first kind/ as that relation which preserves all the hereditary proper- 
+ties of R. This is also called the /transitive closure/ of R: 
+
+: x R⃰ y ⇔ x Mm R ∧ ∀p[p Her R ∧ x∈p ⇒ y∈p] 
+
+For example, if =xPy= means that =x= is a parent of =y=, then =xP⃰ y= 
+means that =x= is an ancestor (or the same as) =y=. The /ancestral of
+the second kind/ is also useful: 
+
+: R⁺ = R⃰|R 
+
+Thus, =P⁺= means "ancestor" in the colloquial sense. The easiest way to visualize the meanings of the ancestrals is by their expansion as infinite unions: 
+
+: R⃰ = R⁰ ∨ R¹ ∨ R² ∨ R³ ∨…
+: R⁺ = R¹ ∨ R² ∨ R³ ∨ R⁴ ∨…
+
+Here are some useful properties of the ancestrals: 
+
+: R⁺ = R⃰-(=) = R⃰-R⁰
+: xR⃰y ⇔ ∃n[n≥0 ∧ xRⁿy]
+
+: R⁰ ⊆ R⃰
+: Rⁿ ⊆ R⃰ , for n≥0
+: Rⁿ ⊆ R⁺ , for n>0
+
+: R|R⁺ = R⁺
+: R⁺ ⊆ R⃰
+: R⁺ = R|R⃰
+: R* = R⁰ ∨ R⁺
+
+: (R⃰)⁻¹ = (R⁻¹)⃰
+: (R⁺)⁻¹ = (R⁻¹)⁺
+
+: (r|s)⃰ = r⃰|s
+
+Ancestral relations are always transitive. Notice that =≥= and =>= for integers can be defined: 
+
+: ≥ = (1+)⃰
+: > = (1+)⁺
+
+The ancestral "fills out" all of the paths in a structure. For instance, if 
+
+: R = a₁ → a₂ → a₃ → a₄
+
+then
+
+#+begin_src dot
+  R⃰ = graph {
+     a1->a1, a1->a2, a1->a3, a1->a4
+     a2->a2, a2->a3, a2->a4
+     a3->a3, a3->a4
+     a4->a4
+  }
+#+end_src
+
+** TODO 12.2 applications 
+
+Suppose that =S= is a sequence and we wish to find the first member of =S= which satisfies some property P. First form the closure =S⁺= , so that for any two members of =S⁺= we can tell which is first. Next, eliminate from =S⁺= any members that do not satisfy =S⁺$P=. Then, =α:S⁺$P= is the first member of =S= satisfying =P=.
+
+Next we will consider a simple character manipulation example: stripping leading blanks from a string. Note that =x = (y cl)⃰ z= means that =x= is a result of consing 0 or more =y='s on to the front of =z=. Hence,
+
+: z [ (y cl)*]⁻¹ x
+
+is a result of stripping one or more =y='s from the front of =x=. To get the desired result it is only necessary to restrict the left domain of this function to be sequences that can't begin with a =y=. Suppose =Y= is the property of beginning with a =y=:
+
+: xY ⇔ y = α:x ⇔ y α x ⇔ x ∈ α⃖:y 
+
+Therefore, the function to strip leading =y='s from a sequence is: 
+
+: ¬α:y < [ (y cl)*l ]
+
+
+
+-1 
+
+
+
+Before we leave the topic of ancestral relations, it will be 
+ful to investigate their use as a means of iteration. Suppose 
+t F is a function (i.e., left univalent). Then, since 
+
+
+
+= F° V F 1 
+
+
+
+V F z V 
+
+
+
+will have yF x 
+1^ there may 
+F is to be a 
+dition T (a 
+Then 
+to 
+
+
+
+X f ■ • • • 
+
+ivalent 
+
+
+
+if and only if for some n, y = F n :x. In gen- 
+be many such n, so F may not be left univalent, 
+function, it is necessary to pick a termination 
+
+T<F 
+
+
+
+that is only true for one of F u 
+is just the function sought; it is 
+
+
+
+x , F - : x , 
+
+roughly 
+
+
+
+while ~T do F 
+
+
+
+logously, T<F + is roughly equivalent to 
+
+
+
+- 28 - 
+
+
+
+repeat F until T 
+
+* TODO 13. Arrays 
+
+** TODO 13.1 definition and basic operations 
+
+
+
+a contiguous subset of the 
+is an array_and i Rm A then 
+the i-th element of A. Similarly, if I C Rm:A 
+then A! : I 
+
+
+
+from 
+If A 
+
+
+
+is a set of 
+
+
+
+An array is just a function 
+integers to some set of values. 
+
+A:i is the i— th element of A. oiniiiany, i i. j. rvm ;n is a. set oi. 
+
+index values then A!:I is the corresponding set of array values 
+and A>I is the subarray of A selected by those indices. 
+
+It is easy to define multi-dimensional arrays: they are 
+just arrays whose elements are selected by sequences of integers, 
+e.g. M:(i,j). If M is a two-dimensional array, then M(i,) is the 
+i-th row of M and M(,j) is the j-th column of M. Also, if I is a 
+set of row indices and J is a set of column indices then M>(IXJ) 
+is the submatrix of M selected by these sets. It is easy to see 
+that M' is the transpose of M, since 
+
+M ' : ( i , j ) = M : ( ' : ( i , j ) ) = M : ( j , i ) 
+
+More generally, if P is a permutation function (i.e. a bijection 
+from an index set into itself) then AP is the result of permuting 
+A by P. 
+
+Suppose x i£ an element of the array A (i.e., for some i, 
+x=A:i). Then A:x is the set of all indices for which x=A:i. 
+Therefore we can find the index of the first occurence of x in A 
+(i.e. APL ' s iota operator) by minA~:x. In general, if P is some 
+property (i.e. class), then A -1 ! : P is the set of indices of all 
+elements of A that satisfy P. A sorted reflexive sequence of 
+these indices is just < 3 (A -1 !:P) 
+
+** TODO 13.2 relation to sequences 
+
+It is easy to convert arrays to sequences and vice versa ♦ 
+Suppose all the elements of A are distinct, then A i"s a func- 
+tion that returns the index of an element of A. We want to 
+define a sequence S such that xSy if and only if x preceeds y in 
+A, i.e. the index of x is one less than the index of y. 
+
+xSy 
+
+
+
+<-» 
+
+
+(A"J-:x) = (A-^iy)-! 
+
+
+<r-» 
+
+
+(A^rx) (-1) (A-J-ty) 
+x[A| (-1) |A- 1 ]y 
+
+
+<-» 
+
+
+
+Hence, S = A(-1)A 
+
+
+
+-1 
+
+
+
+Next, we will consider the opposite process: 
+sequence to an array. Suppose we have a sequence: 
+
+
+
+converting a 
+
+
+
+- 29 - 
+
+
+
+S = 
+
+
+
+We wish to convert this to an array: 
+
+
+
+A = 
+
+
+
+a l~ 
+a 2~ 
+
+
+
+->1 
+
+
+
+-^.2 
+
+
+
+-^.3 
+
+
+
+a 3 ^ 
+
+Thus, for each element a^ in the sequence, we must find its index 
+i in the resulting array. If we can define a relation R such 
+that R:a^=i then R will be the array we seek. Now R:a^ is just 
+the number of predecessors of a^ in S. That is, aQ has no prede- 
+cessors, so R:aQ = 0; a? has two predecessors, so R:a 7 = 2, and 
+so on. Since S defined an immediate predecessor relation, S + 
+defines an ancestral predecessor relation: 
+
+
+
+.+ 
+
+
+
+
+The set of predecessors of any element a is then S + :a, e.g. 
+
+:a 2 = *■ a ' a 1 * 
+The size of this class is then the desired index: 
+
+#: (S + :a 2 ) = 2 
+
+Hence, R:a = #:(£d :a), so R = ftS⁻¹ ". Now, we know that A is R⁻¹ , 
+so we can define the function saO which converts a sequence into 
+a -origin array: 
+
+saO:S = (SS^)⁻¹ 
+To produce a 1-origin array, the only alteration is: 
+
+sa:S = (#S*) _1 
+
+** TODO 13.3 other array operations 
+
+Next we will consider the concatenation of arrays. If A is 
+an array such that A:i = a^, then we can write A: 
+
+A = (a 1 ,l) V (a 2 ,2) V ... V (a m ,m) 
+
+where m is the length of the array. Similarly, suppose that B is 
+
+
+
+- 30 - 
+
+an n element array, then the concatenation of these arrays is 
+A cat B = (a-L 1) V- • • V(a m ,m) V(b lf m+1) V- • • V(b n ,m+n) 
+
+We can see that A cat B = AVB ' where B' results from B by shift 
+its indices by m: 
+
+B' = (b lf m+l) V ... V (b n ,m+n) 
+
+How do we compute B'? Observe: 
+
+xB'i <-» xB(i-m) <-» xB[(-m):i] ⇔ xB(-m)i 
+
+Hence, B* = B(-m) and A cat B = A V 3(-m) , where m is the length 
+of A. The length of A is just #rim:A, so 
+
+A cat B = A V B(-#rim:A) 
+
+We will finish our discussion of arrays by investigating the 
+generation of sorted arrays. Let S be a set of integers to be 
+sorted, then <£S is a structure which relates lesser elements to 
+greater elements. Now if x is any element of th e set , (<XS) :x is 
+the set of all elements . less than x. Thus [ fr ( <XS ) ] : x is the 
+number of elements of S less than or equal to x. This is just 
+the index of x in the sorted array we seek. Hence if A _J_s the 
+sorted array, xAi if and only if i [ # (<xsj ] x , so A = [fr(<*S)] . 
+Of course this can be generalized to any ordering relation. 
+
+* TODO 14. Scanning Structures 
+** TODO 14.1 basic concepts 
+
+In this section we will discuss several methods for scanning 
+structures , that is, for applying a function to each element of a 
+structure and accumulating the results. Since no one method has 
+yet been selected, this section should be taken as a report of 
+work in progress. 
+
+A general paradigm for processing a structure, such as a 
+file, is the following: 
+
+1. Perform some initialization. 
+
+2. Read the next (or first) element of the file. 
+
+3. Take this value and the results of processing the previous 
+values . 
+
+4. Process these to yield new cumulative values and continue 
+from step ( 2) . 
+
+
+
+- 31 - 
+
+5. When the end of the file is reached, return the accumulated 
+result of processing all of its elements. 
+
+A simple form of this appears in APL's reduction operation: 
+
++/v = v 1 +(... (v n _ 1 +v n ) ...) 
+
+A more general form is Backus' insert: 
+
+/f : <x^ , > . . ,X-> = £:<x^,... f : <x n _i ,x n > . . . > 
+
+Our first example of scanning structures will be to express this 
+operation in the relational calculus. 
+
+** TODO 14.2 reduction of arrays 
+
+We are given an n element array A and wish to compute: 
+
+t = A:n + A:(n-1) + ... + A:2 + A:l 
+
+where we have assumed that the right members of A are l..n. We 
+saw in the section on ancestrals that T<F will iterate the 
+application of F with T used as the termination condition. Con- 
+sider how the analogous loop would be written in Pascal: 
+
+S : = ; i : = ; 
+whi le i^n+1 do 
+
+begin S := S +A [ i ] ; i := i + 1 end 
+
+On each iteration two functions are performed: S is incremented 
+by A[i] and i is incremented by 1. Let's represent the state of 
+the computation by a pair (s,i) , where s is the cumulative sum so 
+far and i is the index of the next element to process. We will 
+use F to represent one processing step, so that, if (s',i') is 
+the new state, we can solve for F as follows: 
+
+
+
+f: (?) -(V) 
+
+_ /s+A:i\ 
+⁻¹ i + 1 ] 
+
+
+
+Hence, F 
+
+
+
+( + )£: 
+
+( + 1) : 
+
+
+( P) 
+
+
+(+)£: (s,i) 
+
+
+(+l)ui: (s,i) 
+
+
+<+»* 
+
+
+: M 
+
+
+( + 1JUJ 
+
+
+w 
+
+
+
+( + 1JUJ 
+
+
+
+- 32 - 
+
+It remains to determine the termination condition, T. If x 
+is a state, i.e., a pair (s,i), then xGT when i=n+l. Hence, x€T 
+when ai: x = n+1, so 
+
+xGT ⇔ ui:x = n+1 
+⇔ (n+1) uj x 
+⇔ x Stu: (n+1) 
+
+Hence, T = ui:(n+l). The final state, Xf, containing the sum is 
+T<F : x^, where X|=(0,1) is the initial state: 
+
+x f = (T{F*):(0,1) 
+
+Now, the total t is just α:Xf, so 
+
+t = α(T<F*) : (0,1) 
+
+We can generalize this to any function f with initial value i: 
+
+t = α(T<F*) : (i,l) 
+
+wh e r e F = 
+
+This result can be improved by directly extracting the 
+result from the fioal state. That is, we want to define a filter 
+$ such that t = jz^F : (i,l) . Hence we want t^x^, so 
+
+
+
+L 7T 
+
++ l)Ui 
+
+
+
+ts*x f «-» t <t (t,n + l) 
+Now, note that [,n+l]:t = (t,n+l), so 
+
+(t,n+l) [,n+l] t 
+
+
+
+-1 
+
+
+
+by the definition of ':*. Therefore tf = [,n+l]~ and we have the 
+simplified formula 
+
+t = (,n+l) _1 F*: (i,l) 
+
+** TODO 14.3 reduction of sequences 
+
+Next we will consider the scanning of sequences. Suppose S 
+is a sequence: 
+
+
+
+S = 
+
+
+
+(Si (Sv . . . ,s_,EOF> 
+
+
+
+where EOF is an "end marker"; it can be any value. Now, we wish 
+to find the result 
+
+
+
+i f Si f So f ... f s. 
+
+
+
+that is 
+
+
+
+f : ( f : (. . . f : ( i , s x ) . . .) , s n ) 
+
+
+
+- 33 - 
+
+
+
+for some function f and starting value i. The state can be 
+represented by a pair (t,s), where t is the result so far com- 
+puted and s is the rest of the sequence to be processed. Hence, 
+(t',s') = F:(t,s) where t' = f:(t,α:s) and s* = 0.: s . Therefore, 
+
+
+
+ir) - 
+
+
+
+( t ,α:s ) 
+
+Q:s 
+
+
+
+) = 
+
+
+
+
+deny U/ 
+
+
+
+Hence , 
+
+
+
+F = 
+
+
+
+
+
+
+What is a terminal state? Notice that £1 
+terminal state will have the form (r,§). Hence, 
+
+
+
+<s n ,E0F> 
+
+
+
+so 
+
+
+
+r = 
+
+
+
+(,©)⁻¹ F* 
+
+
+
+(i,S) 
+
+
+
+To put this in a more useful form, we will define a function f@i 
+such that r = (f@i):S. This is simply 
+
+
+
+fei = C,©)⁻¹ □§) (i,) 
+Then, the sum of the elements of a sequence S is just (+)@0:S. 
+
+** TODO 14.4 scanning general structures 
+
+
+
+It is ofte 
+processing at 
+this amounts to 
+tor. We will 
+general class o 
+intuitively as 
+represented by 
+over" a node 
+nodes it has al 
+read head has 
+the node. When 
+the node (as fi 
+tion of each of 
+of this proces 
+with a new set 
+leading out f 
+completed when 
+(hence this s 
+tures) . Scanni 
+head with initi 
+
+
+
+n useful to scan a structure while performing some 
+each node. When the data structure is a sequence 
+APL * s reduce operator and Backus' insert opera- 
+define a scanning operation that works on a more 
+f structures. This operator can be understood 
+follows: The state of the scanning process is 
+a set of "read heads" each of which is "positioned 
+and holds state information accumulated from the 
+ready visited. A node can be processed when a 
+moved to that node over each edge which leads into 
+this occurs a processing function is applied to 
+rst parameter) and the union of the state informa- 
+the read heads (as second parameter). The result 
+sing step becomes the state information associated 
+of read heads which are advanced along each edge 
+rom the node. The processing of the structure is 
+all read heads have arrived at terminal nodes 
+canning operation is not defined for cyclic struc- 
+ng a structure is started by positioning a read 
+al state information over each initial node. 
+
+
+
+The scanning operation is symbolized by fli, where f is the 
+processing function and i is the initial state for the read 
+heads. For instance, if V is a vector, (+)I0:V will scan the 
+elements of V using (+) (i.e. APL +/V or Backus* (/+) :V) . For a 
+
+
+
+- 34 - 
+
+
+
+more interesting example, suppose T is an attributed parse tree, 
+E is a function that evaluates attributes and B is the initial 
+set of attribute bindings. Then EIB:T propogates the values of 
+inherited attributes down to the leaves of the tree. Conversely, 
+EIB:(T ) propogates the values of synthesized attributes back to 
+the root. Hence, repeated applications of EIB and (EIB)* will 
+evaluate all of the attributes. Of course, this program will 
+work just as well if T is a forest of parse trees. The I opera- 
+tor is still undergoing evaluation as it is one of several possi- 
+ble structure-directed scanning operations. 
+
+* TODO 15. Examples 
+
+In this section we will give several examples of relational 
+programs . 
+
+** TODO 15.1 payroll 
+
+Suppose we have a file $ of employee records, where r = $:n 
+is the record for the employee with the employee number n. We 
+will suppose that employee records are functions defined so that: 
+
+r:N = employee name 
+
+r:H = hours worked so far this week 
+
+r:R = pay rate 
+
+We are given an update file U such that Urn is the number of 
+hours worked by employee n today. We wish to generate a new pay- 
+roll file $• . 
+
+SOLUTION: Let r = $:n and r' ■ |*:n be the old and new 
+employee records. It is clear that r ' is the same as r except 
+for its H field. In order to modify part of a relation, we will 
+use the Md function defined by: 
+
+Md: (S,R) = R V S> (-Rm:R) 
+
+Then, if h 1 represents the new value of the H field, the new 
+employee record is 
+
+r' = Md:(r, (h',H)) 
+
+where h 1 is just the cumulative hours worked: 
+
+h' = ($:n) :H + U:n 
+
+Therefore, by the definition of $': 
+
+$' :n = r* = Md : ( $ :n, (h ' ,H) ) 
+
+To find $' we must factor out the employee number n. To do this, 
+note that ($:n):H = (:H):($:n) = (:H)$:n. That is, (:H)$ is a 
+
+
+
+- 35 - 
+
+slice of the payroll file: the hours worked for each employee. 
+Therefore , 
+
+h ' = ( $ : n ) : H + U : n = ( : H ) $ : n + U : n 
+
+Now, define the updating function u by 
+u:n = ( ( + ) Liglil :n, H ) 
+
+
+
+(,H) ( + )Hgll 
+
+
+
+: n 
+
+
+
+Then, $':n = Md:($:n,u:n) = Md|j_j : n Therfore, the solution to 
+our problem, the new payroll file, is 
+
+
+
+(,H) ( + )H£1* 
+
+
+
+$' = Md*| 
+
+where u = 
+
+** TODO 15.2 check issueing 
+
+Suppose we wish to take the payroll file from the previous 
+example and generate checks for the employees. We will assume 
+that a function C is available such that C:(nm,p) returns a check 
+in the amount p made out to the name nnu 
+
+SOLUTION: We will ignore overtime computations. Hence, if n 
+is an employee number then $:n:N is his name and 
+
+p:n = $ :n : H * $:n:R 
+
+is his pay. Hence, his check c:n is c:n = C:(nm,p:n) = C 
+
+
+
+' \ P:n j p 
+
+
+
+nm 
+D : n 
+
+
+
+: n 
+
+
+
+Combining these we have the file F mapping employee numbers into 
+checks : 
+
+f = cum. 
+
+
+
+
+
+
+from which we can factor out the old payroll file 
+
+
+
+F = C 
+
+
+
+:N 
+
+
+
+m 
+
+
+
+If we just want a set of checks, this is Lm:F. 
+
+* TODO 16. Implementation Notes 
+
+The primary goal of our investigation has been to determine 
+if relational programming is significantly better than 
+
+conventional methods. It would be premature to devote much 
+effort to implementation studies before it is even determined if 
+relational programming is an effective programming methodology. 
+However/ a brief discussion of implementation possibilities is 
+probably not out of line. 
+
+
+
+The most obvious representation of a relation is 
+sional representation, in which all the elements of a 
+
+There 
+
+
+
+the exten- 
+
+
+
+relation or 
+are many kinds 
+
+
+
+class are explicitly represented in memory, 
+of extensional representations, such as hash tables, binary trees 
+and simple sorted tables. Of course, performance can be improved 
+through the use of associative memories and active memories (in 
+which each memory cell has a limited processing capability). 
+
+
+
+uneco 
+
+cases 
+
+class 
+
+compu 
+
+relat 
+
+This 
+
+satis 
+
+repre 
+
+mecha 
+
+neces 
+
+as t 
+
+repre 
+
+
+
+Some r 
+nomica 
+an i_n 
+or 
+ting t 
+ion a 
+is f ea 
+fied 
+senta t 
+nism 
+sary; 
+he num 
+senta t 
+
+
+
+elation 
+1 to 
+tension 
+
+
+
+relatio 
+hat rel 
+re impl 
+sible 
+by rel 
+ion is 
+[9, 10 
+for ins 
+er ical 
+ion . 
+
+
+
+s an 
+
+repr 
+
+al r 
+
+n is 
+
+atio 
+
+emen 
+
+beca 
+
+atio 
+
+real 
+
+]. 
+
+tanc 
+
+oper 
+
+
+
+d cl 
+esen 
+epre 
+rep 
+nor 
+ted 
+use 
+ns . 
+
+iy j 
+
+Som 
+e, r 
+ator 
+
+
+
+asses 
+t th 
+senta 
+resen 
+
+clas 
+as fo 
+
+of 
+It 
+ust a 
+etime 
+elati 
+s and 
+
+
+
+wil 
+em e 
+tion 
+ted 
+s . 
+rmal 
+
+
+
+the 
+
+can 
+va 
+s an 
+ons 
+
+rel 
+
+
+
+1 b 
+xpli 
+
+[11 
+by a 
+Oper 
+
+ope 
+
+sim 
+
+be 
+
+r ian 
+
+int 
+of i 
+atio 
+
+
+
+e so 
+ci tly 
+] sho 
+f o rm 
+ation 
+ratio 
+pie 
+
+see 
+t of 
+ensio 
+nf ini 
+ns , r 
+
+
+
+la 
+in 
+uld 
+ula 
+s o 
+ns o 
+alge 
+n th 
+
+a 
+nal 
+te c 
+equi 
+
+
+
+rge 
+memo 
+be u 
+ore 
+n t 
+n th 
+brai 
+at a 
+laz 
+
+
+
+repr 
+ardi 
+re a 
+
+
+
+that it is 
+ry. In these 
+sed . Here a 
+xpression for 
+he class or 
+e expression, 
+c properties 
+n intensional 
+y evaluation 
+esenta tion i~s 
+nality, such 
+n intensional 
+
+
+
+Although the programmer could be allowed to choose between 
+extensional and intensional representations for his relations, 
+this is not necessary. It is probably feasible, and certainly 
+higher level, to have the system choose representations on the 
+basis of cardinality estimates of the classes and relations 
+involved. The algebra of relations is regular enough that many 
+of these decisions can be made at compile time. Any that can't 
+can be deferred to run-time when exact cardinality information is 
+available. See [14] for related techniques. 
+
+* TODO 17. Conclusions 
+
+
+
+aspec 
+
+used 
+
+Altho 
+
+tatio 
+
+of o 
+
+These 
+
+relat 
+
+man a 
+
+tors 
+
+which 
+
+being 
+
+
+
+Of co 
+ts o 
+a rel 
+ugh h 
+n, jo 
+per at 
+rema 
+ions 
+nd Ro 
+for 
+are 
+base 
+
+
+
+urse, we 
+f a rela 
+ational 
+e define 
+in , tie , 
+ions is 
+rks also 
+[3], whi 
+vner [6] 
+assoc ia 
+our plur 
+d on a t 
+
+
+
+are n 
+tional 
+calculu 
+s sever 
+
+compos 
+insuf 
+
+apply 
+ch are 
+
+augmen 
+tive a 
+al desc 
+radi tio 
+
+
+
+ot th 
+calcul 
+s as t 
+al ope 
+i tion, 
+f icien 
+to Chi 
+also o 
+ted Al 
+ccess 
+r iptio 
+nal vo 
+
+
+
+e first 
+us into pr 
+he basis f 
+rations on 
+and restr 
+t for gene 
+Ids* recon 
+riented to 
+gol with s 
+to a data 
+n and imag 
+n Neumann 
+
+
+
+to propo 
+ogramming 
+or data 
+
+relation 
+iction) , 
+ral purpo 
+sti tuted 
+wards dat 
+everal re 
+base. Th 
+e , are 
+language . 
+
+
+
+se introducing 
+Codd [4] has 
+
+base systems. 
+s ( viz . , premu- 
+this small set 
+se programming. 
+
+def ini tion of 
+a bases. Feld- 
+lational opera- 
+eir operations, 
+quite limited, 
+
+
+
+- 37 - 
+
+
+
+One general purpose language that does make extensive use of 
+sets and relations is SETL [7], which provides most of the fami- 
+Liar operations on sets (e.g., union, intersection, difference, 
+powerset, image). SETL differs from relational programming in 
+three significant respects: (1) it can only handle finite sets , 
+(2) many operations must still be performed in a word-at-a-time 
+Eashion using the set former , and (3) it resorts to conventional 
+:ontrol structures. 
+
+Finally, we must mention "logic programming" systems, such 
+as PROLOG [15, 8], which use predicate logic to describe computa- 
+tional processes. These systems also differ from relational pro- 
+gramming in several significant respects: (1) they have a word- 
+at-a-time programming style due to the use of variables 
+representing individuals in the clauses of the program, and (2) 
+they are implemented using a resolution theorem prover, whereas a 
+nore conventional procedural implementation suffices for rela- 
+tional programming. Essentially the same remarks apply to 
+Popplestone ' s relational programming [13], which is like logic 
+programming except that it uses "forward inference" rather than 
+"backward inference". 
+
+In summary, no other programming style that we are aware of 
+:ombines the universal use of relations with a rich set of opera- 
+tions on those relations that can be implemented in a determinis- 
+tic, procedural way. It is hoped that the preceeding discussion 
+las made plausible some of the advantages claimed for relational 
+programming in the Introduction. Considerable work remains to be 
+3one in evaluating the effectiveness of a relational calculus as 
+a programming tool. For instance, the optimum set of combinators 
+and relational operators must be selected. Another non-trivial 
+problem is the selection of a good notation for the relational 
+ralculus. More from convenience than conviction we have used the 
+lotation of [16] and [2]. Making relational programming an 
+affective tool will require designing a notation that combines 
+readability with the manipulative advantages of a two-dimensional 
+algebraic notation. This is all preliminary to any serious con- 
+siderations of software or hardware implementation techniques. 
+
+* TODO 18. References 
+
+[1] Backus, J. Can programming be liberated from the von Neu- 
+mann style? A functional style and its algebra of pro- 
+grams, CACM 21, 8 (August 1978), 613-641. 
+
+[2] Carnap, R. Introduction to Symbolic Logic and its Appl ica- 
+tions , Dover, 1958. 
+
+[3] Childs, D.L. Feasibility of a set-theoretic data structure 
+based on a reconstituted definition of relation. IFIP 68 
+Proceedings , 420-430, North-Holland, 1969. 
+
+[4] Codd , E.F. A relational model for large shared data banks, 
+CACM 13, 6 (June 1970), 377-387. 
+
+[5] Curry, H.B., Feys , R. and Craig, W. Combinatory Logic , I, 
+North-Holland, Amsterdam, 1958. 
+
+[6] Feldman, J. A. and Rovner , P.D. An Algol-based associative 
+language, CACM 12, 8 (August 1969), 439-449. 
+
+[7] Kennedy, K. and Schwartz, J. An introduction to the set 
+theoretical language SETL, J. Comptr . and Math . with Appli- 
+cations 1 (1975), 97-119. 
+
+[8] Kowalski, R. Algorithm = logic + control, CACM 22 , 7 (July 
+1979), 424-436. 
+
+[9] Henderson, P. Functional Programming Application and 
+Implementation , Prentice-Hall, 1980, 223-231. 
+
+[10] Henderson, P. and Morris, J.H., Jr. A lazy evaluator, 
+Record 3rd ACM Symp . on Principles of Programming 
+Languages , 1976, 95-103. 
+
+[11] MacLennan, B.J. Fen - an axiomatic basis for program 
+semantics, CACM 16, 8 (August 1973), 468-474. 
+
+[12] MacLennan, B.J. Introduction to Relational Programming , 
+Computer Science Department Technical Report NPS52-81-008, 
+Naval Postgraduate School, 1981. 
+
+[13] Popplestone, R.J. Relational programming, in Hayes, J.E. 
+et al. (eds.), Machine Intelligence 9, Halsted Press, 1979, 
+3-26. 
+
+[14] Schwartz, J. Automatic data structure choice in a language 
+of very high level, CACM 18, 12 (December 1975), 722-728. 
+
+[15] van Emden, M.H. and Kowalski, R.A. The semantics of predi- 
+cate logic as a programming language, JACM 23, 4 (October 
+1976), 733-742. 
+
+[16] Whitehead, A.N. and Russell, B. Principia Mathematica to 
+*56, Cambridge, 1970. 
+
+* INITIAL DISTRIBUTION LIST
+
+Defense Technical Information Center 
+Cameron Station 
+Alexandria, VA 22314 
+
+Dudley Knox Library 
+Code 0142 
+
+Naval Postgraduate School 
+Monterey, CA 93940 
+
+Office of Research Administration 
+Code 01 2A 
+
+Naval Postgraduate School 
+Monterey, CA 93940 
+
+Chairman, Gordon H. Bradley 
+Code 52Bz 
+
+Department of Computer Science 
+Naval Postgraduate School 
+Monterey, CA 93940 
+
+Professor Bruce J. MacLennan 
+Code 52M1 
+
+Department of Computer Science 
+Naval Postgraduate School 
+Monterey, CA 93940 
+
+* glossary / symbols used
+
+| R⁻¹     | converse of R (xR⁻¹y ⇔ yRx)        |
+| T:x     | apply T as function to x           |
+| #:C     | count of C                         |
+| x∈C     | x is element of class C            |
+| x̂(S(x)) | [[id:4vb4xp40hig0][class description]]                  |
+| ′       | r̂ŝ(r=s⁻¹)                          |
+| Ɂx      | 'the unique x'                     |
+| F!:S    | image of S under F                 |
+| R⃗:x     | ŷ(yRx) -- individuals related to x |
+| R⃖:y     | ŷ(yRx) -- individuals related to y |
+| Φ       | the empty class                    |
+| ⊜       | the empty relation                 |
+| Φ̅̅       | the universal class                |
+| ⊜̅       | the universal relation             |
+| $       | cartesian product                  |
+| α       | head                               |
+| R}S     | x (R}S)y ⇔ xRy ∧ yS                |
+| S{R     | x (S{R)y ⇔ xS ∧ xRy                |
+| R \vert S   | S{R}S                              |
+|         |                                    |
+
+
+* Footnotes
+
+[fn:report]  The work reported herein was supported by the Foundation Research Program of the Naval Postgraduate School with funds provided by the Chief of Naval Research. 
+
+
+
+
