@@ -1,4 +1,8 @@
-LIBRARY 
+#+TITLE: A Relational Program for a Syntax-Directed Editor
+
+* i (cover)
+
+
 RESEARCH REPORTS DIVISION 
 NAVAL POSTGRADUATE SCHO( 
 MONTEREY, CALIFORNIA 9394i 
@@ -64,8 +68,7 @@ MONTEREY r.A oooTo "? H00L
 NAVAL POSTGRADUATE SCHOOL 
 Monterey, California 
 
-
-
+* ii (inside cover)
 Rear Admiral J.J. Ekelund D. A. Schrady 
 
 Superintendent Acting Provost 
@@ -78,8 +81,7 @@ Reproduction of all or part of this report is authorized.
 
 This report was prepared by: 
 
-
-
+* iii (report documentation page - front)
 UNCLASSIFIED 
 
 
@@ -220,7 +222,7 @@ UNCLASSIFIED
 
 SECURITY CLASSIFICATION OF THIS PAGe (Whan Data Entered) 
 
-
+* iv (report documentation page - back)
 
 UNCLASSIFIED 
 
@@ -242,11 +244,11 @@ UNCLASSIFIED
 
 SECURITY CLASSIFICATION OF THIS PAGEfTTian Dmf Bnftmd) 
 
+* 1
 
+A RELATIONAL PROGRAM FOR A SYNTAX DIRECTED EDITOR [fn:nps]
 
-A RELATIONAL PROGRAM FOR A SYNTAX DIRECTED EDITOR* 
-
-8. J. MacLennan 
+B. J. MacLennan 
 
 Computer Science Department 
 
@@ -254,36 +256,17 @@ Naval Postgraduate School
 
 Monterey, CA 93940 
 
-1 . Introduction 
+** 1. Introduction 
 
-An essential part of the investigation of any new programming 
-method or programming language is the evaluation of its use in 
-typical applications. In this report we present a use of rela- 
-tional programming [4, 3, 5] to implement a moderate size appli- 
-cation, a syntax-directed editor. 
+An essential part of the investigation of any new programming method or programming language is the evaluation of its use in typical applications. In this report we present a use of rela- tional programming [[fn:ref4], [fn:ref3], [fn:ref5]] to implement a moderate size application, a syntax-directed editor. 
 
-The syntax-directed editor described in this report is simi- 
-lar in design to that described in [2]. This is a structure edi- 
-tor , that is, an editor which directly constructs and modifies a 
-Parse tree. The source form of the program is unparsed from this 
-tree onto the display whenever it is necessary to update the 
-screen. Other than on the user's screen, the source form of the 
-program is never explicitly stored, neither in memory nor on 
-d isk . 
+The syntax-directed editor described in this report is similar in design to that described in [fn:ref2]. This is a structure editor , that is, an editor which directly constructs and modifies a Parse tree. The source form of the program is unparsed from this tree onto the display whenever it is necessary to update the screen. Other than on the user's screen, the source form of the program is never explicitly stored, neither in memory nor on disk. 
 
-In addition to this unparsing function, the editor imple- 
-ments a number of language-independent commands for shifting the 
-focus of attention among the nodes of the parse tree and for 
+In addition to this unparsing function, the editor implements a number of language-independent commands for shifting the focus of attention among the nodes of the parse tree and for 
 
+[fn:nps] The work reported herein was supported by the Foundation Research Program of the Naval Postgraduate School with funds provided by the Chief of Naval Research.
 
-
-* The work reported herein was supported by the Foundation 
-Research Program of the Naval Postgraduate School with funds 
-provided by the Chief of Naval Research.- 
-
-
-
-- 1 - 
+* 2 
 
 
 
@@ -302,7 +285,7 @@ point in the tree.
 Since an editor is an interactive program that alters a 
 data-base (the parse tree) in time, it is not appropriate to 
 implement it in a purely applicative, or value-oriented, way (see 
-[6] for a discussion of this). Hence, we have a few variable- 
+[fn:ref6] for a discussion of this). Hence, we have a few variable- 
 like objects that can be updated by an assignment operation. The 
 most important of these are T, the parse tree, and N, the current 
 node. Object-oriented operations did not appear in previous 
@@ -313,13 +296,11 @@ In the following sections we describe the data structures
 and relational definitions required to implement the syntax- 
 directed editor. The relational notation is summarized in Appen- 
 dix 1, although the reader unfamiliar with the concepts should 
-consult [4] for a better introduction. The definitions consti- 
+consult [fn:ref4] for a better introduction. The definitions consti- 
 tuting the syntax-directed editor are collected in Appendix 2. 
 Since some potential users of relational programming may be 
 
-
-
-- 2 - 
+* 3 
 
 
 
@@ -329,7 +310,7 @@ dix 3- Appendix 4 contains the syntax-directed editor translated
 into this more natural notation. The reader may be interested in 
 comparing Appendices 2 and 4. 
 
-2 . Description of Data Structures 
+** 2. Description of Data Structures 
 
 In this section we will describe the data structures used by the 
 syntax-directed editor and their representation as relations. 
@@ -362,11 +343,7 @@ defined by the function Tu :
 
 Tu € nodes -&gt; non -terms 
 
-
-
-- 3 - 
-
-
+* 4
 
 Similarly, the function Td defines the mapping for defined 
 nodes. For a defined node a particular alternative of a non- 
@@ -402,11 +379,7 @@ Each non-terminal must also designate another, forwarding , non-
 terminal . If a non-terminal has no alternative corresponding to 
 a key character, then the key character is forwarded to its 
 
-
-
-- 4 - 
-
-
+* 5
 
 forwarding non-terminal. Forw(nt) is the forwarding non-terminal 
 of nt; the type of Forw is: 
@@ -477,9 +450,7 @@ non-terms -» ints
 This completes the specification of the types of the program tree 
 and the grammar. They are defined in terms of the primitive 
 
-
-
-- 5 - 
+* 6
 
 
 
@@ -536,9 +507,9 @@ terminal strings
 Figure 1. Primitive Types 
 types listed in the following figure. 
 
-3 • Editor Functions 
+** 3. Editor Functions 
 
-3- 1 Top Level of Refinement 
+*** 3.1 Top Level of Refinement 
 
 Each entry of a key-stroke k must define a new state. Therefore, 
 we will define a function 'process' such that process (k) will 
@@ -576,9 +547,7 @@ The language-independent processing function is just the union of
 pairs, each pair composed of an editing character and the func- 
 tion to perform the editing operation: 
 
-
-
-- 6 - 
+* 7
 
 
 
@@ -625,7 +594,7 @@ The language-dependent processing is performed by a function
 'enter' which depends on the grammar. Since lang_dep(K) = enter 
 (K), lang dep = enter. This function is described later. 
 
-3. 2 Positioning Commands 
+*** 3.2 Positioning Commands 
 
 In this section we will describe the language-independent posi- 
 tioning commands which shift the focus of attention of the edi- 
@@ -657,9 +626,7 @@ T(m,i)
 
 We can invert this to 
 
-
-
-- 7 - 
+* 8
 
 
 
@@ -699,9 +666,7 @@ The 'next' and 'prev' commands move to the right and left
 siblings, respectively, of the current node. Thus we must say 
 what it means for n to be the right sibling of m: n = 
 
-
-
-- 8 - 
+* 9
 
 
 
@@ -748,9 +713,7 @@ is illustrated in the Figure 2.
 
 Figure 2. Effect of 'next' Command 
 
-
-
-- 9 - 
+* 10
 
 
 
@@ -788,15 +751,14 @@ pred = out ; prev
 n 3 o»/ °s 
 
 Figure 3- Effect of 'succ' and 'pred' 
-3 • 3 Editing Commands 
+
+*** 3.3 Editing Commands 
 
 There are really only two editing commands: deleting the subtree 
 rooted at the current node, and inserting a new subtree at the 
 current node. Each of these commands exists in two forms, as is 
 
-
-
-- 10 - 
+* 11
 
 
 
@@ -831,11 +793,7 @@ The subtree rooted at a node n is just that portion of the
 program tree containing nodes reachable from n. Thus, if 'sub- 
 nodes n' is the set of all nodes reachable from n, then 
 
-
-
--11- 
-
-
+* 12
 
 subtree(n) = (m ! m X ints) -» T 
 where m = subnodes n 
@@ -892,12 +850,7 @@ does this by creating an edge from the parent of N to N, and from
 N to the non-terminal associated with N. These operations can be 
 v isuali zed : 
 
-
-
-- 12 - 
-
-
-
+* 13
 
 T(N) 
 
@@ -951,17 +904,13 @@ L) / T
 
 The root of L is just its first number. 
 
-3 . 4 Program Entry Functions 
+*** 3.4 Program Entry Functions 
 
 In this section we will investigate the definition of the func- 
 tion 'enter(k)' which processes the language-dependent command 
 key, k. If M is an undefined, or open, node, then T(N) is the 
 
-
-
-- 13 - 
-
-
+* 14
 
 non-terminal associated with N, say, nt. This non-terminal is 
 passed along with the command key k to a function ' select ( nt , k) ' 
@@ -1016,9 +965,7 @@ else process. Forw nt; enter k
 = if (nt,k) € dom Alts 
 then process . Alts( nt ,k) 
 
-
-
-- 14 - 
+* 15
 
 
 
@@ -1079,9 +1026,7 @@ process
 
 in .replace. new. second 
 
-
-
-3 . 5 Unparsing 
+** 3.5 Unparsing 
 
 The last major function we must discuss is unparsing , i.e., the 
 generation of source form of the program from the program tree. 
@@ -1089,9 +1034,7 @@ We will define a function unparse(n) which unparses the subtree
 rooted at node n. There are two cases: either node n is unde- 
 fined or it is defined. If it is undefined then T(n) is the 
 
-
-
-- 15 - 
+* 16
 
 
 
@@ -1126,11 +1069,7 @@ Therefore ,
 dispnode = disprule.dd # [ Alts/Forw . first ]. T) 
 Disprule(n, r) takes a node n and a rule r and converts it to a 
 
-- 16 - 
-
-
-
-
+* 17
 
 
 character string. It will do this using an auxiliary function 
@@ -1185,9 +1124,7 @@ of r) under disp.Cn, r,):
 s = disp . (n ,r , ) $ a 
 So the definition of 'danal' is: 
 
-
-
-- 17 - 
+* 18
 
 
 
@@ -1236,52 +1173,41 @@ This completes the definition of the syntax-directed editor. All
 of the definitions of the functions are gathered in Appendix 2 
 and in the natural notation in Appendix 4. 
 
+* 19
+
+** 4. References 
 
 
-- 18 - 
-
-
-
-4. References 
-
-
-
-[1] Brown, J.C., Loglan 4 &amp; 5, A Loglan - English / English - Loglan 
+[fn:ref1] Brown, J.C., Loglan 4 &amp; 5, A Loglan - English / English - Loglan 
 Dictionary , 2nd. Ed., Palm Springs: 1975, The Loglan Insti- 
 tute , viii-xviii . 
 
-[2] MacLennan, B.J., The Automatic Generation of Syntax 
+[fn:ref2] MacLennan, B.J., The Automatic Generation of Syntax 
 Directed Editors , Naval Postgraduate School Computer Sci- 
 ence Department Technical Report NPS52-8 1 -01 4 , October 
 1981 . 
 
-
-
-[3] MacLennan, B.J., Introduction to Relational Programming, 
+[fn:ref3] MacLennan, B.J., Introduction to Relational Programming, 
 Proceedings of ACM Conference on Functional Programming 
 Languages and Computer Architecture , 213-220, October 18- 
 22, 1981; also Naval Postgraduate School Computer Science 
 Department Technical Report NPS52-8 1 -008 , June 1981. 
 
-[4] MacLennan, B.J., Overview of Relational Programming , Naval 
+[fn:ref4] MacLennan, B.J., Overview of Relational Programming , Naval 
 Postgraduate School Computer Science Department Technical 
 Report NPS52-81-017, November 1981. 
 
-[5] MacLennan, B.J., P rogramming with a Relational Calculus , 
+[fn:ref5] MacLennan, B.J., Programming with a Relational Calculus, 
 Naval Postgraduate School Computer Science Department 
 Technical Report NPS52-8 1 -01 3 , September 1981. 
 
-[6] MacLennan, B.J., Values and Objects in Programming 
+[fn:ref6] MacLennan, B.J., Values and Objects in Programming 
 Languages , Naval Postgraduate School Computer Science 
 Department Technical Report NPS52-8 1 -006 , April 1981. 
 
+* 20
 
-
-- 19 - 
-
-
-
-1. APPENDIX: SUMMARY OF RELATIONAL OPERATORS 
+** 1. APPENDIX: SUMMARY OF RELATIONAL OPERATORS 
 
 
 
@@ -1361,9 +1287,7 @@ restrict both domains
 image function 
 reflexive transitive closure 
 
-
-
-- 20 - 
+* 21
 
 
 
@@ -1383,7 +1307,7 @@ first
 
 dom f 
 
-* sy 
+ * sy 
 x € y 
 
 
@@ -1408,17 +1332,11 @@ define x to be y
 
 set membership 
 
+* 22
 
+** 2. APPENDIX: THE SYNTAX DIRECTED EDITOR 
 
-- 21 - 
-
-
-
-2. APPENDIX: THE SYNTAX DIRECTED EDITOR 
-
-
-
-2. 1 Top Level 
+** 2.1 Top Level 
 
 
 
@@ -1484,13 +1402,9 @@ prev = move. total [while( non.dom rightsib™ , parent); right
 succ = next; in 
 pred = out ; prev 
 
+* 23
 
-
-- 22 - 
-
-
-
-2. 3 Editin, 
+** 2.3 Editing
 
 get = 
 put = 
@@ -1532,7 +1446,7 @@ NT = first. T
 
 replaced) = T := (T" 1 N : first L | L) / T 
 
-2. 4 Program Entry 
+*** 2.4 Program Entry 
 
 enter = udf -&gt; select . (T N,) 
 
@@ -1542,7 +1456,7 @@ select = [ process. Alts / (;).( process . Forw | | enter) ]
 
 process = in .replace .new . second 
 
-2 . 5 Unparsing 
+*** 2.5 Unparsing 
 
 unparse = udf-»T / dispnode 
 
@@ -1550,9 +1464,7 @@ dispnode = disprule.(Id # [ Alts/Forw . first ]. T)
 
 disprule = [cat @ ''j.danal 
 
-
-
-- 23 - 
+* 24
 
 
 
@@ -1562,13 +1474,9 @@ disp = dispnt / third
 
 dispnt (n ,r ,ai) = unpar se . T(n , third r ai)) 
 
+* 25
 
-
-- 24 - 
-
-
-
-3 . APPENDIX: NATURAL NOTATION FOR RELATIONAL PROGRAMMING 
+** 3. APPENDIX: NATURAL NOTATION FOR RELATIONAL PROGRAMMING 
 
 In this appendix we present a less mathematical syntax for 
 relational programming. By combining non-symbolic operator names 
@@ -1597,9 +1505,7 @@ means "x p (y q z) r w" , which by right-associativity means M x p
 ((y q z) r w) M . These rules have been inspired by the Loglan 
 syntax [ 1 ] . 
 
-
-
-- 25 - 
+* 26
 
 
 
@@ -1617,8 +1523,7 @@ The formal grammar for this notation follows. In the following
 appendix the syntax-directed editor is expressed in the natural 
 notation . 
 
-3- 1 Formal Syntax 
-
+** 3.1 Formal Syntax 
 
 
 assertion 
@@ -1668,13 +1573,9 @@ monadic-primary* dyadic-primary
 
 { dyadic-id | "{" expression '' } " } 
 
+* 27
 
-
-- 26 - 
-
-
-
-3.2 Vocabulary 
+** 3.2 Vocabulary 
 
 
 
@@ -1825,9 +1726,7 @@ f§x
 
 f reduce x 
 
-
-
-- 27 - 
+* 28
 
 
 
@@ -1843,18 +1742,11 @@ x plus y
 domain f 
 x means y 
 
+* 29
 
+** 4. APPENDIX: SYNTAX DIRECTED EDITOR IN NATURAL NOTATION 
 
-- 28 - 
-
-
-
-4. APPENDIX: SYNTAX DIRECTED EDITOR IN NATURAL NOTATION 
-
-
-
-4.1 SDE-Specific Vocabular' 
-
+*** 4.1 SDE-Specific Vocabulary 
 
 
 Math. Notation Natural Notation 
@@ -1893,9 +1785,7 @@ alternation-rules
 
 forwarding-rules 
 
-
-
-4 . 2 Top Level 
+*** 4.2 Top Level 
 
 Process means language-independent combine language-dependent 
 Language-independent 
@@ -1920,14 +1810,11 @@ combine "P" maps-to put,
 combine "D" maps-to delete, 
 combine "U" maps-to undelete. 
 
-
-
-- 29 - 
-
-
+* 30
 
 Language-independent means enter. 
-4. 3 Positioning 
+
+*** 4.3 Positioning 
 
 Move position-function means 
 
@@ -1950,7 +1837,7 @@ then inverse right-sibling, apply total then move.
 Move-successor means move-next then move-in. 
 Move-predecessor means move-out then move-previous. 
 
-4. 4 Editing 
+*** 4.4 Editing 
 
 Get means remove-into move-buffer. 
 Put means replace-from move-buffer. 
@@ -1961,9 +1848,7 @@ Remove-from buffer means:
 
 buffer becomes subtree of current-node, then excise. 
 
-
-
-- 30 - 
+* 31
 
 
 
@@ -1989,7 +1874,7 @@ Replace-from buffer means tree becomes:
 current-node apply inverse tree, maps-to first buffer, 
 combine buffer, extend tree. 
 
-4 . 5 Program Entry 
+*** 4.5 Program Entry 
 
 Enter means: current-node apply tree, 
 
@@ -2002,16 +1887,12 @@ else: forwarding-rules then process, parallel enter,
 then * then ' . 
 Process means 'second' then new then replace-from then move-in 
 
-4 . 6 Unparsing 
+*** 4.6 Unparsing 
 
 Unparse means: tree if-in undefined-nodes, else display-node. 
 Display-node means: identity construct 
 
-
-
-- 31 - 
-
-
+* 32
 
 tree then alternation-rules else 'first' then forwarding-rules , 
 
@@ -2027,101 +1908,73 @@ N connect non-term-name apply R then 'third',
 
 apply tree then unparse. 
 
+* 33
 
-
-- 32 - 
-
-
-
-INITIAL DISTRIBUTION LIST 
-
+** INITIAL DISTRIBUTION LIST 
 
 
 Defense Technical Information Center 2 
-
 Cameron Station 
 Alexandria, VA 22314 
 
 Dudley Knox Library 2 
-
 Code 0142 
-
 Naval Postgraduate School 
-
 Monterey, CA 93940 
 
 Office of Research Administration 1 
-
 Code 012A 
-
 Naval Postgraduate School 
-
 Monterey, CA 93940 
 
 Chairman, Code 52Bz 40 
-
 Department of Computer Science 
 Naval Postgraduate School 
 Monterey, CA 93940 
 
 Professor Bruce J. MacLennan, Code 52M1 12 
-
 Department of Computer Science 
 Naval Postgraduate School 
 Monterey, CA 93940 
 
 Professor Harvey Abramson 1 
-
 Department of Computer Science 
-
 The University of British Columbia 
-
 2075 Wesbrook Mall 
 
 Vancouver, B. C. Canada 
-
 V6T 1W5 
-
 Dr. M. Sintzoff 1 
-
 Philips Research Laboratory 
-
 2 av. Van Becelaere 
-
 1170 Brussels 
-
 Belguim 
 
 Dr. Mehdi Jazayeri 1 
-
 Synapse Computer Corporation 
 801 Buckeye Court 
 Mil pitas, CA 95035 
 
 Mr. Jim Bowery 1 
-
 Viewdata Corporation of America 
 1444 Biscayne Boulevard Suite 305 
 Miami, Florida 33132 
 
 Dr. Charles D. Marshall 1 
-
 IBM Research, Department K51 
 5600 Cottle Road 
 San Jose, CA 95193 
 
-
-
-33 - 
+* 34
 
 
 
 U202778 
 
-
+* 35
 
 DUDLEY KNOX LIBRARY - RESEARCH REPORTS 
 
-
-
 5 6853 01068018 4 
+
+* (end)
