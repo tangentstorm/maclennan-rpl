@@ -1,0 +1,3527 @@
+NPS52-86-023 
+
+
+NAVAL POSTGRADUATE SCHOOL 
+
+Monterey, California 
+
+
+
+
+FOUR RELATIONAL PROGRAMS 
+
+
+
+B. J. MacLennan 
+
+
+
+November 1986 
+
+
+
+Approved for public release; distribution unlimited, 
+
+Prepared for: 
+
+Chief of Naval Research 
+
+Arlington, VA 22217 
+
+
+
+FedDocs 
+
+D 208.14/2 
+
+NPS-52-86-023 
+
+
+
+NAVAL POSTGRADUATE SCHOOL 
+Monterey, California 
+
+
+
+Rear Admiral R. C. Austin D. A. Schrady 
+
+Superintendent Provost 
+
+
+
+The work reported herein was supported by Contract from the 
+Office of Naval Research. 
+
+Reproduction of all or part of this report is authorized. 
+
+This report was prepared by: 
+
+
+
+Chairman Dean of Information afftk,\ 
+
+Department of Computer Science Policy Science 
+
+
+
+UNCLASSIFIED 
+
+
+
+SECURITY CLASSIFICATION ^ F THIS PAGE 'When Data Entered) 
+
+
+
+REPORT DOCUMENTATION PAGE 
+
+
+
+READ INSTRUCTIONS 
+BEFORE COMPLETING FORM 
+
+
+
+I REPORT NUMBER 
+
+
+
+NPS52-86-023 
+
+
+
+2. GOVT ACCESSION NO 
+
+
+
+3. RECIPIENT'S CATALOG NUMBER 
+
+
+
+4. TITLE (and Subtitle) 
+
+
+
+FOUR RELATIONAL PROGRAMS 
+
+
+
+5. TYPE OF REPORT &amp; PERIOD COVERED 
+
+
+
+6. PERFORMING ORG. REPORT NUMBER 
+
+
+
+i 
+
+
+
+7. AuTHORr»&gt; 
+
+
+
+Bruce J. MacLennan 
+
+
+
+8 CONTRACT OR GRANT NUMBERfaJ 
+
+
+
+O 
+
+
+
+9. PERFORMING ORGANIZATION NAME AND ADDRESS 
+
+Naval Postgraduate School 
+Monterey, CA 93943 
+
+
+
+10. PROGRAM ELEMENT. PROJECT, TASK 
+AREA 4 WORK UNIT NUMBERS 
+
+
+
+N0001485WR24057 
+
+
+
+II. CONTROLLING OFFICE NAME AND ADDRESS 
+
+Chief of Naval Research 
+Arlington, VA 22217 
+
+
+
+12. REPORT DATE 
+
+November 1986 
+
+
+
+13. NUMBER OF PAGES 
+
+24 
+
+
+
+14 MONITORING AGENCY NAME ft ADDRESS^// dllterent Horn Controlltnt Olttce) 15. SECURITY CLASS, (of this report) 
+
+
+
+UNCLASSIFIED 
+
+
+
+15a. DECLASSIFICATION' DOWNGRADING 
+SCHEDULE 
+
+
+
+16. DISTRIBUTION STATEMENT (o( this Report) 
+
+
+
+Approved for public release; distribution unlimited 
+
+
+
+17. DISTRIBUTION STATEMENT (ot the abatract entered In Block 20, It dllterent trotn Report) 
+
+
+
+18. SUPPLEMENTARY NOTES 
+
+
+
+19. KEY WORDS i Continue on reverse aide It neceaaary and Identity by block number) 
+
+Relational programming, functional programming, relations, relational algebra, 
+relational calculus, applicative programming, logic programming, combinator, 
+very-high level language, Gaussian elimination, finite state automata, 
+higher order functions 
+
+
+
+20. ABSTRACT (Continue on reverae aide It neceaaary and Identity by block number) 
+
+Relational programming is a style of programming in which entire relations 
+are manipulated as data and in which programs are also considered relations. 
+Extensive use is made of higher-order, finite and infinite relations and 
+functions. 
+
+In this report we demonstrate the relational programming language RPL 
+by using it to develop four programs: (1) computing word frequencies from 
+text; (2) minimizing deterministic finite state automata; (3) Gaussian 
+elimination; and (4) updating an employee file. Transcripts of actual runs 
+
+
+
+DD 1 JAN 73 1473 EDITION OF 1 NOV 65 IS OBSOLETE 
+
+S N 0102- LF-014-6601 SECURITY CLASSIFICATION OF THIS PACK (Whan Data Bnfred) 
+
+
+
+UNCLASSIFIED 
+
+
+
+UNCLASSIFIED 
+
+
+
+SECURITY CLASSIFICATION OF THIS PAGE (Whan Data Entarad) 
+
+
+
+are included in the appendices, as is a summary of the language 
+
+
+
+S N 0102- LF- 014- 6601 
+
+UNCLASSIFIED 
+
+
+
+SECURITY CLASSIFICATION OF THIS P *.GE(Whan Data Entarad) 
+
+
+
+FO UR REL A TIONA L PRO GRA MS 
+
+B. J. MacLennan 
+
+Computer Science Department 
+
+Naval Postgraduate School 
+
+Monterey, CA 93943 
+
+
+
+Abstract: 
+
+
+
+In this report we demonstrate the relational programming language RPL by using it to develop 
+four programs. These programs are: (1) computing a table of word frequencies from a text; (2) 
+minimizing a deterministic finite state automata; (3) Gaussian elimination; and (4) a simple data 
+processing example involving updating an employee file. Appendix A shows transcripts of execu- 
+tions of the programs on the Brown and Mitton interpreter [Brown&amp;Mitton!. The reader is 
+presumed to be familiar with RPL, which is described in |MacLennan83 . For convenience, how- 
+ever. Appendix B contains the RPL grammar, and Appendix C describes the language accepted 
+by the Brown and Mitton interpreter. 
+
+1. Computing Word Frequencies 
+
+The first example, which is adapted from &lt;MacLennan83 1, it to compute a frequence table F from 
+a text (sequence of words) S. That is, given 5 such that S[i is the i word, we compute F such 
+that F J w is the frequency (number of occurrences) of word w in S. For an example, we take S = 
+&lt;"to". "be", "or", "not", "to", "be"&gt;, which is just an abbreviation for the relation: 
+
+
+
+S = {l:"to", 2:"be", 3:"or", 4:"not", 5:"to", 6:"be"} 
+
+
+
+Pictorially, 
+
+
+
+1 
+
+
+"to" 
+
+
+2 
+
+
+"be" 
+
+
+3 
+
+
+"or" 
+
+
+4 
+
+
+"not" 
+
+
+5 
+
+
+"to" 
+
+
+6 
+
+
+"be" 
+
+
+
+In this case, the desired frequency table F is: 
+
+F = {"to":2, "be":2, "or":l, "not":l} 
+Pictorially, 
+
+
+
+"to" 
+
+
+2 
+
+
+"be" 
+
+
+2 
+
+
+"or" 
+
+
+1 
+
+
+"not" 
+
+
+1 
+
+
+
+In other words, "to" occurs twice, "be" occurs twice, "or" occurs once, and "not" occurs once. 
+Of course, since F is a relation, the order in which the elements are listed is irrelevant. 
+
+To develop the general word-counting program, we work through this particular example. 
+Since the frequency table is a function from the words to their frequencies, the first step is to 
+reverse columns of S: 
+
+5-1 = {»to":l, "be":2. "or":3. "not":4. "to":5. "be":6} 
+
+
+
+The work reported herein was supported by Contract N00014-85- WR-24057 from the Office of Naval Research. 
+
+
+
+Pictorially. 
+
+
+
+"to" 
+
+
+1 
+
+
+"be" 
+
+
+2 
+
+
+"or" 
+
+
+3 
+
+
+"not" 
+
+
+4 
+
+
+"to" 
+
+
+5 
+
+
+"be" 
+
+
+6 
+
+
+
+Notice that this relation is not a function (i.e., it is not single valued). We can make it a func- 
+tion by forming the "unit image" of the table: 
+
+
+
+unimage 5" 1 = {"to":{l, 5}, "be":{2, 6}, "or":{3}, "not":{4}} 
+
+
+
+Pictorially, 
+
+
+
+"to" 
+
+
+{1,5} 
+
+
+"be" 
+
+
+{2.6} 
+
+
+"or" 
+
+
+{3} 
+
+
+"not" 
+
+
+{4} 
+
+
+
+This tells us. for example, that the word "be" occurs in positions 2 and 6 in the text. We do not 
+need to know the places where a given word occurs, but only the number of such places. There- 
+fore, we send the preceding table through the size (cardinality) function (by the relative product 
+operation): 
+
+unimage S" 1 size = {"to":2, "be":2. "or":l, "not":l} 
+
+This is the desired result; the final step is depicted in Figure 1. Notice that since size is defined 
+for all sets, it is in effect an infinite relation; this is permitted in RPL. 
+
+
+
+The resulting program is: 
+
+
+
+F = unimage S size 
+
+
+
+We can turn it into a function definition to compute the frequency table for any text S by: 
+
+freq S = unimage S~ ] size 
+
+It remains to define the 'unimage' function, which is not built into RPL. On the other hand, 
+RPL does have the builtin operator unimg, defined to that T unimg x is the set of all y such 
+that x:y t T. This can be used to define unimage. To see this, note that the left section 
+[T unimg is the function that takes any x into its image under T. Although T is finite (and 
+extensional), sections are always intensional, so it is necessary to to convert T unimg j to its 
+extensional equivalent. This is accomplished with the RPL restrict operation, which converts an 
+intensional relation to an extensional relation by restricting its domain to a finite set. Hence we 
+define: 
+
+unimage T = dom T restrict [T unimg 
+
+The following is an example RPL session that defines the freq function an applies it to a particu- 
+lar text ('?&gt;' is the RPL prompt): 
+
+
+
+1. This function is related to the RPL unimg operator see below. 
+
+
+
+"to" 
+
+
+{1&lt;5} 
+
+
+"be" 
+
+
+{2,6} 
+
+
+"or" 
+
+
+{3} 
+
+
+"not" 
+
+
+{4} 
+
+
+
+{} 
+
+
+
+
+
+{1} 
+
+
+1 
+
+
+{4} 
+
+
+1 
+
+
+{2,6} 
+
+
+2 
+
+
+{4,8} 
+
+
+2 
+
+
+{4,6,7} 
+
+
+3 
+
+
+
+"to" 
+
+
+2 
+
+
+"be" 
+
+
+2 
+
+
+"or" 
+
+
+1 
+
+
+"not" 
+
+
+1 
+
+
+
+Figure 1. Piping unimage 5 Through size Function 
+
+
+
+?&gt; unimage T = domT restrict [Turning 
+?&gt; freq S = unimage S~ size 
+?&gt; freq &lt;"to", "be", "or", "not", "to", "be"&gt; 
+{"be":2, "to":2, "not":l, "or":l} 
+
+?&gt; done 
+
+The appendix contains the actual transcript of this RPL session; it shows how programs must be 
+represented for the Brown and Mitton interpreter. The preceding formulas were produced from 
+this transcript by a pretty printer. 
+
+2. Minimization of Deterministic Finite Automata 
+
+The next example program is the equivalence and minimization of deterministic finite automata 
+by an algorithm developed by Robert Floyd 2 . We assume that we have a finite alphabet £ and a 
+finite set Q of states. The set F C Q represents the final (accepting) states. The finite relation 
+T is such that for atE, T„a is the transition relation for the symbol a. That is, &lt;q, q' &gt; € T \ a 
+if and only if the symbol a takes state q into state q' . 
+
+
+
+2. Private communication, 1985. 
+
+
+
+-3- 
+
+
+
+Our goal is to define a relation R^ such that &lt;q, q' &gt; t R x if and only if q and q' are not 
+equivalent states. This is done in a series of steps, starting from pairs of states that are known to 
+be inequivalent. namely the final and nonfinal states: 
+
+R = Fx (Q\F) 
+
+We now work backward: any states that under the same input lead to inequivalent states are 
+themselves considered inequivalent. For example, R relates inequivalent states: R x relates states 
+related by R together with those that under the same input character are taken into states 
+related by R ; R 2 relates states related by R together with those that under the same one or two 
+input characters lead to states related by R ; and so on. Each step of this process is accom- 
+plished by a function ip\ that is, we will define ip so that R, +i = tp R r It will be easy to see that 
+this process converges in n = (size Q)~ steps, so 
+
+* oc = r Ro 
+
+Next we consider \l&gt;. 
+
+As a preliminary we define the polymorphic image of one relation under another relation. If R 
+and 5 are two relations, then the polymorphic image under R of 5". or more briefly the i?-image 
+of 5, is defined 
+
+R i S = R | S | R- 1 
+
+This has the following property: R ± S relates x to y if and only if there are u and t; such that R 
+relates i to u and y to r. and 5 relates u to v. That is, &lt;i, y&gt; 6 R ± 5 if and only if there are u 
+and v such that &lt;x, u&gt; ■£ R, &lt;y. v&gt; t R and &lt;u, v&gt; £ S. This can be visualized: 
+
+
+
+7? 
+
+
+
+R i S 
+
+
+
+R 
+
+
+
+Now, if we have that R t relates inequivalent states, then (T I a) ± R t will relate those states 
+that are carried by symbol a into states inequivalent by R t . Thus, we define /? l + 1 so that it 
+relates those states that are related by R t together with those related by (T J. a) ± R t . for any 
+a G £. Now, if by [± R t ] we mean the function that takes a polymorphic image of /?,-, that is, 
+
+[±Ri]x = x± R { 
+
+then it is easy to see that 
+
+(T\ [i /?,])! a = [± R,} (T [ a) = {T I a) ± R, 
+
+Hence, the union of (T j a) _ R t , for all a £ E, is just the union of the range of the relation 
+T ! [j. /?, . This yields the definition of 7?, and hence ip: 
+
+
+
+1 «.])) 
+Two states are now equivalent if 
+
+
+
+R l + 1 = il&gt;R, = J R 1 u U (rng(T 
+
+This completes the definition of the inequivalence relation R. 
+they are not inequivalent: 
+
+R = = Q'MR^uR^) 
+
+where Q" means Q x Q. 
+
+The minimal machine is constructed on the basis of the equivalence classes of states under 
+R = . The equivalence class of a state q is just the unit image under /? = of q: 
+
+
+
+eclass q = R^ unimg q 
+
+The set of all such equivalence classes results from taking the image of Q under eclass: 
+
+Q = = eclass img Q 
+
+In general, we define 
+
+equiv = [eclass img . 
+
+so Q = = equiv Q. We take Q = to be the states in the minimal machine. 
+
+It remains to construct the transition relation T = of the minimal machine. For all 
+&lt;q, q' &gt; 6 T i a we want 
+
+&lt; eclass q, eclass q' &gt; € T = [ a 
+
+Thus T = [ a is the isomorphic image under eclass of T I a: 
+
+T = I a = eclass $ (T [ a) 
+
+Thus T = is the (finite) composition of [eclass $ and T. which is the (finite) relative product of T 
+
+
+
+and eclass $:: 
+
+
+
+T- = T \ [eclass $1 
+
+
+
+The remainder of the minimal machine is easy to construct. For example, the final states are just 
+the equivalence classes of the original final states: 
+
+F = = equiv F 
+
+There follows the actual relational program to minimize a small automaton. It makes use of two 
+auxiliary functions a and p for defining the union of a set of sets: 
+
+— DFA Minimization 
+
+— Utility Functions 
+
+1st = [J 1] 
+
+2nd = [| 2] 
+
+r ± s = r [ s \ r~ l 
+
+ef = (/ ■ (lstT(e • 2nd)))T([\] • (IT(un • e)) • 2nd)) 
+
+f pi = 1st • (tr f while ([^ 0] • 2nd)) • [i ,] 
+
+u = l u U0 
+
+
+
+Example DFA 
+
+
+
+E = {1,2} 
+
+T = {1 : {10 : 10, 20 : 20}, 2 : {10 : 30, 20 : 30}} 
+
+Q = {10, 20, 30} 
+
+F = {30} 
+
+
+
+— Minimization 
+
+Q 2 = Q x Q 
+
+n = size Q~ 
+
+R = Fx (Q\F) 
+
+V R = i?U U(rng(rj [± R})) 
+
+R = ee Q 2 \(R x uR^) 
+
+eclass = [R = unimg 
+
+equiv = jeclass img 
+
+&lt;? = = equiv Q 
+
+T = = T | eclass $] 
+
+F = = equiv F 
+
+— Minimized DFA 
+
+val Q = 
+
+{ {10. 20}, {30} } 
+val T = 
+
+{ 1 : { {10, 20} : {10. 20} }. 
+2 : { {10. 20} : {30} } } 
+val F = 
+
+{ {30} } 
+
+The val command prints the value of an identifier. 
+
+3. Gaussian Elimination 
+
+The matrix is represented as a vector of vectors: 
+
+&lt;&lt; a n &gt; • • • - «!„• ^i &gt;, 
+
+&lt; a 21 a 2rr b 2 &gt;&gt; 
+
+
+
+M 
+
+
+
+a nv b n &gt;&gt; 
+
+
+
+For the sake of simplicity we assume all the a, are nonzero. We use the operator 'J.' to select the 
+kth element of a vector. Thus l M j &amp;' is the kth row of M and 'M | [J. k]" 1 is the kth column of 
+M. 
+
+The Gauss Elimination function will use n successive steps. Each of these steps will accom- 
+plish the transformation 
+
+&lt;M, k&gt; — &lt;M'. k + l&gt; 
+
+where M' is obtained from M by performing the elimination process on the kth column: 
+
+M' = elim &lt;M, k&gt; 
+
+Thus the complete process is defined: 
+
+Gauss M = (elim for &lt;1 , . . . , n&gt;) M 
+
+Here we make use of the functional '(/ for 5) x' which computes the sequence of values 
+
+V\ = f&lt;x, 5j&gt; 
+y 2 = f&lt;y v S 2 &gt; 
+
+Vn = /&lt;J/n-n S n&gt; 
+
+-6- 
+
+
+
+and returns y n . The "for* functional is defined in terms of reduction as follows: 
+
+/ for S = JO S] « (/ §] 
+
+This can be understood by the expansion: 
+
+(/for S) x = (|@ S] • (/§])* = [® S] ([/§]*) 
+= [@ 5] (/ § x) = (/ § x) @ 5 
+= (/§x)5 
+
+We turn now to the elimination process. We want M' = elim &lt;M, k:^. where M ' results from 
+M by zeroing all entries in column k of M, except the entry in row k, which is set to one. This 
+can be accomplished by subtracting an appropriate matrix E from M: 
+
+M' = matdif &lt;M, E&gt; 
+
+Here 'matdif is a component-wise matrix difference function. 
+
+The matrix E is produced by multiplying the appropriate factors by the individual rows of M. 
+For the first elimination step E is: 
+
+&lt; [1-1/ a n )M v 
+
+[a 21 /a n )M v 
+
+E, = : 
+
+( a nl/ fl ll)^l &gt; 
+
+The matrix resulting from subtracting E l from M is 
+
+&lt;&lt; 1, a 12 ', • • • o lB ', b\ &gt;, 
+&lt; 0, a 2 o', • • • a 2n ', b' \ &gt;, 
+
+
+
+M x 
+
+
+
+&lt; °^ a nl'^ ■ ■ ■ a„ n '- *&gt;'n &gt;&gt; 
+
+
+
+At the next stage the elimination matrix is: 
+
+&lt; (a 12 '/a 22 ')M' 2 , 
+(l-l/o 22 ')M 2 ', 
+
+E 2 = : 
+
+{ a n2 I a 2l') M 2 &gt; 
+
+In general, if M ' ' is the matrix resulting from the A: — 1st elimination step, then the elimination 
+matrix for the £th step is 
+
+&lt; i a ik" l a kk") M k"i 
+E k - {\H k -l]/a kk ")M k '\ 
+
+[«nk" l a kk") M k" &gt; 
+
+It is easy to see that E k results from multiplying a vector V k by the kth row of M' ' . This is just 
+the outer product of \\ and the /rth row of M' ' : 
+
+E k = outer prod &lt; V k , M' \k&gt; 
+
+The vector \\ is 
+
+
+
+-7- 
+
+
+
+&lt; Hk"l a Vk"-&gt; 
+
+v k = ( a kk"- l )' a kk" • 
+
+a n k"i a kk" &gt; 
+This is obtained by forming the scalar product of 1/ a kk ' ' and the vector 
+
+U k = &lt;a \k"- a 2k" y ■ ■ ■ &lt; a kk"- 1 - ■ • ■ &gt; a nk"&gt; 
+
+This in turn is the result of subtracting from the kth column of A/' ' the unit vector unit &lt; M, A;&gt;, 
+which has a 1 in the Arth position, and a in all others. 
+
+We now develop an explicit relational formula for V^. For this purpose it will be convenient 
+to treat it as a binary function \\ = V &lt;M. k&gt;. We have: 
+
+V &lt;M. k&gt; = scaprod &lt;1 / diag &lt;M. &lt;:&gt;, U k &gt; 
+
+= scaprod &lt;1 diag &lt;M, k&gt;. vecdif &lt; column &lt;M. k&gt;, unit &lt;M, k&gt;&gt;&gt; 
+
+The parameter &lt;Af, k&gt; can be factored out by use of the construction operation 'T', which is 
+defined so that (f~g)x = &lt;jx, gx&gt;. Factoring, we have: 
+
+V &lt;M, k&gt; = scaprod &lt;~\ ! diag &lt;M, k&gt;. vecdif &lt;column &lt;M. k&gt;, unit &lt;M. k&gt;&gt;&gt; 
+
+= scaprod &lt;((1 /] • diag) &lt;M, &amp;&gt;. vecdif ((columnTunit) &lt;M. k&gt;)&gt; 
+
+= scaprod &lt;([l /) ° diag) &lt;A/, ^&gt;, (vecdif ■ (columnTunit)) &lt;M, k&gt;&gt; 
+
+= scaprod ((('l /] " diag)T(vecdif » (columnTunit))) &lt;M. k&gt;) 
+
+= (scaprod c ((1 / c diag)T(vecdif ° (columnTunit))) &lt;M. k&gt; 
+
+Canceling &lt;M. ^&gt; from both sides yields an explicit formula for V: 
+
+V = scaprod ° (([l /] c diag)T(vecdif c (columnTunit))) 
+
+We proceed similarly to get a formula for elim: 
+
+elim &lt;M. k&gt; = matdif &lt;M. E k &gt; 
+
+= matdif &lt;M. outerprod &lt; V k . M [ k&gt;&gt; 
+
+= matdif &lt;M, outerprod &lt;V'&lt;M. b,M| b&gt; 
+
+We perform some minor rearrangements so that &lt;M, &amp;&gt; can be factored out of the right-hand 
+side: 
+
+elim &lt;M, k&gt; = matdif &lt;A/, outerprod &lt; V &lt;M. k&gt;, [|J &lt;M, ^&gt;&gt;&gt; 
+
+= matdif &lt;M. (outerprod ■ ( VT[1])) &lt;M, k&gt;&gt; 
+
+= matdif &lt;[| lj &lt;M, /:&gt;, (outerprod - ( VT"!!])) &lt;M, k&gt;&gt; 
+
+= (matdif ■ ([j l]T(outerprod • ( VT[1])))) &lt;M, k&gt; 
+
+Canceling &lt;M, k&gt; from both sides yields an explicit formula for elim: 
+
+elim = matdif • ([J. l]T(outerprod • (VT[i]))) 
+
+A complete RPL session demonstrating the Gaussian elimination function follows: 
+
+
+
+-8- 
+
+
+
+— Utility Functions 
+
+con k = X z k 
+
+transmap / = [| /] • [#j 
+
+vecdif = transmap [— ] 
+
+scaprod &lt;k. v&gt; = v j [k x] 
+
+outerprod &lt; u. v&gt; = u\ (scaprod ° , v]) 
+
+matdif = transmap vecdif 
+
+column &lt;M. k&gt; = M \ [J. k] 
+
+unit &lt;M. k&gt; = &lt;1 , . . . , size M&gt; | [[= k] -» con 1: con 
+
+diag &lt;M. k&gt; = M [ k { k 
+
+f for S = [Q 5] . [/ §] 
+
+— Gaussian Elimination 
+
+V = scaprod ■ (([1-0 /] ■ diag)T(vecdif ° (columnTunit))) 
+elim = matdif • (\l 1 T(outerprod ° ( ^T[{] ))) 
+Gauss M = (elim for &lt; 1 .... , size M&gt;) M 
+
+— Example Matrix 
+
+M = &lt;&lt;3, 9, 33&gt;, &lt;2, -1, 1&gt;&gt; 
+
+— Execution 
+
+Gauss M 
+
+&lt;&lt; 1.0, -2.38419E-7, 2.0&gt; 
+&lt; 0.0. 1.0. 3.0&gt;&gt; 
+
+The matrix M represents the equations 
+
+3j - 9t/ = 33 
+2x - y = 1 
+
+The result of Gauss M correctly reflects the solution z = 2, t/ = 3. 
+
+4. Employee File Update 
+
+Next we consider a simple data processing example adapted from !MacLennan83!. We are given 
+an employee file F indexed by employee number. That is. F [ n is the record for employee 
+number n. The employee records themselves are represented by functions from attribute names 
+into attribute values. For example, if R is an employee record, then R [ "N" is the employee's 
+name. R [ "R" is his hourly rate, and R { "H' 1 is the hours worked this pay period. Here is an 
+example employee file containing three records: 
+
+F = {124 : {"N" : "John", "R" : 10. "H" : 100}. 
+118 : {"N" : "Bill". "R" : 15, "H" : 120}, 
+207 : {"N" : "Sally", "R" : 14. "H" : 115}} 
+
+We are also given an update file U such that U J, n is the number of hours worked this week by 
+employee number n. For example: 
+
+U = {118 : 6. 124 : 40, 207 : 40} 
+
+Our task is to generate an updated employee file F' in which the hours worked ("H") field has 
+been updated. 
+
+First we define 'sumhrs 1 so that if R is an employee record and h is the hours worked this 
+week, then sumhrs &lt;R. h&gt; is the new total hours. Clearly. 
+
+
+
+sumhrs &lt;R. h&gt; = (R , "H") + h 
+Alternately, we can define this function variable-free style: 
+
+sumhrs = [+] • ([| "H"] || I) 
+It is easy to see the two are equivalent: 
+
+sumhrs &lt;R, h&gt; = ([+] • ([| "H"] || I)) &lt;fl, h&gt; 
+
+= [+] (([j"H"j ill) &lt;R,h&gt;) 
+
+= [+] &lt;[j "H"] #,I h&gt; 
+
+= {R i "H") + h 
+
+Our next task is to replace the old value of "H" field by h ' . This can be accomplished by the 
+ordered union operation ';'. For example. 
+
+{"H" : h'} ; R 
+
+will return a record R' in which R' { "H" = h' but all other fields of R' are the same as in R. 
+How do we get the relation {"H" : h' }? Since this is just a sequence that's equivalent to the 
+array &lt;"H", h' &gt;, we can use as to convert the array to a sequence. We solve for the function / 
+that computes {"H" : h' } from &lt;R. h&gt; as follows: 
+
+f&lt;R,k&gt; = {"H" : sumhrs &lt;R. h&gt;} 
+
+= as &lt;"H'". sumhrs &lt;R. h&gt;&gt; 
+
+= as (["H" ,] (sumhrs &lt;/?, h&gt;)) 
+
+= (as ° ["H" ,j ° sumhrs) &lt;R, h&gt; 
+
+Hence. 
+
+/ = as • ["H" ,] ■ sumhrs 
+
+It's necessary to get the corresponding records from the F and U files together so that they can 
+be processed by /. This is accomplished by the extensional construction operation £ defined so 
+that (F f U) I n = &lt;F J, n. U { n&gt;. With the given example files we have: 
+
+F # U = { 124 : &lt;{"N" : "John", "R 1 ' : 10. "H": 100}, 40&gt;. 
+118 : &lt;{"N" : "Bill", "R" : 15, "H" : 120}, 6&gt;. 
+207 : &lt;{ ti N• , : "Sally". "R" : 14, "H" : 115}, 40&gt;} 
+
+Notice that the pairs &lt;F [ n, U [ n&gt; are just the inputs required for /. We combine the preced- 
+ing results into a update file 'upd* denned so that upd j n is {"H" : A'}, representing the new 
+hours worked for employee number n. In this case, 
+
+upd = { 124 : {"H" : 140}. 
+118 : {"H" : 126}, 
+207 : {"H" : 155}} 
+
+It's easy to solve for upd by using the relative product: 
+
+upd; n = /((F# U) I n) 
+= ((F # U) \ f) I n 
+
+Hence, upd = (F f U) \ f. Substituting for / yields: 
+
+upd = (F # U) (as ■ !"H" ,] • sumhrs) 
+
+Now we're almost done. We want each record in F' to be the ordered union of the corresponding 
+update record in upd and old record in F. Hence we solve: 
+
+
+
+-10- 
+
+
+
+F' i n = (upd [ n) ; (F I n) 
+= [;] &lt;upd n. F ^ n&gt; 
+[;] ((upd # F) 1 n) 
+
+((upd # F) | [;]) i n 
+
+
+
+Hence. 
+
+
+
+/" (upd # f ) 
+
+
+
+The complete session follows: 
+
+— The Files 
+
+F = {124 : {"INT : "John", "R" : 10. "H" : 100}, 
+118 : {"N" : "Bill", "R" : 15, "H" : 120}, 
+207 : j"N" : "Sally", "R" : 14. "H" : 115}} 
+
+U = {118 : 6. 124 : 40. 207 : 40} 
+
+— Computing the New File 
+
+sumhrs = [+] • ([I "H"] || I) 
+
+upd = (F # U) j (as • "H" ,1 • sumhrs) 
+
+F' = (upd # F) | [;] 
+
+— The New File 
+
+valF 
+
+
+
+{124 
+118 
+207 
+
+
+
+{"H" 
+{"H" 
+{"H" 
+
+
+
+140. "N" : "John". "R" : 10}, 
+126. "N" : "Bill", "R" : 15}, 
+155. "N" : "Sally", "R" : 14} } 
+
+
+
+This result correctly reflects the fact that John (employee 124) has worked 124 hours. Bill 
+(employee 118) has worked 15 hours, and Sally (employee 207) has worked 14 hours. 
+
+It is simple to modify the program so that it uses the input files OldMaster and Updates, and 
+defines the output file NewMaster: 
+
+F = file "OldMaster" 
+U = file "Updates" 
+
+sumhrs = |+] • ([, "H"] || I) 
+
+upd = (F # U) i (as • ["H" ,] • sumhrs 
+file "NewMaster" = (upd # F) j [;] 
+
+5. References 
+
+jBrown&amp;Mitton] Brown. J. R.. and Mitton, S. J.. Relational Programming: Design and Imple- 
+mentation of a Prototype Interpreter, MS thesis, Naval Postgraduate School, June 1985. 
+
+iMacLennan83j MacLennan. B. J.. "Relational Programming." Naval Postgraduate School Com- 
+puter Science Department Technical Report NPS52-83-012, September 1983. 
+
+
+
+-11- 
+
+
+
+APPENDIX A: EXAMPLE RPL SESSIONS 
+
+This appendix contains transcripts of actual RPL sessions with the Brown and Mitton inter- 
+preter. Note that the interpreter follows the Interlisp convention of permitting a bracket ']' to 
+close any number of open parentheses. 
+
+Example 1: Word Frequence 
+
+It will be seen that the RPL interpreter computes a relation containing redundant tuples. They 
+do no harm, but can be eliminated (by a quadratic algorithm) if desired. The transcript follows: 
+
+Loading RPL DO YOU WANT TO RESUME A PREVIOUS RPL SESSION? &lt;y/n&gt; n 
+
+
+
+RPL INTERPRETER ON LINE!! 
+
+?&gt; S == (list "to" "be" "or" "not" "to" "be"] 
+
+?&gt; (S sup -1] 
+
+( rel ( be 6 ) ( to 5 ) ( not 4 ) 
+( or 3 ) ( be 2 ) ( to 1 ) ) 
+
+?&gt; unimage T == ((dom T) restrict (Isec T unimg] 
+
+?&gt; (unimage (S sup —1] 
+
+( set ( be ( set 6 2 ) ) ( to ( set 5 1 ) ) 
+(not (set 4 ) ) (or (set 3 ) ) 
+(be (set 6 2 ) ) (to (set 5 1 ) ) ) 
+
+?&gt; ((unimage (S sup -1)) rp size] 
+
+( rel ( be 2 ) ( to 2 ) ( not 1 ) ( or 1 ) 
+( be 2 ) ( to 2 ) ) 
+
+?&gt; freq S == ((unimage (S sup -1)) rp size] 
+
+?&gt; (freq (list "to" "be" "or" "not" "to" "be"] 
+
+( rel ( be 2 ) ( to 2 ) ( not 1 ) ( or 1 ) 
+( be 2 ) ( to 2 ) ) 
+
+?&gt; done 
+
+DO YOU WANT TO SAVE ENVIRONMENT FOR FUTURE USE? &lt;y/n&gt; n 
+
+
+
+■12- 
+
+
+
+Example 2: Minimizing DFA 
+
+For this example we assume that commands for defining the DFA and performing the minimiza- 
+tion are on a file, u examples/dfa.rpr\ whose contents are: 
+
+1st —-■ (rsec sel 1)) 
+
+2nd == (rsec sel 2)) 
+
+r ppd s == (r | (s | (cnv r)))) 
+
+sigma f == ((f o (1st (. bar) (epsilon o 2nd))) (, bar) ((op ) o ((I (. bar) (un o epsilon)) o 2nd)))) 
+
+f rho i == (1st o (((sigma f) while ((rsec != empty) o 2nd)) o (Isec i .)))) 
+
+union == ((op cup) rho empty)) 
+
+SIGMA == (set 1 2)) 
+
+T == (rel (1 : (rel (10 : 10) (20 : 20))) (2 : (rel (10 : 30) (20 : 30))))) 
+
+Q == (set 10 20 30)) 
+
+F == (set 30)) 
+
+Q_sup_2 = (Q cart Q)) 
+
+n == (size Q sup_2)) 
+
+R_sub_0 == (F cart (Q F))) 
+
+psi R == (R cup (union (rng (T rp (rsec ppd R)))))) 
+
+R sub inf == ((psi sup n) R sub_0)) 
+
+R sub_= == ((Q_sup_2 R_sub_inf) cap (Q sup_2 (cnv R_sub_jnf)))) 
+
+rom eclass == (Isec R sub_= unimg)) 
+
+rom equiv == (Isec rom eclass img)) 
+
+Q sub = == (rom equiv Q)) 
+
+T sub = == (T rp (Isec rom eclass $))) 
+
+F sub = == (rom equiv F)) 
+
+EOF 
+
+This file is executed by being loaded into RPL. The resulting transition function and states of 
+the minimal machine are then displayed. They can be seen to be sets of sets, since the states in 
+the minimal machine are represented by equivalence classes. ° The transcript follows: 
+
+DO YOU WANT TO RESUME A PREVIOUS RPL SESSION? &lt;y/n&gt; y 
+
+INPUT FILENAME 
+
+examples/dfa.rpl 
+
+Loading Session loaded 
+
+?&gt; val Q sub_= 
+
+( set ( set 10 20 ) ( set 10 20 ) ( set 30 ) ) 
+
+?&gt; val T_sub_= 
+
+(rel (1 (rel ( ( set 10 20 ) ( set 10 20 ) ) ( ( set 10 20 ) ( 
+set 10 20 ) ) ) ) ( 2 ( rel ( ( set 10 20 ) (set 30 ) ) ( ( set 10 
+20 ) (set 30 ) ) ) ) ) 
+
+?&gt; val F_sub_= 
+
+( set ( set 30 ) ) 
+
+?&gt; done 
+
+
+
+3. Note that as usual there is benign redundancy in the sets. 
+
+
+
+13- 
+
+
+
+Example 3: Gaussian Elimination 
+
+The program for performing the Gaussian elimination is in the file "examples/gauss. rpP", whose 
+contents are: 
+
+con k == (func x k)) 
+transmap f == ((rsec rp f) o (op #))) 
+vecdif == (transmap (op — ))) 
+scaprod (k v) —= (v rp (Isec k times))) 
+outerprod (u v) == (u rp (scaprod o (rsec . v)))) 
+matdif == (transmap vecdif)) 
+column (M k) == (M rp (rsec sel k))) 
+
+unit (M k) == ((listrange 1 to (size M)) rp (if (rsec = k) -&gt; (con 1) ; (con 0)))) 
+diag (M k) == ((M sel k) sel k)) 
+f for S == ((rsec @ S) o (Isec f red))) 
+
+V == (scaprod o (((Isec 1.0 divide) o diag) (. bar) (vecdif o (column (. bar) unit))))) 
+elim == (matdif o ((rsec sel 1) (. bar) (outerprod o (V (. bar) (op sel) ))))) 
+Gauss M == ((elim for (listrange 1 to (size M))) M)) 
+M == (list (list 3 9 33) (list 2 -1 1))) 
+a == (diag (list M 1))) 
+
+b == (vecdif (list (column (list M 1)) (unit (list M 1))))) 
+v == (scaprod (list 0.33 b))) 
+EOF 
+
+The session shown in the following transcript performs the Gaussian elimination on the matrix 
+M: 
+
+DO YOU WANT TO RESUME A PREVIOUS RPL SESSION? &lt;y/n&gt; y 
+INPUT FILENAME 
+examples/gauss. rpl 
+
+Loading Session loaded 
+
+?&gt; (Gauss M] 
+
+( rel (1 ( rel (1 1.0 ) (2 -2.38419E-07 ) (3 2.0 )) ) 
+(2 (rel (1 0.0 ) (2 1.0 ) (3 3.0 ) ) ) ) 
+
+?&gt; done 
+
+Note that the resulting matrix is printed as a relation rather than a list of lists, since it is quite 
+expensive for the interpreter to determine if a relation is in fact a list. 
+
+
+
+14- 
+
+
+
+Example 4: Data Processing 
+
+In this example, the employee file to be updated is small (thr^e records), and so typed in interac- 
+tively. More typically, the RPL file facility would be used to load F from disk. The transcript 
+follows: 
+
+RPL INTERPRETER ON LINE!! 
+?&gt; F == (rel (124 : 
+
+(rel ("N" : "John") ("R" : 10) ("H" : 100))) 
+(118 : 
+
+(rel ("N" : "Bill") ("R" : 15) ("H" : 120))) 
+(207 : 
+
+(rel ("N" : "Sally") ("R" : 14) ("H" : 115] 
+
+?&gt; U == (rel (118 : 6) (124 : 40) (207 : 40] 
+?&gt; (F# U] 
+
+( rel ( 124 ( rel 
+
+(1 (rel ( N John ) ( R 10 ) ( H 100 ) ) ) 
+
+( 2 40 ) ) ) 
+( 118 ( rel 
+
+(1 (rel ( N Bill ) ( R 15 ) ( H 120 ) ) ) 
+
+(26))) 
+( 207 ( rel 
+
+(1 (rel ( N Sally ) ( R 14 ) ( H 115 ) ) ) 
+
+( 2 40 ) ) ) ) 
+?&gt; sumhrs == ((op +) o ((rsec sel "H") || I] 
+
+?&gt; upd == ((F # U) rp 
+
+(aso ((Isec "H" .) o sumhrs] 
+
+?&gt; F' == ((upd # F) rp (op ;] 
+
+?&gt; val F' 
+
+( rel ( 124 
+
+(rel ( H 140 ) ( N John ) ( R 10 ) ) ) 
+( 118 
+
+(rel ( H 126 ) ( N Bill ) ( R 15 ) ) ) 
+( 207 
+
+(rel ( H 155 ) ( N Sally ) ( R 14 ) ) ) ) 
+
+?&gt; done 
+
+
+
+15- 
+
+
+
+APPENDIX B: RPL GRAMMAR 
+
+
+
+session = command done 
+
+
+
+command 
+
+
+
+expression 
+
+
+
+application = 
+
+
+
+prefixid [identifier] = expression 
+display expression 
+
+[expression infix] application I 
+superscription 
+
+([application primary 
+iter ' primary -* primary 
+
+
+
+I 
+application 
+
+
+
+superscription = expression sup &lt; 
+
+
+
+primary 
+
+
+
+literal 
+prefixid 
+I 
+infix 
+
+infix primary 
+primary infix 
+primary -» primary ; primary 
+
+( expression [.. expression] ) 
+{ expression ... expression] } 
+&lt; primary , • ■ • &gt; 
+file string 
+
+
+
+infix = infixop bar 
+identifier = letter 
+
+
+
+letter 
+digit 
+
+
+
+prime 
+
+
+
+prime = 
+
+
+
+literal 
+
+
+
+digit* [. digit*] [E [ -f- | ] rft^tt" 1 "] 
+
+string 
+
+true 
+
+false 
+
+
+
+string 
+
+
+
+char " 
+
+
+
+•16- 
+
+
+
+infixop = 
+sel . : cup member nomem Isubset subset = -&gt; &lt;- restr : cl cr cap \ 
+@hat ! cat @ . | | $ red + - times divide != &lt; &gt; &lt;= &gt; = 
+andsign orsign cart 
+
+
+
+{identifier \ 
+£1 I 
+
+prefixop I 
+
+
+
+prefixop = 
+- un cur unc theta size str DELTA inv dom rng mem Lm Rm Mm run lun bun 
+init term alpha omega ALPHA OMEGA min max mu index select join as sa saO 
+rp rpi rsort sort unimg all ssm img curry uncurry PHI Id while upsilon 
+phi delta PI extend restrict wig not 
+
+
+
+17- 
+
+
+
+APPENDIX C: RPL INPUT FORM SUMMARY 
+
+
+
+TABLE 1. Primitive Extensional Operations 
+
+
+
+Name 
+
+
+Old Input Form 
+
+
+New Input Form 
+
+
+Publication 
+
+
+Form 
+
+
+selection 
+
+
+t sel x 
+
+
+t sel x 
+
+
+t ; X 
+
+
+
+
+relative product 
+
+
+t u 
+
+
+t | u 
+
+
+t | u 
+
+
+
+
+construction 
+
+
+t . bar u 
+
+
+t # u 
+
+
+*# ii 
+
+
+
+
+pair formation 
+
+
+x : y 
+
+
+x : y 
+
+
+x : y 
+
+
+
+
+union 
+
+
+t cup u 
+
+
+t cup u 
+
+
+t U u 
+
+
+
+
+unit set 
+
+
+un x 
+
+
+un x 
+
+
+un x 
+
+
+
+
+currying 
+
+
+cur t 
+
+
+cur t 
+
+
+cur t 
+
+
+
+
+uncurrying 
+
+
+unc t 
+
+
+unc t 
+
+
+unc / 
+
+
+
+
+unique element selection 
+
+
+theta s 
+
+
+theta s 
+
+
+9 s 
+
+
+
+
+element selection 
+
+
+(added) 
+
+
+epsilon t 
+
+
+e t 
+
+
+
+
+cardinality 
+
+
+size t 
+
+
+size t 
+
+
+size t 
+
+
+
+
+structure 
+
+
+str t 
+
+
+(deleted) 
+
+
+(deleted) 
+
+
+
+
+transitive closure 
+
+
+t sup + 
+
+
+t sup + 
+
+
+t + 
+
+
+
+
+empty set 
+
+
+empty- 
+
+
+empty 
+
+
+
+
+
+
+
+
+TABLE 2. Nonprimitive Extensional Operations: Group 1 
+
+
+
+Name 
+
+
+Old Input Form 
+
+
+New Input Form 
+
+
+Publication 
+
+
+Form 
+
+
+pair list 
+
+
+(x, y) 
+
+
+(x,y) 
+
+
+(*i y) 
+
+
+
+
+left pair section 
+
+
+(x.) 
+
+
+(deleted) 
+
+
+(deleted) 
+
+
+
+
+right pair section 
+
+
+(,y) 
+
+
+(deleted) 
+
+
+(deleted) 
+
+
+
+
+duplication 
+
+
+DELTA x 
+
+
+DELTA x 
+
+
+A x 
+
+
+
+
+membership 
+
+
+x member t 
+
+
+x member t 
+
+
+x e t 
+
+
+
+
+nonmembership 
+
+
+x nomem t 
+
+
+x nomem t 
+
+
+x i t 
+
+
+
+
+improper subset 
+
+
+s Isubset t 
+
+
+s Isubset t 
+
+
+s C t 
+
+
+
+
+proper subset 
+
+
+s subset t 
+
+
+s subset t 
+
+
+s C t 
+
+
+
+
+equality 
+
+
+s = t 
+
+
+s = t 
+
+
+s = t 
+
+
+
+
+converse 
+
+
+inv t. t sup -1 
+
+
+cnv t. t sup -1 
+
+
+cnv /. r 1 
+
+
+
+
+domain 
+
+
+dom t 
+
+
+dom t 
+
+
+dom t 
+
+
+
+
+range 
+
+
+rng t 
+
+
+rng t 
+
+
+rng t 
+
+
+
+
+members 
+
+
+mem t 
+
+
+mem t 
+
+
+mem t 
+
+
+
+
+left member 
+
+
+Lm (x,t) 
+
+
+x Lm t 
+
+
+x Lm t 
+
+
+
+
+right member 
+
+
+Rm (x.t) 
+
+
+x Rm t 
+
+
+x Rm t 
+
+
+
+
+member 
+
+
+Mm (x,t) 
+
+
+x Mm t 
+
+
+x Mm t 
+
+
+
+
+right univalent 
+
+
+run t 
+
+
+run t 
+
+
+run / 
+
+
+
+
+left univalent 
+
+
+lun t 
+
+
+lun t 
+
+
+lun / 
+
+
+
+
+bi-univalent 
+
+
+bun t 
+
+
+bun t 
+
+
+bun t 
+
+
+
+
+initial members 
+
+
+init t 
+
+
+init t 
+
+
+init / 
+
+
+
+
+terminal members 
+
+
+term t 
+
+
+term t 
+
+
+term t 
+
+
+
+
+reflexive transitive closure 
+
+
+t sup * 
+
+
+t sup ** 
+
+
+t 
+
+
+
+
+domain restriction 
+
+
+p -&gt; t 
+
+
+p-&gt; t 
+
+
+p^t 
+
+
+
+
+range restriction 
+
+
+t &lt;- p 
+
+
+t &lt;- p 
+
+
+t - P 
+
+
+
+
+restriction 
+
+
+t restr p 
+
+
+t restr p 
+
+
+t T p 
+
+
+
+
+sequence filtering 
+
+
+(added) 
+
+
+p xi t 
+
+
+p^t 
+
+
+
+
+
+-18- 
+
+
+
+TABLE 3. Nonprimitive Extensional Operations: Group 2 
+
+
+
+Name 
+
+
+Old Input Form 
+
+
+New Input Form 
+
+
+Publication Form 
+
+
+first member 
+
+
+alpha t 
+
+
+alpha t 
+
+
+Q t 
+
+
+last member 
+
+
+omega t 
+
+
+omega t 
+
+
+U) t 
+
+
+initial sequence 
+
+
+ALPHA t 
+
+
+ALPHA t 
+
+
+A t 
+
+
+final sequence 
+
+
+OMEGA t 
+
+
+OMEGA t 
+
+
+n t 
+
+
+ordered union 
+
+
+t ; u 
+
+
+t ; u 
+
+
+t ; u 
+
+
+cons left 
+
+
+x cl t 
+
+
+x cl t 
+
+
+x cl t 
+
+
+cons right 
+
+
+t cr x 
+
+
+t cr x 
+
+
+t cr i 
+
+
+minimum 
+
+
+min s 
+
+
+min s 
+
+
+min s 
+
+
+maximum 
+
+
+max s 
+
+
+max s 
+
+
+max s 
+
+
+intersection 
+
+
+s cap t 
+
+
+s cap t 
+
+
+s n t 
+
+
+set difference 
+
+
+s \ t 
+
+
+s \ t 
+
+
+s \ t 
+
+
+apply functional record 
+
+
+t @ hat x 
+
+
+t @hat x 
+
+
+t @ X 
+
+
+apply functional structure 
+
+
+t ! x 
+
+
+t ! x 
+
+
+t ! x 
+
+
+minimize 
+
+
+mu t 
+
+
+mu t 
+
+
+n t 
+
+
+database index 
+
+
+index x d 
+
+
+x index d 
+
+
+x index d 
+
+
+database select 
+
+
+select x 
+
+
+x select d 
+
+
+x select &lt;l 
+
+
+database join 
+
+
+join x 
+
+
+x join dblist 
+
+
+i join dblist 
+
+
+array to sequence 
+
+
+as t 
+
+
+as t 
+
+
+as / 
+
+
+sequence to array 
+
+
+sa t 
+
+
+t sa i 
+
+
+t sa i 
+
+
+seq. to zero-origin array 
+
+
+saO t 
+
+
+(deleted) 
+
+
+(deleted) 
+
+
+relative product 
+
+
+rp f t 
+
+
+t rp f 
+
+
+t\ f 
+
+
+relative product inverse 
+
+
+rpi f t 
+
+
+f rpi t 
+
+
+/! t 
+
+
+array concatenation 
+
+
+t cat u 
+
+
+t cat u 
+
+
+t cat u 
+
+
+relation sort 
+
+
+rsort s 
+
+
+rsort s 
+
+
+rsort s 
+
+
+sort 
+
+
+sort s 
+
+
+sort s 
+
+
+sort s 
+
+
+unit image 
+
+
+unimg t x 
+
+
+t unimg x 
+
+
+t unimg i 
+
+
+all 
+
+
+all t 
+
+
+all t 
+
+
+all / 
+
+
+sequence to matrix 
+
+
+ssm t 
+
+
+ssm t 
+
+
+ssm t 
+
+
+
+TABLE 4. Primitive Intensional Operations 
+
+
+
+Name 
+
+
+Old Input Form 
+
+
+New Input Form 
+
+
+Publication Form 
+
+
+application 
+
+
+f 6 x 
+
+
+f @ X 
+
+
+/ @ X 
+
+
+image 
+
+
+img f s 
+
+
+f img s 
+
+
+f img 5 
+
+
+composition 
+
+
+fg 
+
+
+fog 
+
+
+/ ■ 9 
+
+
+infix to prefix 
+
+
+(added) 
+
+
+(op +), (op times), ... 
+
+
+[+].[*], ••• 
+
+
+left section 
+
+
+(x+), (x-), ... 
+
+
+(lsec x +), (lsec x -), ... 
+
+
+[z+], [*-], • • • 
+
+
+right section 
+
+
+(+y), (-y), - 
+
+
+(rsec -t- y), (rsec - y), ... 
+
+
+[+y], [-y], ■ ■ ■ 
+
+
+paralleling 
+
+
+f| ! g 
+
+
+fi I g 
+
+
+f\\g 
+
+
+isomorphism 
+
+
+f $ t 
+
+
+f $ t 
+
+
+/$ t 
+
+
+formal application 
+
+
+f @ bar g 
+
+
+(deleted) 
+
+
+(deleted) 
+
+
+functional condition 
+
+
+(p -&gt; f; g) 
+
+
+(ifp-&gt;f;g) 
+
+
+[p-f\9) 
+
+
+curry 
+
+
+curry f 
+
+
+curry f 
+
+
+curry / 
+
+
+uncurry 
+
+
+uncurry f 
+
+
+uncurry f 
+
+
+uncurry / 
+
+
+filtering 
+
+
+PHI p (d. r) 
+
+
+pPHI S 
+
+
+p $ S 
+
+
+iteration 
+
+
+iter jp -&gt; f] 
+
+
+(iter p -&gt; f) 
+
+
+iter [p - f 
+
+
+formalization 
+
+
++ bar, times bar, ... 
+
+
+(+ bar), (times bar), ... 
+
+
+T, x, ... 
+
+
+identity 
+
+
+Id 
+
+
+I 
+
+
+I 
+
+
+
+-19- 
+
+
+
+TABLE 5. Nonprimitive Intensional Operations 
+
+
+
+Name 
+
+
+Old Input Form 
+
+
+New Input Form 
+
+
+Publication Form 
+
+
+while loop 
+
+
+while (p, f] 
+
+
+(f while p) 
+
+
+/ while p 
+
+
+array reduction 
+
+
+f red i 
+
+
+f red x 
+
+
+/§* 
+
+
+repeated composition 
+
+
+f sup n 
+
+
+f sup n 
+
+
+r 
+
+
+value of node 
+
+
+upsilon f 
+
+
+upsilon f 
+
+
+vf 
+
+
+operate on form 
+
+
+phi f 
+
+
+phif 
+
+
+0f 
+
+
+operate on data 
+
+
+delta f 
+
+
+delta f 
+
+
+Sf 
+
+
+image of structure 
+
+
+PIf 
+
+
+PIf 
+
+
+n/ 
+
+
+extension 
+
+
+extend (t, f) 
+
+
+t extend f 
+
+
+t extend / 
+
+
+restriction 
+
+
+restrict (s, f) 
+
+
+s restrict f 
+
+
+s restrict / 
+
+
+formal negation 
+
+
+wig p 
+
+
+wig p 
+
+
+~P 
+
+
+
+TABLE 6. Miscellaneous Operations 
+
+
+
+Name 
+
+
+Old Input Form 
+
+
+New Input Form 
+
+
+Publication 
+
+
+Form 
+
+
+sum 
+
+
+x + y 
+
+
+x -r y 
+
+
+x - y 
+
+
+
+
+difference 
+
+
+x - y 
+
+
+x- y 
+
+
+x - y 
+
+
+
+
+product 
+
+
+x times y 
+
+
+x times y 
+
+
+x x y 
+
+
+
+
+quotient 
+
+
+x divide y 
+
+
+x divide y 
+
+
+x i y 
+
+
+
+
+inequality 
+
+
+x != y 
+
+
+x != y 
+
+
+x ^ y 
+
+
+
+
+less 
+
+
+x &lt; y 
+
+
+x &lt; y 
+
+
+x &lt; y 
+
+
+
+
+greater 
+
+
+x &gt; y 
+
+
+x &gt; y 
+
+
+x &gt; y 
+
+
+
+
+less or equal 
+
+
+x &lt;= y 
+
+
+x &lt;= y 
+
+
+i&lt;y 
+
+
+
+
+greater or equal 
+
+
+x &gt;= y 
+
+
+x &gt;= y 
+
+
+x &gt; y 
+
+
+
+
+conjunction 
+
+
+x andsign y 
+
+
+x andsign y 
+
+
+x A y 
+
+
+
+
+disjunction 
+
+
+x orsign y 
+
+
+x orsign y 
+
+
+x V y 
+
+
+
+
+negation 
+
+
+not x 
+
+
+not x 
+
+
+— 'i 
+
+
+
+
+cartesian product 
+
+
+s cart t 
+
+
+s cart t 
+
+
+S x / 
+
+
+
+
+
+TABLE 7. Data Input Operations and Syntax 
+
+
+
+Name 
+
+
+Input Form 
+
+
+Publication Form 
+
+
+identifiers 
+
+strings 
+
+booleans 
+
+
+a. b'. total, etc. 
+"abed" 
+true, false 
+
+
+a. b' , total, etc. 
+"abed" 
+true, false 
+
+
+relation 
+set 
+
+
+(rel (x : y), ... ) 
+(set x y ... ) 
+
+
+((*y), ••• ) 
+
+{z, y, ■ ■ ■ } 
+
+
+sequence 
+list 
+subrange set 
+
+
+(seq x y ... ) 
+(list x y ... ) 
+(setrange m to n) 
+
+
+{x,y, ■ • • ) 
+
+&lt;i, y, • • • &gt; 
+{m, . . . ,n) 
+
+
+subrange sequence 
+subrange list 
+
+
+(seqrange m to n) 
+(listrange m to n) 
+
+
+(m, . . . ,n) 
+&lt;m, . . . , n&gt; 
+
+
+
+■20- 
+
+
+
+TABLE 8. RPL Command Types 
+
+
+
+Name 
+
+
+Input Form 
+
+
+Publication Form 
+
+
+data definition 
+
+
+x == y 
+
+
+x = y 
+
+
+prefix function definition 
+
+
+f x = = y 
+
+
+f x = y 
+
+
+infix function definition 
+
+
+x f y = = z 
+
+
+x f y = z 
+
+
+write data to a file 
+
+
+file "name" == x 
+
+
+file "name" = x 
+
+
+read data from a file 
+
+
+x == (file "name") 
+
+
+x = file "name" 
+
+
+output, form 1 
+
+
+display x 
+
+
+display i 
+
+
+output, form 2 
+
+
+dis x 
+
+
+display x 
+
+
+output, form 3 
+
+
+d X 
+
+
+d x 
+
+
+output, form 4 
+
+
+X 
+
+
+X 
+
+
+output value of definition 
+
+
+val x 
+
+
+val j 
+
+
+output function environment 
+
+
+env f 
+
+
+env / 
+
+
+output entire environment 
+
+
+env 
+
+
+env 
+
+
+
+-21- 
+
+
+
+INITIAL DISTRIBUTION LIST 
+
+
+
+Defense Technical Information Center 
+
+Cameron Station 
+
+Alexandria. VA 22314 2 
+
+Dudley Knox Library 
+
+Code 0142 
+
+Naval Postgraduate School 
+
+Monterey, CA 93943 2 
+
+Office of Research Administration 
+
+Code 012 
+
+Naval Postgraduate School 
+
+Monterey, CA 93943 1 
+
+Chairman, Code 52 
+
+Department of Computer Science 
+
+Naval Postgraduate School 
+
+Monterey. CA 93943 40 
+
+Bruce J. MacLennan 
+
+Code 52ML 
+
+Department of Computer Science 
+
+Naval Postgraduate School 
+
+Monterey, CA 93943 12 
+
+Ralph Wachter 
+
+Code 433 
+
+Office of Naval Research 
+
+800 N. Quincy 
+
+Arlington, VA 22217-5000 1 
+
+S. Kamal Abdali 
+
+Tektronix Laboratories 
+
+Computer Research Laboratory 
+
+M/S 50-662 
+
+P. O. Box 500 
+
+Beaverton, OR 97077 1 
+
+Drew D. Adams 
+
+Centre de Recherches de la C.G.E. 
+
+Laboratories de Marcoussis 
+
+Division Informatique 
+
+Route de Nozay 
+
+91460 Marcoussis 
+
+France 1 
+
+Vinay Apsingikar 
+
+CMC Limited 
+
+R&amp;D Division 
+
+115 Sarojini Devi Road 
+
+Secunderabad 500003 
+
+India 1 
+
+
+
+-22- 
+
+
+
+John Backus 
+
+IBM Almaden Research Center 
+
+650 Harry Road 
+
+San Jose. CA 95120-6099 
+
+Jospeh H. Fasel 
+
+Los Alamos National Laboratory 
+
+C-10. MS B296 
+
+Los Alamos, NM 87545 
+
+Robert Floyd 
+
+Computer Science Department 
+Stanford University 
+Stanford, CA 94305 
+
+Joseph A. Goguen 
+SRI International 
+Computer Science Laboratory 
+333 Ravenswood Avenue 
+Menlo Park, CA 94025 
+
+Peter Henderson 
+
+Department of Computer Science 
+
+SUNY at Stony Brook 
+
+Long Island, NY 11794 
+
+Paul Hudak 
+
+Yale University 
+
+Department of Computer Science 
+
+Box 2158, Yale Station 
+
+New Haven, CT 06520 
+
+Bharat Jayaraman 
+University of North Carolina 
+Department of Computer Science 
+New West Hall 035 A 
+Chapel Hill, NC 27514 
+
+A. Dain Samples 
+
+Computer Science Division - EECS 
+University of California 
+Berkeley, CA 94720 
+
+Mayer Schwartz 
+
+Computer Research Laboratory 
+
+MS 50-662 
+
+Tektronix. Inc. 
+
+P. O. Box 500 
+
+Beaverton. OR 97077 
+
+Guy L. Steele 
+
+Thinking Machines Corporation 
+
+245 First Street 
+
+Cambridge, MA 02142 
+
+Richard Taylor 
+INMOS Limited 
+
+
+
+-23- 
+
+
+
+Whitefriars 
+Lewins Mead 
+Bristol BSl 2NP 
+UK 
+
+
+
+■24- 
+
+
+
+DUDLEY KNOX LIBRARY 
+
+
+
+3 2768 0030241 1 8 

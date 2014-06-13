@@ -1,0 +1,4901 @@
+LIBRARY 
+
+RE. ' &gt;TS DIVISION 
+
+NAVAL PO i GRADUATE SCHOOL 
+MONTEREY, CALIFORNIA 93940 
+
+
+
+NPS52-83-012 
+
+
+
+NAVAL POSTGRADUATE SCHOOL 
+
+Monterey, California 
+
+
+
+
+RELATIONAL PROGRAMMING 
+
+
+
+Bruce J. MacLennan 
+
+
+
+September 1983 
+
+
+
+Approved for public release; distribution unlimited 
+Dl " Q Dared for: 
+
+
+
+PfEDDOCS ;f of Naval Research 
+
+D208.U'2:NP3-52-83-0l2 ington, VA 22217 
+
+
+
+NAVAL POSTGRADUATE SCHOOL 
+Monterey, California 
+
+
+
+Rear Admiral J. J. Ekelund D. A. Schrady 
+
+Superintendent Provost 
+
+
+
+The work reported herein was supported in part by the Foundation 
+Research Program of the Naval Postgraduate School with funds provided 
+by the Chief of Naval Research. 
+
+Reproduction of all or part of this report is authorized. 
+
+This report was prepared by: 
+
+
+
+UAV1U K. H51MU, uridiniian ..*,_■_*,. 
+
+Department of Computer Science Dean of Research 
+
+
+
+DUDLEY KNOX LIBRARY 
+NAVAL POSTGRADUATE SCHOOL 
+MONTEREY CA 93943-5101 
+
+
+
+UNCLA SSIFIEP 
+
+
+
+SECURITY CLASSIFICATION OF THIS PAGE (Whan Data Entarad) 
+
+
+
+REPORT DOCUMENTATION PAGE 
+
+
+
+READ INSTRUCTIONS 
+BEFORE COMPLETING FORM 
+
+
+
+1. REPORT NUMBER 
+
+NPS52-83-012 
+
+
+
+2. GOVT ACCESSION NO 
+
+
+
+3. RECIPIENT'S CATALOG NUMBER 
+
+
+
+4. TITLE (and Subtltlt) 
+
+Relational Programming 
+
+
+
+5. TYPE OF REPORT ft PERIOD COVERED 
+
+
+
+Technical Report 
+
+
+
+6. PERFORMING ORG. REPORT NUMBER 
+
+
+
+7. AUTHORC*; 
+
+Bruce J. MacLennan 
+
+
+
+8. CONTRACT OR GRANT NUMBERf*) 
+
+
+
+9. PERFORMING ORGANIZATION NAME AND ADDRESS 
+
+Naval Postgraduate School 
+Monterey, CA 93943 
+
+
+
+10. PROGRAM ELEMENT. PROJECT. TASK 
+AREA ft WORK UNIT NUMBERS 
+
+61152N: RR000-01— 100 
+N0001483WR30104 
+
+
+
+It. CONTROLLING OFFICE NAME AND ADDRESS 
+
+Chief of Naval Research 
+Arlington, VA 22217 
+
+
+
+12. REPORT DATE 
+
+
+
+September 1983 
+
+
+
+'3- NUM5EP OF P.».C1S 
+
+
+
+77 
+
+
+
+14. MONITORING AGENCY NAME ft ADDR ESS(I( dittarant Irom Controlling Otllca) 
+
+
+
+IS. SECURITY CLASS, (ol thla raport) 
+
+Unclassified 
+
+
+
+15*. DECLASSIFICATION/ DOWNGRADING 
+SCHEDULE 
+
+
+
+16. DISTRIBUTION ST ATEMENT (of thla Raport) 
+
+Approved for public release; distribution unlimited 
+
+
+
+17. DISTRIBUTION STATEMENT (ol tha abatract antarad In Block 20. II dltlarant Irom Raport) 
+
+
+
+18. SUPPLEMENTARY NOTES 
+
+
+
+19. KEY WORDS (Continue on ravaraa alda II nacaaamry and Idanttty by block number) 
+
+Relational programming, functional programming, relations, relational 
+algebra, relational calculus, applicative language, logic programming, 
+combinator, very-high-level language. 
+
+
+
+20. ABSTRACT (Contlnua on ravaraa alda It nacaaaary and Idantlty by block numbar) 
+
+This report describes relational programming , a style of programming in 
+which entire relations are manipulated as data, and in which programs are 
+represented as relations. The use of relational operators on both data and 
+programs is illustrated, and implementation issues are discussed. 
+
+
+
+DD | JAN 73 1473 EDITION OF 1 NOV «S IS OBSOLETE 
+
+S/N 0T02-LF- 014-6601 
+
+
+
+UNCLASSIFIED 
+
+
+
+SECURITY CLASSIFICATION OF THIS PAGE (Whan Datm tntmamd) 
+
+
+
+RELATIONAL PROGRAMMING 
+
+Bruce J. Mac Lennan 
+
+Computer Science Department 
+
+Naval Postgraduate School 
+
+Monterey, CA 93940 
+
+
+
+1. Introduction 
+
+
+
+2. Classes and Relations . . . 
+
+2.1 basic concepts . . . 
+
+2.2 relational descriptions 
+
+2.3 converse 
+
+2.4 arrow diagrams . . . 
+
+2.5 tables 
+
+
+
+3. Domains 
+
+4. Functions 
+
+4.1 basic concepts . . 
+
+4.2 higher level functions 
+
+
+
+CONTENTS 
+
+
+
+- 1 - 
+
+
+
+5. Boolean Operations 9 
+
+5.1 logical connectives 9 
+
+5.2 empty class 10 
+
+5.3 Cartesian product H 
+
+5.4 subset relation 11 
+
+6. Limiting and Restriction H 
+
+7. Relative Product and Composition 13 
+
+8. Structures 15 
+
+8.1 initial and terminal members 15 
+
+8.2 higher level operations 17 
+
+9. Sequences 19 
+
+9.1 ordinal couples 19 
+
+9.2 catenation and consing 20 
+
+9.3 alternative definitions of sequences 22 
+
+10. Binary Operations 23 
+
+10.1 basic concepts 23 
+
+10.2 operations on binary operations 24 
+
+11. Combinators 26 
+
+- ii - 
+
+
+
+11.1 paralleling of relations 26 
+
+11.2 conditional union 26 
+
+11.3 combinatory logic 27 
+
+11.4 Curried functions 29 
+
+12. Records 30 
+
+12.1 basic operations 30 
+
+12.2 functional records 31 
+
+12.3 relational databases 33 
+
+13. Ancestral Relations 35 
+
+13.1 definition 35 
+
+13.2 applications 37 
+
+13.3 iteration 37 
+
+14. Arrays 38 
+
+14.1 definition and basic operations 38 
+
+14.2 relation to sequences 40 
+
+14.3 other array operations 42 
+
+15. Isomorphic and Homomorphic Images 43 
+
+15.1 images 43 
+
+
+
+in - 
+
+
+
+15.2 images of functional structures 44 
+
+15.3 isomorphism and the structure function 46 
+
+16. Data Structures 47 
+
+16.1 definition 47 
+
+16.2 operations on data structures 48 
+
+17. Reducing Structures 52 
+
+17.1 basic concepts 52 
+
+17.2 reduction of arrays 53 
+
+17.3 reduction of sequences 54 
+
+18. Examples 55 
+
+18.1 payroll 55 
+
+18.2 check issuing 57 
+
+18.3 pseudo-natural notation 57 
+
+19. Implementation 50 
+
+19.1 introduction 58 
+
+19.2 computability 59 
+
+19.3 extensional representation 59 
+
+19.4 intensional representations 50 
+
+- iv - 
+
+
+
+19.5 eliminating polymorphism 60 
+
+19.6 extensional operators 62 
+
+19.7 intensional operators 64 
+
+20. Conclusions 64 
+
+21. References 67 
+
+
+
+RELATIONAL PROGRAMMING 
+
+1. Introduction 
+
+In this report 1 we discuss relational programming , i.e. a style of programming in 
+which entire relations are manipulated rather than individual data. This is analogous 
+to functional programming [Backus78], wherein entire functions are the values mani- 
+pulated by the operators. We will see that relational programming subsumes functional 
+programming because every function is also a relation. It is appropriate at this point 
+to discuss why we have chosen to investigate relational programming 2 . 
+
+As we have noted, relational programming subsumes functional programming; 
+hence, anything that can be done with functional programming can be done with rela- 
+tional programming. Furthermore, relational programming has many of the advan- 
+tages of functional programming: for instance, the ability to derive and manipulate 
+programs by algebraic manipulation. A well developed algebra of relations dates back 
+to Boole's original work and has been extensively studied since then. Although rela- 
+tions are more general than functions, their laws are often simpler. For instance, 
+(fg)~ l = g~ l f~ x is true for all relations, but true only for functions that are one-to- 
+one. Also, relational programming more directly supports non-linear data structures, 
+such as trees and graphs, than does functional programming. In relational program- 
+ming the basic data values are themselves relations, whereas in functional program- 
+ming there is a separate class of objects (lists) used for data structures. One final rea- 
+son for investigating relational programming is that it provides a possible paradigm fei 
+utilizing associative and active memories. As a teaser for what is to come, v;e presc:; 
+the following example of a relational program. We will take a text T, represented as an 
+array of words (i.e., T(i) is the i-th word), and generate a frequency table F so 
+F(w) is the number of occurences of word iv in T. Now we will see (§4) that all T (iu) is 
+the set of all indices of the word w. If we let size(C) be the cardinality of a set C, then 
+
+
+
+1. The work reported herein was supported by the Office of Naval Research under contract number N0Q014- 
+82-WR-20162, and by the Foundation Research Program of the Naval Postgraduate School with funds 
+provided by the Chief of Naval Research. 
+
+2. The reader can find a shorter introduction to relational programming in [MacLennan83]. That report is a 
+revision and extension of [MacLennanBla] and [MacLennan81b]. 
+
+
+
+-1- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+the number of indices (occurences) of iv is just size[all T (w)]. Therefore we can write 
+F = size. (all T) (§7). 
+
+2. Classes and Relations 
+
+2. 1 basic concepts 
+
+Our relational calculus will deal with three sorts of things: individuals, classes and 
+relations. These can best be illustrated by example. If 'x' is the name of an individual 
+and ' C is the name of a class (set), then 'ieC means that the individual denoted by 
+'x' is a member of the class denoted by ' C (i.e., that x has property C). Thus 
+'Aristotle eman 1 would indicate that Aristotle is a man, and '2eeven' would mean that 2 
+is an even number. Some authors (e.g., Russell and Whitehead) use 'xeP' for 'ieP'. 
+The symbol '£' and its alternate V are abbreviations for 'tan' , which is the Greek word 
+for 'is'. 
+
+If 'x' and 'y' are names of individuals and ' R' is the name of a relation, then 'x R y' 
+means that x bears the relation R toy . For example, 
+
+Aristotle student Plato 
+
+means that Aristotle is a student of Plato. Also, '2 &lt; 3' means that 2 bears the less- 
+than relation to 3. A relation is just a set of pairs. Therefore, if we use x:y to denote 
+the basic pair-making operation, then:r% if and only if x.y e R. The notation that we 
+have introduced above will be extended to classes of classes, classes of relations, rela- 
+tions among classes, relations among relations, etc. 
+
+2.2 relational descriptions 
+
+There are several ways to describe classes and relations. One of the easiest is to list 
+its elements, for example: 
+
+S = \ 1, 3, 5, 7 j 
+
+R - \ l:a, 2:b, 3:c, 4:d j 
+
+
+
+-2- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+This is called an extensional description of the class. Obviously, this is only possible if 
+the class or relation is finite and only practical if it's small. Therefore we also have 
+intensional descriptions of classes and relations. 
+
+If S(x) is a sentence involving 'x' , then a class description is an expression of the 
+form '\x \S(x)l'. This denotes the class of all individuals, a, for which S(a) is true, i.e., 
+
+aeji \S(x)\ &lt;=&gt; 5(a) 
+
+Similarly, if S(x,y) is a sentence involving 'x' and 'y', then '\x:y\S(z,y)\' is a relation 
+description which describes the relation that holds between a and b whenever S(a,b) 
+is true, i.e., 
+
+a\x:y \S(x ,y)\b &lt;±&gt; S(a,b) 
+
+To illustrate this notation we will define the converse of a relation. 
+
+2.3 converse 
+
+The relation R~ x is called the converse of R , i.e. xR~ x y &lt;^&gt; yRx. Using our notation 
+for descriptions we can define R~ l = \x ,y | yRx]. As an example of a relation among 
+relations, we define 'inv' as the relation that holds between converses: 
+s invr &lt;e&gt; r=s~ l . Hence, inv = js:r | r=s' 1 ]. Some examples of converses are 
+parent ~ l = child and &lt; _1 = &gt;:. 
+
+EXERCISES: Prove the following properties of the converse: 
+( r -i)-i =r 
+
+r inv s &lt;&amp; s inv r 
+
+inv -1 = inv 
+
+2.4 arrow diagrams 
+
+Relations can be portrayed by an-avj diagrams (Haase diagrams). In such a 
+diagram there is a node for each individual related by the relation and an arrow from x 
+to y whenever xRy . For instance, 
+
+
+
+-3- 
+
+
+
+RELATIONAL PROGRAMMING 
+C 
+
+
+
+R = 
+
+
+
+a~* 
+
+
+
+
+represents the relation R such that bRa, cRb, dRb , eRd, eRe , bRe and -xRy for all 
+other cases: 
+
+R = \ b:a, c:b, d:b, e:d, e:e, b:e | 
+
+The effect of the converse operator is to reverse all of the arrows. Hence, R~ l is 
+diagrammed: 
+
+
+
+R- 1 = 
+
+
+
+
+2.5 tables 
+
+Relations can often be viewed as tables. For instance, the relation R of the previous 
+section can be shown as the table in Figure 1. 
+
+R 
+
+
+
+b 
+
+
+a 
+
+
+c 
+
+
+b 
+
+
+d 
+
+
+b 
+
+
+e 
+
+
+d 
+
+
+e 
+
+
+e 
+
+
+b 
+
+
+e 
+
+
+
+Figure 1. Relation Viewed as a Table 
+Of course, it makes no difference in what order we write the rows of the table. 
+
+The converse of a relation is obtained by simply exchanging the columns of the table 
+(see Figure 2). Of course, classes are represented by one column tables. For instance 
+the class C of primes less than ten is shown in Figure 3. 
+
+3. Domains 
+
+We often need to talk of the individuals that can occur on the right or left of a rela- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+
+
+R 
+
+
+
+-l 
+
+
+
+a 
+
+
+b 
+
+
+b 
+
+
+c 
+
+
+b 
+
+
+d 
+
+
+d 
+
+
+e 
+
+
+e 
+
+
+e 
+
+
+e 
+
+
+b 
+
+
+
+Figure 2. Converse of a Relation 
+tion. We say that x is a left^member of R whenever there is ay such that xRy . 
+
+x Lm R &lt;=&gt; 3y (xRy ) 
+
+For instance, if 'x parent y' means that x is a parent of y, then 'Socrates Lm parent' 
+means that Socrates is a parent. Right^member and member are defined analogously: 
+
+y Rm R o 3x (xRy ) 
+z Mm R &lt;^&gt; z LmR V z Rm /? 
+
+EXERCISES: Prove that these satisfy the identities: 
+
+xLmR &lt;^&gt; xRmR~ l 
+yRrnR &lt;=&gt; yln\R~ l 
+
+4. Functions 
+
+4 . 1 basic concepts 
+
+Functions and relations are closely related. Consider the successor relation, 'succ': 
+x succ y &lt;r&gt; x + 1 = y . Thus, x succ y says that x's successor is y . The corresponding 
+arrow diagram is: 
+
+1 2 3 4 5 ... 
+« — »»• — &gt;« &gt; • &gt; • 
+
+
+
+and the corresponding table is shown in Figure 4. since 1 succ 2, 2 succ 3, etc. Notice 
+that, in this case, for each left member x there is a unique right member y such that 
+x succ y . This y can be written using Whitehead and Russell's [Whitehead70] definite 
+description: 
+
+
+
+RELATIONAL PROGRAMMING 
+
+
+
+1 
+
+
+
+3 
+
+
+
+3 
+
+
+
+5 
+
+
+
+V 
+
+
+
+Figure 3. Set Viewed as a Table 
+ty(x succ y) 
+
+This can be read: the y such that x's successor is y . A more convenient way to write 
+this is succ(x). In general, R(x) means 'the unique y such that xRy', i.e. 
+R(x) = ty(xRy). When no confusion will result we write Rx instead of R(x). This nota- 
+tion is left-associative, that is, Fxy = (Fx)y. When we need to make the application 
+operation explicit we write R@x (R at x or R applied to x) for Rx. 
+
+The functional notation is meaningful only if there is a unique y such that xRy , i.e. 
+xRy /\xRz D y-z. That is, there is only one arrow leading from x. When this condi- 
+tion is satisfied for all x we call R right univalent, symbolized by 'run': 
+
+i?erun &lt;=&gt; \/xyz[ xRy /\xRz Dy = z ] 
+
+The right univalent relations are more commonly called functions. In a left univalent 
+relation there is exactly one arrow leading to each node. Consider the 'absolute 
+reciprocal' relation: xRy &lt;^&gt; y = \l/x\. This is diagrammed in Figure 5. Since 
+7?erun it is meaningful to write R{x), so we observe R(-3) = 1/3. We can find Rx by 
+following the arrow pointing from x or by looking down the left column for x and taking 
+the corresponding element from the right column. 
+
+The concepts of left univalence and bi-univalence are defined analogously: 
+
+7?€lun &lt;=&gt; \/xyz[ yRx A zRx D y-z ] 
+/?ebun o /?elunAi?erun 
+
+Bi-univalent relations are also called bijections and one-one mappings. 
+
+
+
+-6- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+
+
+1 
+
+
+2 
+
+
+2 
+
+
+3 
+
+
+3 
+
+
+4 
+
+
+4 
+
+
+5 
+
+
+
+
+
+
+
+Figure 4. Function Viewed as a Table 
+4.2 higher level functions 
+
+Of course, the converse of a function is not necessarily a function. The 'sin' relation, 
+defined so that x siny means that y is the sine of x, is right univalent but not left 
+univalent. Hence, we can write either y = sin:r or x siny, but can express the arcsine 
+only by y sin -1 x . The notation sin" 1 y is meaningless. Since / (x) is meaningful only 
+when / Grun we will be careful to write f (x) only when we have previously shown (or it 
+is obvious) that / erun and x Lm / . 
+
+The fact that F(x) may be meaningless makes it convenient to use several other 
+relations derived from F. One of these is the image. If F is any relation and C is a 
+class then img F C is the set of all y such that xFy for some x in C , i.e., 
+
+img F - \C:z \ z = \y\ Bx(xFy AxeC)JJ 
+
+The tabular interpretation of img^C is shown in Figure 6. We see that, if F is any func- 
+tion, then imgFS is the image of the class S under that function. Notice that the 
+operation imgFS is defined for all relations F and classes 5, regardless of whether 
+Fcrun or the members of S are left members of F. For these reasons, it is generally 
+safer to write img^C than Fx . 
+
+The image operation is also useful for working with relations. For example, 
+img.inv(&lt;)5 is the set of all numbers that are less than some element of S. The rever- 
+sal of the sense of the ordering occurs because img(&gt;)5 is the set of all y such that for 
+some xeS, x&gt;y . Thus img.inv(&lt;)S' is the set of all x such that for some y£.S , x&lt;y . 
+
+Related ideas are the image and converse image of an individual. If R is a relation, 
+then c = unimg/?x means that c is the class of individuals related to x. This class is 
+
+
+
+-7- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+
+
+1 
+
+
+1 
+
+
+-1 
+
+
+1 
+
+
+2 
+
+
+1/2 
+
+
+-2 
+
+
+1/2 
+
+
+3 
+
+
+1/3 
+
+
+-3 
+
+
+1/3 
+
+
+
+
+
+
+
+Figure 5. Right-Univalent Relation Viewed as Table 
+called the unit image of x, and is denned unimg R x = \y\ xRy]. Alternately we can 
+
+define unimg/?x = imgR\x\. 
+
+The converse idea is that of the inverse unit image of y : 
+
+unimg. inv R y = \x\ xRy\ 
+
+Like the image, unimg/? and unimg. inv/? are denned for all R and all arguments. 
+
+We can also apply the unit image operations to general relations. Therefore 
+unimg. inv(&lt;)a; is the set of all numbers less than x. This is sufficiently common that 
+we define all = unimg. inv. Then alKrc is the set of all numbers less than x. 
+
+Next consider the function all( = ): 
+
+all(=)x = \y \y=x\ 
+
+Hence, all=:r is just the unit class containing x, which we will abbreviate this unrr. 
+Conversely, if C is a single element class, then un _1 C selects the unique member of 
+that class: un _1 C = tx(x^C). It is thus a uniqueness filter. We will write this as i?C 
+where i5 = un _1 . The expression 1?C can be read 'the C 
+
+EXERCISES: Show the following: 
+
+unimg R~ x = unimg. inv R 
+unimg. inv R~ l = unimg/? 
+unimg R y = img/?(uny) 
+
+It is often convenient to have names for domain extracting functions, e.g., dom R is 
+the class of left members of R . These are simply defined using images: 
+
+
+
+-B- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+
+
+F 
+
+
+C in 
+
+
+ip/ 7 
+
+
+
+
+
+
+
+
+x x 
+
+
+
+
+Vi 
+
+
+x .i 
+
+
+v.* 
+
+
+
+
+x 2 
+
+
+
+
+y.z 
+
+
+X n 
+
+
+Vn 
+
+
+
+
+x n 
+
+
+
+
+Vn 
+
+
+
+Figure 6. Image Operation Applied to Tables 
+dom = all Lm 
+
+dom.inv - all Rm 
+
+mem = all Mm 
+
+Of course the left members (domain) and right members (domain-inverse) of a relation 
+can be obtained by taking its left and right columns, respectively, and deleting dupli- 
+cates (Figure 7). 
+
+R 
+
+
+
+/ \ 
+
+
+
+dom R dom.inv R 
+
+Figure 7. Domain Extracting Operators 
+5. Boolean Operations 
+
+5. 1 logical connectives 
+
+We will next investigate ways of combining relations and classes. The simplest 
+methods are just abstractions of the logical connectives used between propositions: 
+Therefore, we define the intersection, union, negation and difference of classes and 
+relations: 
+
+ie(5 r\ T) &lt;p&gt; ieSAz£7 
+xz(S u T) &lt;t&gt; x^S V x^T 
+a:e(~5) &lt;^&gt; -(are5) 
+
+
+
+-9- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+xe(S\T) &lt;n&gt; ie5A -(xcT) 
+xe(SdT) o x^Sdx^T 
+
+As an example of the use of these operations, consider our previous definition of Mm: 
+
+z Mm R &lt;^&gt; z Lm /? V z Rm /? 
+
+Using the union operation this can be written Mm = Lm u Rm. Similarly, bun = lun n 
+run. The logical connectives satisfy the usual properties of a Boolean algebra (e.g., 
+DeMorgan's theorem). 
+
+As an example of the use of these operations, we will define the closed interval func- 
+tion, [771. .n ], which is the set of integers m, m + 1 n. It is just: 
+
+[771. ,7i ] = all^ra n all&lt;n 
+
+where &lt; and &gt; are the relations on integers. In general we will allow [m..n] for an}' 
+types on which a strict order is denned. 
+
+EXERCISES: Define the analogous notations (m. .n), [m. .n), and (m..n]. 
+
+5.2 empty class 
+
+It is useful to have a name for the empty class: &lt;/&gt; = 5\5, for any set S. Hence, 
+xe0 is always false. This is most often used for stating properties of relations and 
+classes. For instance, 5 n T = means that classes S and T have no members in 
+common. 
+
+The universal class is also useful: O = ~0. For instance, S u T = O means that 
+every individual is either a member of 5 or of T. Notice that the class of the right 
+members of a relation is just the image of the universe under that relation, i.e., 
+
+dom.inv/? = img/?0 
+dom R - img/? _1 
+mem R = img(R u R~ Y )0 
+
+EXERCISES: Prove these properties of the domain functions. 
+
+
+
+-10- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+5.3 Cartesian product 
+
+It is often useful to have the maximum relation that can hold between two classes, 
+i.e., the Cartesian product of those classes. This is denned: 
+
+SxT = \x:y | xeS ^y^T\ 
+
+EXERCISES: Show the Cartesian product satisfies the following properties: 
+
+(sxf) -1 = txs 
+dom(sxt) = s 
+dom.inv(sx£) = t 
+mem(sx£) = s u t 
+
+sx(t nii) = (sxt) n (sxu) 
+
+sx(tuu) = (sxt)u(sxu) 
+
+sx(t \u) - (sxt) \ (s X ~1i) 
+
+sx(tDu) = (sx~t)u(sxu) 
+
+SX0 = 0XS = 0X0 = 
+
+sxt = (sxO) n (OxO 
+5.4 subset relation 
+
+Finally, we define the subclass operation: 
+SqT o Vx(ie5 d xeT) 
+EXERCISES: Show the following are true: 
+
+S£t D (sXu)Q(tXu) 
+
+s£l 3 (rxs)Q(rxt) 
+
+SQt AliCU 3 (sXu)^(tXv) 
+
+6. Limiting and Restriction 
+
+It is often useful to limit the left or right domain of a relation. Consider the relation 
+
+-11- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+y sin" 1 x, which means that x is an arcsine of y . We cannot write x = sin -1 ?/ because 
+sin -1 is not right univalent (i.e. it is not a function). If we restrict y, the argument of 
+sin, to the range -tt/4 to 77/ 4, then there is a unique x such that y sin -1 x. Let S be 
+the class of reals in the range — n/ 4 to n/ 4: 
+
+5 = (-7T/4..7T/4] = all&gt;(-7r/4) n aU&lt;(rr/4) 
+
+then we will write .S^sin for the sine function with its arguments restricted to S. This 
+function is bi-univalent, so it is invertible. If we call the inverse of this restricted sine 
+Arcsin: 
+
+Arcsin = (S^sin) -1 
+
+then it is perfectly meaningful to write Arcsin x (if x Rm sin). The left-restriction 
+operation is defined: 
+
+x(S-*R)y &lt;=&gt; x&lt;^S/\xRy 
+
+In other words, 
+
+y - {S^R)x &lt;=&gt; y - Rx Axe5 
+
+The right-restriction is defined analogously: 
+
+x(R&lt;r-S)y &lt;^&gt; xRy AyeS 
+
+These notations can be combined to restrict both domains: 
+
+x(S^R&lt;-T)y &lt;z&gt; x^S /\xRy AyeT 
+
+The combination s^R&lt;-s is so common that a special notation is provided for it: 
+Rts - s-*R*-s. For instance, &lt;rP, where xeP &lt;=&gt;x&gt;0, is the less-than relation res- 
+tricted to positive numbers. Notice that x succ y if and only if y is the successor of x. 
+Therefore we can define the sequence of integers (m.ra + l, . . . ,n) by restricting the 
+succ relation: 
+
+[771. .71] = all&gt;77i -&gt; succ «- all&lt;n 
+
+See Figure B for a tabular representation of the domain restricting operations. 
+
+-12- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+
+
+JL 
+
+
+R 
+
+
+
+
+C^ff 
+
+
+
+
+
+
+x z 
+X n 
+
+
+2/i 
+
+2/n 
+
+
+
+
+x 2 
+
+
+
+
+
+
+
+
+
+
+
+
+
+Figure 8. Domain Restricting Operations 
+
+EXERCISES: Show that the restriction operations can be denned in terms of inter- 
+section and Cartesian product: 
+
+s^&gt;r*-t = r n (sxt) 
+rts - r n (sxs) 
+s-*r = r n (sxO) 
+r&lt;-s = r n (Oxs) 
+
+EXERCISES: Show that other properties satisfied by these operations are: 
+
+sxi = s-»0&lt;0 *-t 
+dom(s-»r) = s n dom(r) 
+dom.inv(r*-s) = s n dom.inv(r) 
+dom(r&lt;-s) = img(r _1 )s 
+dom.inv(s-&gt;r) = img r s 
+
+(s-»7") _1 = (r _1 )&lt;-s 
+(s-&gt;r«-£) _1 = £-&gt;(r _1 )&lt;-s 
+(rTs) -1 = (r _1 )Ts 
+
+r*-s nr&lt;-^ = r&lt;-(s r\ t) 
+r*-s vr*-t = r«-(s u £) 
+(rxQ)*-s = rxs 
+
+
+
+7. Relative Product and Composition 
+
+If xsony is the relation 'x is a son of y' and xbrothen/ is the relation 'x is a brother 
+cf y', then the relative product, 'son | brother', is the relation 'a son of a brother of. 
+
+-13- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+More formally, 
+
+R\S = \x:z \ By(xRy S\ySz)l 
+
+We will also write S.R and S°R for R | S. The reason for this is that if F and G are func- 
+tions it is easy to see that F.G is the composition of these functions: 
+
+z = F.Gx &lt;*&gt; x F.Gz 
+o xG\Fz 
+&lt;^&gt; 3y(xGy /\yFz) 
+*&gt; 3y[z=Fy /\y = Gx] 
+o z=F(Gx) 
+
+Hence, F.Gx = F(Gx). 
+
+It is convenient to have a notation for relative products of a relation with itself. For 
+instance, the 'grandparent' relation can be written ' parent | parent', which we abbrevi- 
+ate parent 2 . In general, 
+
+E° - (=)T(mem R) 
+
+R x = R 
+
+E n + 1 = (R n )\R = R\(R n ) 
+
+EXERCISES: Show these obvious properties of the relative product: 
+
+(r.s).t = r.(s.t) 
+r. (s u t) = r.s u r.t 
+(r u s).t = r.t u s.t 
+r. (s n t) c r.s n r.t 
+(r n s).t c r.t n s.t 
+n{r.s) e&gt; 3(dom.invr ndoms) 
+where 3r means 3x[x€.r] 
+
+
+
+■14- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+
+
+-i\-i _ 
+
+
+
+(r- 1 ) 
+
+
+
+= r 
+
+
+
+r m r n _ r m+n ( mn :&gt;0) 
+
+(r m ) n = r mn (m,n&gt;0, orrebun) 
+
+r m r n c y.m+n ( r e t&gt; un ) 
+
+7-.7- -1 = r _1 .r = r° (rebun) 
+
+dom(r.s) Q domr 
+dom.inv(r.s) c dom.invs 
+Lm = Rm|inv 
+Rm = Lm | inv 
+
+r. (0X0) = (0X0). r = 0X0 
+
+r. Id = Id.r = r where Id = ( = ) (the identity function) 
+
+8. Structures 
+
+We have previously seen the use of arrow diagrams to represent a relation. For 
+instance, the diagram in Figure 9 represents the relation R shown in Figure 10. 
+
+
+
+
+&gt; » &lt; 
+
+
+
+
+Figure 9. Arrow Diagram for a Relation 
+8. 1 initial and terminal members 
+
+Now, notice that the domain (left) and codornain (right) members of R are: 
+
+dom R - \ a, b, c, d, e, f, g \ 
+dom.inv/? = { g, f, e, d, i, h \ 
+
+We define the initial members of R to be those members which are not pointed at by 
+an arrow. Therefore, the initial members of R are the left members that are not right 
+
+
+
+■15- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+
+
+R 
+
+
+
+a 
+
+
+g 
+
+
+b 
+
+
+f 
+
+
+c 
+
+
+e 
+
+
+d 
+
+
+d 
+
+
+d 
+
+
+e 
+
+
+e 
+
+
+i 
+
+
+f 
+
+
+f 
+
+
+f 
+
+
+i 
+
+
+g 
+
+
+f 
+
+
+£ 
+
+
+h 
+
+
+
+Figure 10. Tabular Representation of a Structure 
+members, that is, the domain members that are not codomain members. 
+
+init R - dom(/?) \dom.inv(/?) = \&amp;, b. cj 
+
+The terminal members of a relation are defined analogously: 
+
+termi? = dom.inv(i?) \ dom(R) = |h, i| 
+
+When a relation is used to represent a data structure, the above functions become 
+important. 
+
+For instance, a sequence is represented by a relation with the structure: 
+
+
+
+S — a l a 2 a 3 
+
+
+
+On-l ^n 
+
+
+
+In this case init S is the unit class containing the head (first element) of the relation 
+(i.e., a,) and term S is the unit class containing the last element of the sequence (i.e., 
+o^). Similarly, (~.init S)^&gt;S is the sequence with its first element deleted: 
+
+
+
+a? a 
+
+
+
+-►♦- 
+
+
+
+*• &gt;• 
+
+
+
+Hence, the following common sequence manipulation functions can be defined: 
+
+a S = tf.init 5 first 
+
+cjS = tf. term S last 
+
+US = (~.init S)-&gt;S final 
+
+
+
+-16- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+
+
+AS = S&lt;-(~. termS) initial 
+EXERCISES: Prove the following properties of these relations: 
+
+a = w.inv 
+
+a&gt; = a.inv 
+A.inv = inv.f} 
+Q.inv = inv.A 
+
+More operations on sequences are discussed in the next section. 
+
+As another example of the use of 'init' and 'term', consider the relation, represent- 
+ing a tree, shown in Figure 11. 3 - 
+
+
+
+
+T = 
+
+
+
+figure 11. Relation Representing a Tree 
+Then, aT is 'a', the root of the tree, and term T is \d, h, i, f, j, kf, the leaves of the tree. 
+
+The result is analogous for forests. £ 9 
+
+
+
+F - 
+
+
+
+
+
+e f g 
+
+
+
+
+Figure 12. Relation Representing a Forest 
+Given the relation in Figure 12, the set of roots is init F and the set of leaves is term F: 
+
+init F = $a,i,gj 
+
+term F = ^c,e,f,g,h,j,k,l,m,n,t,u,v,w^ 
+
+8.2 higher level operations 
+
+The set of nodes whose parent is n is just imgFn. For instance, the set of nodes 
+directly descended from a root is 
+
+
+
+-17- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+(img F).init F - $b,h,j,o,p,r} 
+
+The set of nodes that point to leaves is 
+
+(img T^" 1 ) term F - $b,d,a,i,o,p,s,r} 
+
+These operations can be used for obtaining the maximum and minimum of sets. 
+Suppose '&lt;' is the less-than relation on integers and 5 is some set of integers, say 
+$3.5,9J. Then 
+
+
+
+&lt;T5 = 
+
+3 5 9 
+
+Now note that init(&lt;T5) = \3\ and term(&lt;tS') = \9\. Hence, if S is any set of 
+numbers, then the minimum and maximum of this set are: 
+
+min S = a(&lt;rS) 
+max S - w(&lt;TS) 
+
+Notice that we can select the maximum and minimum based on any relation that is a 
+series (i.e., transitive, irreflexive and connected). If R is any series then a(RtS) is the 
+minimum (relative to R) and o(RtS) is the maximum. 
+
+EXERCISES: Show that the following are properties of these operations: 
+
+init r = term(r -1 ) 
+term r = init(r -1 ) 
+init c dom 
+term Q dom.inv 
+init(rTs) = term(r _1 ?s) 
+
+init(r us) q init r u init s 
+init r n init s q init(r r\ s) 
+term(r us) c term r u term s 
+term r n term s c term(r ns) 
+init(sxi) = sV 
+
+-18- 
+
+
+
+RELATIONAL PROGRAMMING 
+term(sxi) = init(sxi) -1 = init(fxs) = f\s 
+
+9. Sequences 
+
+9. 1 ordinal couples 
+
+In this section we will continue the discussion of sequences begun in the last section. 
+We saw that it was easy to define the following operations on sequences: 
+
+a S = tf.init S 
+
+a S = i?. term S 
+
+AS = S«-(~.term 5) 
+
+US = (~.init S)-*S 
+
+This provides us with functions for taking sequences apart. We will define the ordinal 
+couple or pair, which puts them together. If x and y are two objects, then '(x,y)' is 
+the relation that relates x and y but no other objects. 
+
+x ,y = • &gt; • 
+
+x y 
+
+That is, u (x ,y)v if and only if u -x and y =v . This is formally defined by: 
+
+x,y - \u:v | u=x /\v=y\ = un(i) x un(?/) = un(x:y) 
+
+Notice that x:y =-&amp;(x,y). Observe also that a(x ,y) - x and a&gt;(x ,y) - y. Finally, 
+xRy o (x ,y)QR. 
+
+Explicit relations can be described by a combination of the pair and union opera- 
+tions. For example, we have the identity: 
+
+I *i:yi. x 2 y2, ■ • • . x n y n \ = (x^y^ u (x z ,y 2 ) U ■ ■ ■ U (x n ,y n ) 
+
+We will define a convenient notation for sequences of two or more elements: 
+
+{ *i, x z *n) = [xi-xz, x z :x 3 x n ^:x n \ 
+
+Therefore the sequence (a,b,c,d,e) is just 
+
+
+
+■19- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+» » • — &gt;• — »&gt;• — &gt;• 
+
+a b c d e 
+
+9.2 catenation and consing 
+
+If s and t are sequences then we can define an operation 'sH\ which is the catena- 
+tion of s and t . To form this catenation we must hook the last element of s to the first 
+element of t . 
+
+
+
+s 1 s m ~ 1 1 t n - 
+
+Therefore x [s~t ]y if and only ifxs y , on t y, or x=cj s and y = a t . Hence, 
+
+s*i = s u {(j s , a t) u t 
+
+The catenation operation is only defined for sequences, which are required to have at 
+least two elements (since an irreflexive relation with less than two elements is the 
+empty relation). This issue is discussed in the following section. 
+
+How then do we add a single element to the left or right of a sequence? The 'cons 
+left' and 'cons right' operations are easy to define: 
+
+• • *• • &gt; • — -&gt;• 
+
+i els, s„ =&gt; x s, s n 
+
+x c\ s = (x , a s) u s 
+s cr y = s u (o s , y) 
+
+If 5 is a sequence and xMmS, then Sx is the successor of x in S and S~ l x is the 
+predecessor of x in S (if these exist). 
+
+Sx = successor of x in S 
+S~ l x - predecessor of x in 5 
+
+These are convenient ways of moving around within a sequence. Also, note that if s is a 
+subsequence of t then sQt . Some additional identities are: 
+
+
+
+-20- 
+
+
+
+RELATIONAL PROGRAMMING 
+(x,y)\(y,z) = (x,z) 
+
+img a (SxT) = S 
+
+img w(5xr) = T 
+
+EXERCISES: Show that if s is a sequence, then: 
+
+a(x cl s) = x 
+Q(x cl s) = s 
+
+o(s cry) - y 
+
+A(s cr y) = s 
+
+(as)cl(Qs) = s, if size s &gt; 2 
+(As) cr (cj s) = s, if size s &gt;2 
+
+Also, if s is a sequence, show that s u(us, as)isa ring formed by joining the last ele- 
+ment of s to the first element. 
+
+If s is a sequence, then s _1 is the reverse of s. Hence, revs = s~ ! . Show the follow- 
+ing: 
+
+as = cj s~ l 
+o s = a s _1 
+
+As = (Qs- 1 )^ 1 
+fis = (As- 1 )" 1 
+
+s -ty l = r^s" 1 
+x cl s) -1 = s" 1 cr x 
+s crz)" 1 = x cl s _1 
+
+x &gt;yY l = (y&gt; x ) 
+x x , x 2 x n y l = ( x n , . . . , x 2 , I,) 
+
+
+
+-21- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+\x x :y x , x z :y z x n :y n \~ l - \yi.x x , y 2 :x 2 y n -x n \ 
+
+9.3 alternative definitions of sequences 
+
+We will state the formal definition of a sequence: a relation is a sequence if it is a 
+connected irreflexive bijection. That is, 
+
+sequence = connex n irrefl n bun 
+
+seirrefl &lt;=&gt; s° q s~ } 
+
+seconnex &lt;^&gt; dom s = init s u dom s _1 A dom s _1 = term s u dom s 
+
+Although the preceding definition of sequences is very convenient, it has a number of 
+limitations. For example, the operations discussed above are only defined for 
+sequences with two or more elements, since an irreflexive relation cannot relate less 
+than two elements. In particular, (2) = 0. One solution to this problem is to use a stan- 
+dard "end marker" for all sequences, say 'EOF'. For example, the sequence 1, 3, 5 
+would be represented by the relation (1,3, 5, EOF). A one element sequence containing 3 
+would be represented by (3, EOF) and an empty sequence by (EOF) = () = 0. This 
+definition has some curious properties of its own. For example, the relation 
+(3, 3, EOF) = $3:3, 3:E0F| has no initial members and in fact is not a sequence (since it's 
+not irreflexive). Of course this objection also applies to our original definition of 
+sequences. 
+
+A different solution is to extend the definition of sequences so as to allow length ens 
+sequences by making the relation reflexive. 
+
+
+
+s u (= t mem s) 
+
+yi.i 
+
+
+
+S] S 2 Sg 
+
+The one element sequence is then: 
+
+
+
+
+
+
+
+s o - ( s o. s o) 
+
+
+
+-22- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+This still does not solve the problem with repeating elements in sequences, however. 
+
+An alternative definition of sequences is based directly on the pair-making opera- 
+tion. Define &lt;&gt; to be some distinguished value 'nil'. Then define 
+
+&lt;z 1( x s , .... x n &gt; = x l ;&lt;x z x n &gt; 
+
+We can see that 
+
+&lt;X\,x 2 x n &gt; = x 1 :x2:...:x n :ni\ 
+
+(We have assumed ':' is right-associative in the above equation.) This is essentially the 
+way lists are represented in LISP. A more comprehensive solution to these problems is 
+discussed in Chapter 16, Data Structures. 
+
+10. Hi nary Operations 
+
+10. 1 basic concepts 
+
+In this section we will discuss our approach to binary operations —that is, to func- 
+tions with two arguments and one result. We have already seen how unary functions 
+are connected to relations. For instance, we can write the fact that y is the sine of x 
+by either xsiny or y = sinx. Since we only deal with binary relations, we will have to 
+have a new convention for handling binary functions. This convention is: we will com- 
+bine the two arguments of an operation into a pair. For instance, we can define a rela- 
+tion 'sum' such that (x ,y) sum z if and only if z is the sum of x and y . More formalty: 
+
+sum = \a:z \ 3x ,y[a = (x ,y) A z =x+y]\ 
+
+We can use our function application convention as usual, e.g., 
+
+z = sum(x,j/) &lt;=&gt; (x ,y) sum z 
+
+Now, it would be inconvenient to have to invent names, such as 'sum', for each opera- 
+tion, such as ' + '. Hence, we will adopt a systematic convention for making such names: 
+placing the conventional infix symbol for the operation in parentheses or other brack- 
+ets. For instance, 
+
+-23- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+(x,y)[ + ]z &lt;=&gt; z = [ + ](x,y) o z -x\y 
+
+In fact, if n is any infix operation symbol, we will explicitly define its meaning by 
+
+X7TT/ = [-n]{x,y) 
+
+This notation will permit us to manipulate in a more regular fashion the usual arith- 
+metic operations ( + , -, x, /) as well as the relational operations (e.g. n, u, -», &lt;-, T, x). 
+We omit the brackets when the meaning is clear without them. For instance, if S is a 
+class of classes, then 
+
+img n (5x5) 
+
+is the class of all pairwise intersections of members of 5. 
+
+10.2 operations on binary operations 
+
+It is often convenient to be able to generate simple relations from a binary opera- 
+tion. Following Russell and Whitehead [Whitehead70], let n represent any binary opera- 
+tion. We define: 
+
+( 7r y) = \x:z | xny = z\ 
+(xn) = \y:z \ xny = z\ 
+
+Hence, x(-l)y e&gt; y =x—l, therefore (-1) is the predecessor function. Similarly, 
+x(l+)y &lt;=&gt; y = 1+x, therefore (1+) and ( + 1) are both the successor function. These 
+can be used as functions: (-l)x = x-1 and ( + l):r = x + 1. 
+
+This convention makes it very easy to form more complex functions. For instance, if 
+we want f (x) = sin(l/x) then we can define / = sin.(l/). To see that this works: 
+
+f(x) = [sin.(l/)]x 
+= sin[(l/)x] 
+= sin[l/x] 
+
+Again, we omit the brackets when the meaning is clear from context or can be made 
+clear by spacing. Furthermore, we adopt the convention that if two binary operators 
+
+-24- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+occur together, then the first is taken in its unary sense and the second in its binary 
+sense. For example, sxut means [sx]u(, not sx[u£]. When a binary operator is used 
+in its unary sense, it will be taken to be very binding; that is, f.xu means f.[xu], not 
+
+Now observe the action of the (x ,) and (,y) functions: 
+
+(x,)y = (x,y) 
+(,y)x = (x,y) 
+
+Therefore, for any binary operation rr (except ',') we can define 
+
+xn = [tt].( x .) 
+
+Let's see why this works: 
+
+(xn)y = [(-n).(x,)]y 
+
+= (n)[(x,)y] 
+
+= (n)[x.y] 
+
+= xttij 
+
+The form (ny)x is analogous. In general, if / is a binary function, then /. (x ,) and 
+/. (,y) are the "partially instantiated" unary functions. This is the effect of Curry and 
+Feys 'B' combinator [Curry 58]. 
+
+Since S' 1 is the reverse of a sequence, 7r.inv is the reverse form of an operation. 
+For instance, -.inv is the reverse subtract operation: 
+
+-.inv(x,y) - -(inv(x ,y)) 
+
+= -(y&gt; x ) 
+
+- y-x 
+
+Thus -.inv can be read 'subtract from' and /.inv can be read 'divide into'. This is 
+Curry and Feys 'C combinator (see the next section). 
+
+
+
+-25- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+11. Combinatory 
+
+11.1 paralleling of relations 
+
+In this section we will discuss several powerful operations for manipulating relations. 
+These are called combinators because of their similarity to the combinators of Curry 
+and Feys [Curry58], 
+
+The first combinator we will discuss is the paralleling of relations, R\\S , which is 
+defined: 
+
+(u,v)R\\S(x,y) &lt;^ uRx S\vSy 
+
+So, if / and g are functions, [f\\g](x,y) = [f(x), g(y)]- Hence, f\\g is the element- 
+wise combination of / and g . For example, if we want / (x ,y) = sin x + cos y , we can 
+write / = + .(sin||cos) since 
+
+f(x,y) = [ + .(sin||cos)](ar,i/) 
+
+= +[(sin||cos)(a:,|/)] 
+
+= + [sin:r, cos y] 
+
+= sin x + cos y 
+
+11.2 conditional union 
+
+The restriction operations allow us to define the very useful conditional union or 
+overlay operation [MacLennan75], R;S = R u ~.domR -» S. In other words, the value 
+of (R\S)x is Rx if xedomi?, and Sx otherwise. This has many uses. For example, if / 
+is a partial function, then / ;Id is the extension of / to the identity function. That is, 
+(/ ;Id):r is fx if that is defined and x otherwise. 
+
+The conditional union is useful for defining conditional-like structures. For example 
+p-*f \g is a function that applies / if p of its argument is true, and applies g otherwise: 
+
+r _ f . ]x Af X lf P X 
+\9 X if -pz 
+
+(This assumes p cdom/ . Why?) Therefore we have the equivalent of Backus' conditional 
+
+-26- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+combining form jd -&gt;/ \g ■ 
+
+The overlay operation is also useful for updating functions representing tables. For 
+example (i,x);T is a table just like T except that Ti is nowx, regardless of whether Ti 
+was defined or not. Similarly, S;T is a table in which all the entries of S have been 
+added to T, possibly replacing corresponding elements already there. 
+
+11.3 combinatory logic 
+
+One of the simplest combinators described by Curry and Feys is the elementary can- 
+cellator, K, defined so that Kr is a function such that (Kx)y=x for all y . That is, K gen- 
+erates constant functions. Since Kr is a relation that relates x to everything, we can 
+define it: K= (Ox).un, where un = i? _1 is the unit class generator. To see that this 
+works, note that 
+
+Kr = Ox.unx = Ox(uni) 
+
+and therefore that 
+
+u(Kx)v &lt;r&gt; u[Ox(\inx)]v 
+
+&lt;=&gt; iz eO A i/eun(x) &lt;=&gt; v=x 
+
+Therefore, for arbitrary u, (Kx)u - x. 
+
+Another combinator is the elementary duplicator, W, defined so that 
+(Vif)x = f (x,x). If we define Ai = (x ,x) then it is easy to see that W/ is just /. A. For 
+instance, x.A is the squaring function: 
+
+x.An = x(An) = x(n,n) = nxn = n 2 
+
+It should be clear that Backus' [/ ,g ] combining form is just our (/ \\g ).A, since 
+
+(/HsO-Aa: = f\\g (x,x) = (fx.gx) 
+
+Since this combination is so common we will adopt a special notation for it: 
+f~g - (/HflO-A. Hence, (f~g)x = (fx.gx) 
+
+
+
+-27- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+EXERCISES: Show that some of the properties satisfied by these combinators are: 
+
+(R\\S).(T\\U) = (R.T)\\(S.U) 
+(R\\S) n = (H n )\\(S n ) 
+
+(r;s).t = (r.t)-(s.t) 
+
+(R\\S).(TU) = (R.T)-(S.U) 
+
+A./? = R^R 
+
+(R\\S).inv = (S\\R) = inv. (R\\S) 
+
+inv.(/TS) = 57/? 
+
+a.(R^S) = (dom5)-&gt;/? 
+
+u.(R^S) = (dom R)-&gt;S 
+
+R\\S = (R.a)-(S.cj) 
+
+ci = (ccnr 1 
+
+cr = (A7w) _1 
+
+EXERCISES: Show that/ = + .(x.A72x) is the function/(0 = t z +2t. 
+
+The formalizing combinator, $, is defined so that [$/ (a,b)]x = f[a(x),b(x)]. It is 
+easy to see that $/ (a, b) = f.(a~b). For instance, 
+
+/ = $ + [x.A, 2x] 
+
+is just the function / (t) = t 2 +2t . This can be written directly using the notation of our 
+relational calculus: 
+
+/ = +.(x.AT2x) 
+
+The combination §n[f ,g] occurs very frequently. Therefore, we define n = $tt to be the 
+formalization of the operator n. Notice that [fng]x = (fx)n(gx). In particular, the 
+function ft = t 2 +2t can be written 
+
+/ = x.AT 2x 
+
+In general, n.(f~g) - fng. 
+
+
+
+-28- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+Another combinator is the meta-application operator, @, which corresponds to Curry 
+and Feys' S combinator: (f@g)x = (fx)@(gx). For instance, img@init is the operation 
+that gives the set of descendents of roots of a forest F, since 
+
+(img@init)F = (img /^©(init F) = (img T^.init F. 
+
+Another combinator denned by Curry and Feys is the ^ combinator: 
+
+W.g)]{*.y) = f[g{*).9(y)] 
+
+This is simply denned by ^(/,g0 = f-(g\\g)- Therefore, if / = ^[+, x.A] then 
+/ {x ,y) = x z +y 2 . This can also be written / = x.A.a T x.A.w. 
+
+11.4 Curried functions 
+
+A function / is called a Curried derivative of g if fxy = g (x ,y). We define operators 
+'curry' and 'uncurry' such that / = curry g and g = uncurry / . First consider 
+uncurry: 
+
+(uncurry/ )(z,y) - g{x,y) 
+
+- fxy 
+
+= (fx)@y 
+
+= ®[{fx).y] 
+= @.[f\\1d]{x,y) 
+
+By canceling (x ,y) from both sides we see that uncurry/ = @.[/||Id]. If we wish, we 
+can factor / out of this expression in this manner: 
+
+uncurry/ = @.[/||Id] 
+= [®.][/IUd] 
+= [©-].[l|Id]/ 
+
+Hence, uncurry = [@.].[||Id]. 
+
+Next consider Currying. One solution is to simply define curry = uncurry -1 ; we can 
+learn more however by donning curry directly. Suppose we are given a Curried pair- 
+
+
+
+-29- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+making function 'n': nxy - (x,y). Then, 
+
+fxy = (curry g)xy = g(x,y) = g(nxy) - g([nx]y) = g.[nx]y 
+
+Therefore, canceling y from each side we get: 
+
+curry g x = g.{nx) - [g. ](nx) = [g.].nx 
+
+Hence, curry g = [g. ].n. 
+
+As a final example we derive Curry and Feys' C combinator: Cfxy = fyx. Observe: 
+
+Cfxy = fyx = (fy)@x = [@x](fy) = [@x].fy 
+
+Therefore, by canceling y we get: 
+
+Cfx = [@x].f =[.f][@x] = [.f].[@]x 
+
+Hence, C/ = [./]•©• 
+
+EXERCISES: Show the following properties satisfied by these combinators: 
+
+(Kx).f = dom/-»Kx 
+
+/.(Kr) = K(fx) 
+
+C = curry. [.inv].uncurry 
+
+12. Records 
+
+12. 1 basic operations 
+
+By a record we mean a finite function whose domain is other than a contiguous sub- 
+set of the integers. For example, the following relation might represent a personnel 
+record: 
+
+R = \ name : "Don Smith", age: 40, 
+
+hire-date: £mo:"Aug", dy:31, yr:19B0|, salary: 40000 \ 
+
+The selectors 
+
+name, age, hire-date, mo, dy, yr, salary 
+
+
+
+-30- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+might be the strings "name", "age", etc. or the integers 1, 2, etc.. We are not con- 
+cerned with their exact nature so long as they are distinct. A field is selected by apply- 
+ing the record to the field's selector: R(age) = i?@age = 40. Thus 'i?@age' is analogous 
+to Pascal or Ada's ' R. age'. Next we will consider how records can be manipulated using 
+the relational operators. 
+
+Notice that if D is a record of default values (say, for a personnel record) and R is a 
+record providing values for only some of the fields of a personnel record, then R\D is a 
+complete personnel record with defaults from D provided for the unspecified fields of 
+R . MR and S are records with disjoint selectors (or with overlapping selectors whose 
+values agree) then RuS is a join or combination of these two records. Finally, if S is a 
+set of selectors, then S^&gt;R is a subrecord of R containing only the fields whose selec- 
+tors are in S . For example, 
+
+\age, salary} -&gt;/? = \ age: 40, salary: 40000 ] 
+
+12.2 functional records 
+
+A common situation is to apply the same function / to every field of a record R . For 
+example, we might want to negate the coordinates of a two-dimensional point 
+P = $X:10,Y:30j. This is easily accomplished by [Q-].P. Therefore P's Y coordinate is: 
+
+[0-].P ® Y = [0-](PY) = [0-](30) = 0-30 = -30 
+
+In general, we can see that the &lt;p field of f R is / (R(p): f .R@(p - f (R(p)- 
+
+Now suppose that we have a record F whose fields are functions f \, f z, ■ ■ ■ , f n - 
+
+F - \&lt;Pi'fi. Vzfz. • • ■ ■ &lt;Pnfn\ 
+
+We want to compute a record R that has the same shape as F, but with fields whose 
+values are f^x, for a given x: 
+
+R - \&lt;P\-f \ x &lt; Vz-fz** • ■ ■ ■ 9nfn x \ 
+Therefore, for any selector &lt;p, 
+
+
+
+-31- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+Rep = Fepx = (F&lt;p)@x - [@x](Fcp) - [@x].F tp 
+
+Hence, R - [@x].F. We define @ to be the application of a functional record to an argu- 
+ment, F@x - @x.F. Notice that F© is the function derived from the functional record 
+F. Further applications are discussed in §14, on arrays. 
+
+We have seen how f.R applies a function to a record argument to yield a record 
+result and F®x applies a functional record to an argument to yield a record result. 
+Next we will investigate the application of a functional record to a record argument to 
+yield a record result. In the simplest case F and R are the same shape and we want to 
+apply corresponding elements of F to corresponding elements of R to yield 
+corresponding elements of the result. Thus, if we let S be the result record, then for 
+any field cp: 
+
+Sep = (Ftp)® (Rip) = (F@R)y 
+
+using the meta-application operator @. Hence, S = F@R. Therefore, we can apply 
+corresponding elements of F to corresponding elements of R by F@R. 
+
+For an example of this operation, suppose that we have the personnel record R 
+defined in §12. 1 and that we want to compute a new record S in which the age field of R 
+has been incremented and in which the salary field has been increased by 10%. We can 
+accomplish this by S = F@R, where 
+
+F = iname: Id, age: 1 + , salary: l.lx, hire-date: Id] 
+
+A common situation is to update one field and leave the rest unchanged. The R record 
+with its age field incremented is just [age,l + ; Kid]®/?. 
+
+We next consider a generalization of meta-application: the outer product of a func- 
+tional record and its argument record. Suppose we have a record F of functions and a 
+record R of arguments; the records F and R are not assumed to have the same shape 
+(i.e., the same domain members). We define 5 = outer/ 7 */?, the outer product of F and 
+R to be a record with the same shape as F, each of whose fields has the same shaoe as 
+
+
+
+-32- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+R. That is, if tp is a field selector of F and t// is a field selector of R , then Sep is a record 
+in which S&lt;pif/ is the result of applying Ftp to Rip. That is, Sep = (F&lt;p).R, since {F&lt;p).R 
+applies Ftp to each field of R and forms a record of the results. Therefore, 
+Stp = (.R)(F(p) = .R.Fcp. This yields the definition of the outer product: 
+.R.F = outerFR. Further applications of this operator will be discussed in §14, on 
+arrays. 
+
+EXERCISES: Define an outer product that yields the transpose of this result. That 
+is, Scpip = (Ff){Rtp). 
+
+12.3 relational databases 
+
+Next we consider databases composed of record-sets and define functions that are 
+analogous to the relational operations of Codd [Codd70]. Let D be a record set whose 
+elements have the selectors (name, age, hire-date, salary! ; D might represent part of 
+an employee database. Observe that if / is any operation applicable to a record then 
+img/ is a corresponding function applicable to the entire record set. 
+
+For example, to form &amp; projection composed of just the 'age' and 'salary' fields of D 
+we write img[£ age, salary }-&gt;]£. To compute D' in which every employee in D has been 
+given a 10% raise, we can write 
+
+D' - img [(^salary: l.lxj; KId)@]Z? 
+
+In other words, we are applying a function to each record in D; this function multiplies 
+the 'salary' field by 1.1 and leaves the other fields intact. 
+
+Often we v/ant to choose some selector &lt;p of the records in D to be a key and gen- 
+erate a function F from D such that Fk is the record in D whose &lt;p field is k , Yfe write 
+this F = indexpD. Observe: 
+
+r - Fk &lt;^&gt; np - k /\r &lt;^D 
+
+o r@ cp = A; A r £Z? 
+&lt;^ [@cp]r = k /\r^D 
+
+
+
+-33- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+&lt;=&gt; r = [@&lt;pY x k /\r^D 
+&lt;^&gt; r = {[®&lt;pY x ^D)k 
+
+Hence, F = [@&lt;pY x ±-D, so we define index^U = [@&lt;p]~ 1 &lt;-D. 
+
+Another common operation is selection. For example, suppose we want P to be the 
+set of all records in D whose 'age' field is greater than or equal to 65. The first step is 
+to index the set on the age field: A - index age D . Notice that xAr if and only if record 
+r from D has an age field equal to x . We can think of A as a multiple-valued function 
+that takes ages into the records having those ages. Thus, if we apply \mgA to a set of 
+ages then we will get a set of all the records that have ages in the given set. Clearly, 
+then 
+
+P - img&gt;l(all&gt;65) = img[index age 2J](all&gt;65) 
+
+This leads to a general definition of the selection function: 
+
+select^ = img[index9?Z?] 
+
+Hence, select^ = img.(index9?), so select = (img.). index. With this definition of select 
+we can write 
+
+select age D (all&gt;65) 
+
+to select all those records whose age is greater or equal to 65. 
+
+Finally, we consider the join of two record sets D and E, joimp(D,E)- This is com- 
+posed of of records formed by combining all those records from D and E whose &lt;p fields 
+are equal. To accomplish this, first index D and E on their y&gt; fields: F = indexr/?/}, 
+G = indexpE. Let fc be any value of the field 9?; observe that (F\\G)k is a pair (rf.e) 
+where d&amp;D, e&lt;£E and d and e both have their &lt;p fields equal to k. Therefore, v/e want 
+due to be in the join. The set of all such pairs (d,e) is just the range (dom.inv) of the 
+relation F\\G. Therefore, to get the join J we must apply the union operation to every 
+record pair in the range of F\\G: 
+
+J - imgu(dom.inv[F||G]) 
+-34- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+This is the definition of the join operation. We can factor D and E out of the definition 
+thus: 
+
+join9?(£? ,E) = [imgu].dom.inv F\\G 
+
+= [imgu] . dom. inv[index^Z? ||index93£'] 
+= [irngu].dom.inv.||.(indexyji},index&lt;p.£') 
+= [imgu].dom.inv.||.[index9? || index^](Z7,£') 
+
+Therefore, 
+
+joinp = [imgu].dom.inv.||.[indexp&gt; || indexes] 
+
+EXERCISES: Factor 95 out of the definition of join. 
+
+13. Ancestral Relations 
+
+13.1 definition 
+
+Carnap [Carnap58] defines the relation of a property p being hereditary with 
+respect to a relation r : 
+
+p Her r &lt;^&gt; Vry \x ep A x r y D y&lt;Ep\ 
+&lt;=&gt; irng[r -1 ]p Qp 
+
+This leads to the definition of the ancestral of R of the first kind as that relation which 
+preserves all the hereditary properties of R . This is also called the reflexive transitive 
+closure of R : 
+
+xR *y &lt;^&gt; x Mmr A Vp [p Her R A x ep 3 y ej&gt; ] 
+
+For example, if xPy means that x is a parent of y , then xP*y means that x is an ances- 
+tor (or the same as) y. The ancestral of the second kind or transitive closure is also 
+useful: 
+
+/?+ = R*\R = R,R* 
+
+Thus, P + means 'ancestor' in the colloquial sense. The easiest way to visualize the 
+meanings of the ancestrals is by their expansion as infinite unions: 
+
+-35- 
+
+
+
+RELATIONAL PROGRAMMING 
+R* - R° u R x u R z u R 3 u • ■ 
+
+# + = tf 1 u /? 2 u /? 3 u /? 4 u 
+
+EXERCISES: Here are some useful properties of the ancestrals. Prove them. 
+
+r+ = R\(=) = /?*\tf° 
+artf'y &lt;^ 5i[n&gt;0Ai/? n i/] 
+
+/? n c R\ forn&gt;0 
+R n c /? + , forn&gt;0 
+/?utf + = tf* 
+tf + C i? # 
+# + = i?|/f # 
+R* = R°u R + 
+
+(rT 1 = Off- 1 )* 
+
+(r + )- 1 = (R-'y 
+
+(rfs)* C r*Ts 
+
+Ancestral relations are always transitive. Notice that &lt; and &lt; for integers can be 
+denned: 
+
+* = (1+)' 
+&lt; = (l+) + 
+
+That is, x&lt;y means that y can be reached from x by zero or more applications of the 
+successor function (l+). The ancestral "fills out" all of the paths in a structure. For 
+instance, if 
+
+R — a i ag 0,3 a 4 
+
+
+
+then 
+
+
+
+-36- 
+
+
+
+RKIATIONAL PROGRAMMING 
+
+
+
+R* = 
+
+
+
+
+13.2 applications 
+
+Suppose that S is a sequence and we wish to find the first member of S which 
+satisfies some property P. First form the closure S + , so that for any two members of 
+5 + we can tell which is first. Next, eliminate from S + any members that do not satisfy 
+P\ S + 1\P. Then, a(S + rP) is the first member of S satisfying P. 
+
+Next we will consider a simple character manipulation example: stripping leading 
+blanks from a string. Note that x (y cl)* z means that z is a result of consing or 
+more y's on the front of x . Hence, z [(y cl)*] -1 x means that x is the result of strip- 
+ping one or more y's from the front of z . To get the desired result it is only necessary 
+to restrict the left domain of this function to be sequences that don't begin with a y. 
+Suppose Y is the property of beginning with a y : 
+
+ie7 » y=ai &lt;=&gt; x ay &lt;=&gt; x e allay 
+
+Therefore, the function to strip leading y's from a sequence is: 
+
+[(y cl)*]" 1 «- ~.(alla)y 
+
+13.3 iteration 
+
+Before we leave the topic of ancestral relations, it will be useful to investigate their 
+use as a means of iteration. Suppose that F is a function (i.e., right univalent). Then, 
+since 
+
+F + = f* u F z u F 3 u 
+
+we will have xF + y if and only if for some n&gt;0, y - F n x. In general there may be many 
+such 7i, so F + may not be a function. If F+ is to be a function, it is necessary to pick a 
+termination condition (a class) that is only true for one of F x x, F 2 x, F 3 x , .... Therefore 
+
+-37- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+consider the relation F + *~~.domF. Let D - ~.dom7 r to see the effect of this function: 
+
+F + &lt;-D = {F i uF z uF 3 u ■ ■ )*-D = (F*-D u F z &lt;-D u F*&lt;-D u ■ ■ ■ ) 
+
+Then {F*&lt;^D)x is F"x where n is the unique n&gt;0 such that F"x is denned but F n ' ri x is 
+not. This n is unique because F 71 * 1 ! undefined implies that for all m.&gt;n F^'x is 
+undefined. This leads to the definition of iter F: 
+
+iter F = F + *-~.domF 
+
+Notice that iter[P-*F] will iterate the application of F so long as its argument satisfies 
+P (and is in the domain of F). Since it always applies F at least once it is not like a 
+while loop; the equivalent of the while loop 
+
+while -P do F 
+
+is iter[P-»F];Id, since any input not in P n domf will be passed through. Hence we 
+define while[P,^] = iter[P-»/'];Id. Analogously, F\wbi\e[P,F] is equivalent to 
+
+repeat F until - P 
+
+14. Arrays 
+
+14. 1 definition and basic operations 
+
+An array is just a function from a contiguous subset of the integers to some set of 
+values. If A is an array and i e dom A then A(i) is the i-th element of A. Similarly, if 
+/ c dom A is a set of index values then imgAI is the corresponding set of array values 
+and I-+A is the subarray of A selected by those indices. 
+
+It is easy to define multi-dimensional arrays: they are just arrays whose elements 
+are selected by sequences of integers, e.g. M(i,j). If M is a two-dimensional array, 
+then M. (i,) is the i-th row of M and M. (,j) is the j-th column of M . Also, if / is a set of 
+row indices and / is a set of column indices then Ix.J -&gt; M is the submatrix of M 
+selected by these sets. It is easy to see that M. inv is the transpose of M , since 
+
+M.inv(i,j) = M[mv(i,j)] = M(j ,i) 
+-3B- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+More generally, if P is a permutation function (i.e. a bijection from an index set into 
+itself) then A.P is the result of permuting A by P. 
+
+APL-like array and matrix operations are easy to express with the relational opera- 
+tors. For example, if A is an array, then / .A is the array resulting from applying / to 
+every element of A. This follows from the definition of composition, (f.A)i =f(Ai). 
+Hence, sin. A applies sin to every element of A. Conversely, if F is an array of func- 
+tions, then F@x is an array of results obtained by applying each element of F to x. 
+That is, (F@x)i - (Fi)x . Also, if F is an array of functions and A is an array of argu- 
+ments, then F@A is an array of results obtained by corresponding elements of F to 
+corresponding elements of A. This follows from (F@A)i = Fi @ Ai. 
+
+Note that if A and B are two arrays with the same domain, then ATB is the 
+element-wise sum of these two arrays. To see this, suppose that C = ATB and consider 
+an arbitrary element of C: 
+
+C i = {ATB)i = Ai + Bi 
+
+In general, if n is an infix binary operation, then ff is the element-wise extension of that 
+operation to arrays. If / is any binary function, then /. (A~B) is the element -wise 
+application of it to arrays A and B . 
+
+The same approach works for matrices and arrays of higher dimensionality. Sup- 
+pose that M and N are two-dimensional matrices with the same domains. Then, 
+f.M (i,j) = f[M(i,j)] and 
+
+{M*N){i,j) = M(i,j) + N(i,j) 
+
+As for one-dimensional arrays, a matrix of functions can be applied to a single argu- 
+ment by M@x, and a matrix of functions can be applied to a matrix of arguments by 
+M@N. 
+
+If A and B are arrays, then C = /. (A\\B) is an outer product by f of A and B, since 
+C(i.j) - f (Ai.Bj). For example, 
+
+
+
+-39- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+x.([l..l2] || [1..12]) 
+
+is a 12 by 12 multiplication table. We can also form an outer product between an array 
+of functions and an array of arguments. If F is an array of functions and A is an array 
+of arguments, then P = @.(F\\A) is a matrix in which P(i,j) = (Fi)(Aj). 
+
+EXERCISES: Prove that @ .(F\\A) = uncurry.outer F A. 
+
+Suppose x is an element of the array A (i.e., for some i, x=Ai). Then alL4 x is the 
+set of all indices for which x=Ai. Therefore we can find the index of the first occurence 
+of a; in A (i.e. APL's iota operator) by min(alL4 x). In general, if P is some property 
+(i.e. class), then img.4" 1 P is the set of indices of all elements of A that satisfy P. A 
+sorted reflexive sequence of these indices is just &lt; T \mgA~ l P 
+
+14.2 relation to sequences 
+
+It is easy to convert arrays to sequences and vice versa. Suppose all the elements 
+of A are distinct, then A~ x is a function that returns the index of an element of -4. We 
+want to define a sequence S such that xSy if and only if x preceeds y in A, i.e. the 
+index of x is one less than the index of y . To put this functionally, we want to define S 
+so that y=Sx means that y is the successor of x in A, i.e., that the index of y is one 
+greater than the index of x . 
+
+y = Sx &lt;±&gt; A~ x y - A~ x x + 1 
+&lt;~&gt; A~ l y = (l+).A~ x x 
+&lt;=&gt; y - A. (l + ).A~ x x 
+
+Hence, S = A (1+).A~ X . Notice that this is just the image of the (1+) structure under 
+the function A~ l : S = A~ } $(1+) (the $ operation is discussed in the next chapter). 
+
+Next, we will consider the opposite process: converting a sequence to an array. 
+Suppose we have a sequence: 
+
+S - g a.j a 2 a.3 
+
+
+
+-40- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+
+
+We wish to convert this to an array: 
+
+
+
+A = 
+
+
+
+
+
+
+a 
+
+
+1 
+
+
+a, 
+
+
+2 
+
+
+a 2 
+
+
+3 
+
+
+a 3 
+
+
+
+Thus, for each element a* in the sequence, we must find its index i in the resulting 
+array. If we can define a relation R such that E(cL i )=i then R~ l will be the array we 
+seek. Now i?(ot) is just the number of predecessors of a* in S. That is, a has no 
+predecessors, so R(o.q) = 0; a z has two predecessors, so R(a. 2 ) - 2, and so on. Since S 
+defined an immediate predecessor relation, 5"*" defines an ancestral predecessor rela- 
+tion: 
+
+
+
+
+-4 *C- — &gt;&gt; &gt; t 
+
+S = a a x a 2 a 3 
+
+
+
+Since xSy means x is a predecessor of y , y-Sx means y is a successor of x, Thus the 
+set of successors of any element a is then unimgS + a, and the set of predecessors of a 
+is unimg.inv5 + a, e.g. 
+
+unimg.inv5 + a 2 = $a , a,} 
+
+Alternately, unirng.inv5 + a = all5 + a is the set of all elements that bear the 5 + relation 
+to a. The size of this class is then the desired index: 
+
+size(all5 + a 2 ) = 2 
+
+Hence, R(a) = size(all5 + a), so R = size.(all5 h ). Now, we know that A is R~ l , so we can 
+define the function saO which converts a sequence into a 0-origin array: 
+
+
+
+-41- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+saOS = [size. (allS*)]- 1 
+To produce a 1-origin array, the only alteration is: 
+
+saS = [size. (allS*)]- 1 
+
+14.3 other array operations 
+
+Next we will consider the concatenation of arrays. If A is an array such that Ai - Oj, 
+then we can write A: 
+
+A = $l:ai, 2:a 2 m-.a^] 
+
+where m is the length of the array. Similarly, suppose that B is an n element array, 
+then the concatenation of these arrays is 
+
+A cat B - \\:a x m:a 7n \ U \m + l:b l m-\-n.b n \ 
+
+We can see that A cat B - AuB' where B' results from B by shift its indices by m: 
+
+B' = {m + l:b 1 m+n:b n l 
+
+How do we compute 5"? Observe: 
+
+B'i = B{i-m) = B[(-m)i] = B.(-m)i 
+
+Hence, B' - B. (~m) and A cat B = A u B. (-m), where m is the length of A. The 
+length of A is just size.dom A, so 
+
+A cat B = A u B. (-size.dom A) 
+
+We will finish our discussion of arrays by investigating the generation of sorted 
+arrays. Let S be a set of integers to be sorted, then [^TS] is a structure which relates 
+lesser elements to greater elements. Now if x is any element of the set, all[&lt;?5]a: is 
+the set of all elements less or equal to than x. Thus size(all[&lt;?S]x) = size, (all &lt;lS)x is 
+the number of elements of S less than or equal to x. This is just the index of x in the 
+sorted array we seek. Hence if A is the sorted array, iAx if and only if 
+a;[size.(all &lt;T5)]i, so A = [size. (all &lt;?5)] _1 . Of course this can be generalized to any 
+ordering relation. 
+
+-42- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+15. Isomorphic and Homomorphic Images 
+
+15.1 images 
+
+Consider any relation R and any biunivalent function/ . If we take each node nofi? 
+and replace it by fn we get a relation closely related to R called the image of R under 
+/ , symbolized / SR. 
+
+a 
+
+
+
+
+
+e ■&lt; *d 
+
+R f$R 
+
+figure 13. Image of a Relation 
+It is easy to define f SR . Observe that if S = f SR then (fx)S(fy) just when xRy . 
+
+Conversely uSv whenever there are x and y such that xRy , u =fx and v =fy . Hence, 
+
+uSv &lt;=&gt; Bpry [xRy A u =fx A v =fy ] 
+
+&lt;^&gt; 3xy [xfu A xRy A yfv ] 
+
+&lt;=&gt; 3xy[uf~ l x /\xRy A yfv] 
+
+&amp; u[f~ l \R\f]v 
+
+Hence, / SR =f~ 1 \R\f = /./?./ _1 . 
+
+The image operation is also useful when / is not biunivalent. For example, if fb -fd 
+then / SR (with the R in Figure 13) is: 
+
+
+
+ISP 
+
+
+
+/e /6=/d 
+
+I.e., we merge the nodes corresponding to 6 and d. 
+
+The 5 operation is clearly related to the img operation — they both compute the 
+image of a structure. Since -&amp;.[f ||/].un x:y - {fx):(fy), we have this relationship 
+between the images of relations and sets: 
+
+fSR = img(tf.[/||/].un)fl 
+
+
+
+-43- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+That is, fS= img(tf.[/||/].un). 
+
+The image operations have many uses. For example, since [l..n] = (1,2 n), we 
+
+can see that 
+
+(ra + )#[l..n] = (m + l,m+2 ra+n) 
+
+Hence the identity [ra + L.ra+n] = (ra+)$[l..n,]. To compute a list of the powers of two 
+from 2° to 2 16 we write (2t)#[0..l6], where xfy = x v . Finally, to compute a list of the 
+sines of the angles from 0°=0 rad. to 9Q°=ir/ 2 rad. we write 
+
+sin.(x7r/l80) 5[0..90] 
+
+To see that this works: 
+
+sin.(xrr/180) 5(0,1 90) 
+
+= ( sin.(x7r/ 180)0, sin.(x7r/ 180)1, .... sin.(x7r/ 180)90 ) 
+
+= ( sin(0xrr/ 180), sin(lxrr/ 180) sin(90x7T/ 180) ) 
+
+= ( sinO , sin 1° sin 90° ) 
+
+EXERCISES: Show that inv = [tf.inv.unjS. 
+
+15.2 images of functional structures 
+
+We have seen how, given a function / and a relation of values V we can form a rela- 
+tion / SV in which the shape of V is the same as the shape of / SV and each member 
+v ememF corresponds to fv in / SV. Now we will address the converse problem: given 
+a relation of functions F and a value v , how can we construct a relation F\v such that 
+the shape of F is the same as the shape of F\v and each member / EmemF 
+corresponds to fv in F\v . This is clearly the image of F under some unknown function 
+(p: F\v = (fiSF . We will solve for &lt;p. Observe &lt;pf - fv - f@v = (@v)f . Hence cp = (@v) 
+and F\v - (@v)SF. That is, F\v is the image of F under the operation 'apply to v'. We 
+can eliminate v from this definition: 
+
+(F\)v = F'.v = (@v)SF = (SF)(@v) = (SF).@ v 
+
+
+
+-44- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+Therefore F\ = (SF).@. Notice that the F\ is a function derived from a functional 
+structure just as F® is a function derived from a functional record. 
+
+We now consider some applications of this operation. To form a sequence by apply- 
+ing each of a sequence of operations to the same argument we write, for example: 
+
+(sin, cos, tan) !i? = (sin i5, cos i3, tan t?) 
+
+In particular, (f ,g)\ is just f~g and Backus' constructor [f ,g , . . . ,h] is just our 
+[f.9 h]\. 
+
+Recall our previous example in which we computed the sines of the angles from 0° to 
+89° by 
+
+sin.(x7r/180) #[0..89] 
+
+We can extend this to compute a table of the sines, cosines and tangents of the angles 
+from 0° to 89° by using both of the image operations: 
+
+(sin,cos,tan)!.(xTr/180) S[0..B9] 
+
+This produces a sequence of sequences of the form 
+
+((sin 0°, cos 0°, tan 0°), (sin 1°. cos 1°, tan 1°) (sin 89°, cos 89°, tan 89°)) 
+
+In general F\$R has an outer structure the same as R's, each of the elements of which 
+has a structure the same as F's. Thus it is sort of an "outer product" between F and 
+R in which the members are fr for / Mm F and r Mm R . 
+
+To convert a sequence of sequences such as this into a matrix requires an applica- 
+tion of the sa operator at each level of structure. Let 5 be the sequence of sequences. 
+First convert each of its elements to an array by sa$S . Next, convert the resulting 
+sequence to an array by sa[sa#S]. The result of the latter operation is an array of 
+arrays that can be converted to a two dimensional matrix by uncurrying. Thus the 
+sequence to matrix conversion is 
+
+ssm 5 = uncurry.sa[sa55] 
+
+
+
+-45- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+Therefore, 
+
+ssm = sa$ | sa | uncurry 
+
+This can be read: To convert a sequence of sequences to a matrix, convert each of its 
+elements to an array, convert the result to an array, and uncurry that result. 
+
+EXERCISES: Define an outer product operation PER which has the outer structure 
+of F but the inner structure of R. Thus, the matrix corresponding to PER is the tran- 
+spose of the matrix corresponding to E\$R: 
+
+(ssm PER).inv = ssm(E\$R) 
+
+15.3 isomorphism and the structure function 
+
+Carnap [Carnap58] defines two relations to be isomorphic when there is a 
+biunivalent relation between their members that preserves their structure. That is, R 
+is isomorphic to 5": 
+
+R~S « 3/ ebun[tf = f SS] 
+
+Thus, two relations are isomorphic if one is a biunivalent image of the other. 
+Equivalently, two relations are isomorphic if their arrow diagrams are equivalent when 
+their node labels are removed. The isomorphism of sets is defined in the same way: 
+
+S~T &lt;=&gt; 3/ebun[5 = img/7] 
+
+The structure of a relation is arrow diagram for the relation with its node labels 
+removed. For example, the structure of R in Figure 13 is: 
+
+
+
+
+str R 
+
+
+
+Thus two relations are isomorphic if they have the same structure. Mathematically the 
+structure of a relation is just the set of all relations isomorphic to the given relation: 
+str R = \S \S~R\ = all~/?. Thus str R is an equivalence class under ~. Alternately, 
+
+
+
+-46- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+strR = \S\SmRl 
+
+= \S\ 3febun[S=fSR]l 
+= img[$R]b\m 
+
+That is, strR is the class of all biunivalent images of R. Note that R~S -e&gt; str/? = strS. 
+
+The structure of a set is defined in exactly the same way. Since CimgSF = imgFS , 
+we have 
+
+str5 = \T | T~S\ = all~S = img[CimgS]bun 
+
+Observe that if, following Russell and Whitehead [White he ad70], we define a number as 
+the class of all classes isomorphic to a given class, then the size of a class is just the 
+set of all classes isomorphic to that class: size S = \T\T~S\. But this is just the 
+definition of the structure of a class. Hence for all sets S , size S - str S . In other 
+words, the structure of a set is its cardinality. When the identity of its elements is 
+ignored, the only structural characteristic still possessed by a set is its size: 
+
+str$l,8,2j = strfcat.dog.cowj = {■,-,] = 3 
+
+16. Data Structures 
+
+16. 1 definition 
+
+Simple relations are not adequate for modeling all structures. For example, sup- 
+pose we write this sequence: (1,2,3,2,4,5). This is defined to be the relation 
+
+\ 1:2, 2:3, 3:2, 2:4, 4:5 | 
+
+To make its structure more apparent, we will draw this as an arrow diagram: 
+
+
+
+R = 1~ 
+
+
+
+2\J3^/I~5 
+
+
+
+This is certainly not what we expected, and it will not give the results we expect. For 
+example, we cannot scan through this "sequence" because R{2) is multiple valued. 
+
+
+
+-47- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+To avoid this problem it is often better to use data structures (or interpreted struc- 
+tures). A data structure S is a pair {D,R), where R is a relation (a simple structure) 
+that defines the form part of the data structure, and D is a function that associates 
+data values with the members of R; it is called the data part of the data structure. 
+Usually dorru9 = mem/?, but this does not have to be the case; we will see examples 
+later. 
+
+The structure that we intended by writing (1,2,3,2,4,5) can be correctly represented 
+by a data structure {D,R) in which R = (a,b,c,d,e,f) and 
+
+D = [a:l, b:2, c:3, d:2, e:4, f:5j. 
+
+It doesn't matter what a, b, c, d, e, f are, so long as they are distinct. We will write data 
+structure sequences with angle brackets: &lt;1,2,3,2,4,5&gt;. 
+
+16.2 operations on data structures 
+
+We need functions for both interrogating and updating data structures. The data 
+and form parts of data structures can be extracted by a and cj, respectively. In partic- 
+ular, if n is a node in S, nemem(u5), then aSn is the value associated with that node. 
+A common situation is to inquire the value of a node selected by applying a function / 
+to the form of a data structure; we write this vfS. For example, vaS is the value of 
+the first element of S and v(cjS)S is the value of the second element of S . In general, 
+
+vf(D.R) = D(fR) = D @ fR = @{D,fR) = @.[ld\\f](D,R) 
+
+Therefore, vf = @. [ld||/ ] and v = (@. ).(Id||). 
+
+Next we define operators tp and 6 that alter their argument function so that it 
+operates on either the form or the data part of a data structure, but leaves the other 
+part unchanged. That is, &lt;pf (D,R) - (DJR) and 6f{D,R)-{fD,R). Therefore 
+&lt;pf = Id||/ and 6f = / ||Id, so &lt;p = Id|| and 6 = ||Id. 
+
+We will define an operation n such that UfS is the image of the structure S under 
+the function / , that is, n/5 is a structure with the same form as S but with values 
+
+-48- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+derived by applying / to the data of 5". Thus UfR is the analog for data structures of 
+f $R for relations and f.R for records and arrays. Suppose S = (D,R) and 
+UfR = (D'.R). For any nememi? we must have D'n = f(Dn), so D' = f.D - [f.]D. 
+Hence, we get UfS from S by applying [/. ] to the data part of S, so UfS - 6[f. ]S , 
+and Uf = 6[f. ]. For example, if S is any data structure whose values are numbers, 
+then n[l+]S adds one to each element of the data structure. 
+
+The n operator leaves the form of the data structure unchanged; next we consider 
+operators that reform data structures. First we define operators that filter a data 
+structure by removing some of its nodes. In the simplest case we just throw away the 
+nodes we don't want, only retaining those that satisfy a given property P. Hence, 
+
+(D,R') = (D.RTP) = (D,[rP]R) = &lt;p[tP](D,R) 
+
+Hence ^[tP] filters a data structure by eliminating all those nodes that do not satisfy 
+P. Suppose that we want to eliminate the negative nodes of a data structure. Thus we 
+wantxeP &lt;=&gt; aSn&gt;0 &lt;=&gt; n (aS)|&gt; 0, so P - all(a5 |&gt;)0. 
+
+This simple form of filtering will often lead to nodes becoming isolated. That is, if we 
+filter the sequence 
+
+&lt; 3, 4, -2, 6, 7, -1, 2, -4 &gt; 
+
+by the set P - all(otS |&gt;)0 then we will get 
+
+3 4 6 7 2 
+
+Note that the node whose value is 2 (a positive number!) is not even in the relation 
+anymore since it has no neighbors (it is still in the data mapping, however). Usually we 
+would prefer to connect up the remaining elements of the sequence, yielding 
+&lt;3,4,6,7,2&gt;. How can this be accomplished? 
+
+We will define an operator $ such that $PS is the data structure resulting from 
+filtering the data structure S by the predicate P. Suppose 5 = (D,R) and 
+$PS = (D,R')- R' will be derived from R by adding some new pairs to RfP. In 
+
+-49- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+particular, we want to add just enough pairs to directly connect those nodes that were 
+indirectly connected in R but are not indirectly connected in JRtP . We will call this 
+operation £, so R' = £R . 
+
+Observe that xR+y if and only if y is reachable from x in one or more steps. Simi- 
+larly x{R \R*)y if and only if y is reachable from x in two or more steps. Therefore, 
+first take our original relation R and compute R + : 
+
+
+
+
+Then eliminate the undesirable members by restriction, S = RfP: 
+
+
+
+
+There are clearly many redundant edges here. We want to eliminate any edges that 
+can be generated from the others; that is, we want a minimal set of edges. Since S \S* 
+are all the edges of length two or greater, these are the redundant edges: 
+
+
+
+
+If we delete these edges from S we will have only the nonredundant edges left, so 
+S\{S\S + ) is 
+
+
+
+3 4 
+
+
+
+6 7 
+
+
+
+We can now define £. First we define a useful operation /j. that minimizes a relation 
+by eliminating all of its redundant edges: i±R = R \ /? |7? + . To see that this works just 
+
+
+
+-50- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+expand the transitive closure: 
+
+fiR = R \R\R + 
+
+= R \R\(R 1 uR z uR 3 u ■ ■ ■ ) 
+= R \ (R z uR 3 uR 4 ■■ ■ ) 
+= R \R 2 \R 3 \R 4 \ 
+
+Hence, to filter a relation R by a predicate P we use (x[R*tP]. Therefore, 
+
+$PR = r&lt; = fi[R + rP] 
+= fi.[fP][tracR] 
+= /^.[tP].trac R 
+
+where we have used trac R = R + . Hence we have that 
+
+£P = /A.[fP].trac 
+
+Notice that this definition is really quite readable. It says, "To filter a relation, com- 
+pute the transitive closure (trac), eliminate undesirable nodes [tP], and eliminate 
+redundant edges (yu)." 
+
+We now want to extend £ into the operation &lt;f? on data structures. Recall that $PS 
+means that a node is to be included in the result only if its value satisfies P. Hence, if 
+S = (D,R) then we want to filter R by F where neP if and only if ZVieP. Now, the set 
+of all nodes whose value is in P is just the inverse image of P under D, F - img.invPP. 
+Therefore, we want to filter R by img.invPP, which we do by £(img.invPP)P. Hence, 
+$P(D,R) = (D, £[img.inv£P]P). We can factor (D,R) out of this equation: 
+
+$PS = $P(D,R) 
+
+= (D, £[img.invZ?P]P) 
+
+= (D, £[(@P).img.inv£]P) 
+
+= (D, £.(@P).img.invP R) 
+
+= (D, uncurry[f(@P).img.inv](£&gt;,P)) 
+
+= (aS, uncurry[£.(@P).img.inv]S') 
+
+-51- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+= (a 7 uncurry[£.(@P).img.iriv])S' 
+Therefore, 
+
+$P = a7uncurry[£.(@.P).img.inv] 
+
+17. Reducing Structures 
+
+17. 1 basic concepts 
+
+In this section we will discuss several methods for reducing structures, that is, for 
+applying a function to each element of a structure and accumulating the results. Since 
+no one method has yet been selected, this section should be taken as a report of work 
+in progress. 
+
+A general paradigm for processing a structure, such as a file, is the following: 
+
+1. Perform some initialization. 
+
+2. Read the next (or first) element of the file. 
+
+3. Take this value and the results of processing the previous values. 
+
+4. Process these to yield new cumulative values and continue from step (2). 
+
+5. When the end of the file is reached, return the accumulated result of processing all 
+of its elements. 
+
+A simple form of this appears in APL's reduction operation: 
+
++/V = V l + (- ■ ■ (V n ^+V n )- • •) 
+
+A more general form is Backus' insert: 
+
+//&lt;*i x n &gt; = f:&lt;x ll ,..f:&lt;x n - l ,x n &gt;...&gt; 
+
+Our first example of scanning structures will be to express this operation in the rela- 
+tional calculus. 
+
+
+
+-52- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+17.2 reduction of arrays 
+
+We are given an n element array A and wish to compute: 
+
+t = A(n)+A(n-1) + ■ ■ ■ +,4(2)+i4(l) 
+
+where we have assumed that the domain of A is [l..n]. We saw in the section on ances- 
+trais (§13) that iter[~7 -» F] will iterate the application of F with T used as the termi- 
+nation condition. Consider how the analogous loop would be written in Pascal: 
+
+S:= 0; i := 0; 
+while i^n+1 do 
+begin S := S+A[i]; i := i+1 end 
+
+On each iteration two functions are performed: S is increased by A[i] and i is incre- 
+mented by 1. Let's represent the state of the computation by a pair (s,£), where s is 
+the cumulative sum so far and i is the index of the next element to process. We will 
+use F to represent one processing step, so that, if (s'.i') is the new state, we can solve 
+for F as follows: 
+
+F(s,i) = {s'.i') 
+
+- (s+M,i + l) 
+
+= (+[s.M], [l+]0 
+
+= (+.[Idp](s,i), [l+].«(s.i)) 
+
+= ( + .[Idp]71 + .cj)(s,i) 
+
+Hence. F = ( + .[Id||4]7 l + .cS). 
+
+It remains to determine the termination condition, T. If x is a state, i.e., a pair 
+{s,i), then x^T when i=n + l, Hence, xeT when ux = n + 1, so T is the set of all states 
+mapped by a into n + 1. Hence, T = all un + 1. The final state, x f , containing the sum 
+is iter[~r -&gt; F]x it where x i =(0,l) is the initial state: 
+
+x f = iter[~T -» F](0,1) 
+
+Now, the total t is just axj , so 
+
+-53- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+t - a.iter[~T -» F](0,1) 
+
+We can generalize this to any function / with initial value i: 
+
+t = a.itert-7 7 -* F](i,l) 
+where F = (/. [Id||i4]T l + -«) 
+and T = all cj (l+siza4) 
+
+This result can be improved by directly extracting the result from the final state. 
+That is, we want to define a filter 95 such that t = &lt;p.F*{i,\). Hence we want Xjcpt, so 
+x f &lt;pt &lt;t&gt; (t ,n + l) 99 t. Now, note that [,n + l]t = (t,n + l), so t [,n + l](£,n + l) by the 
+definition of application. Therefore &lt;p = [,n + l] _1 and we have the simplified formula 
+t - [,7i + l]" 1 ./ 7 '*(i 1 l). This leads us to the following definition of the array reduction 
+operation: 
+
+(ffi)A = In + tf-t.F^i.m) 
+where F = (f ,[ld\\A];i + .cS) 
+and m = min(dom A) 
+and n = max(dom A) 
+
+Therefore, if A is an array indexed m ton, then (+^0)^4 is the summation of A, 
+
+£* 
+
+Using this operation, the inner product of arrays A and B can be written simply as 
+
+EXERCISES: Show that +%Q{A*B) is the inner product of A and B. 
+17.3 reduction of sequences 
+
+Next we will consider the scanning of sequences. Suppose S is a sequence: 
+
+S = {s lt s 2 , . . . ,s n ,EOF) 
+where EOF is an "end marker"; it can be any value. Now, we wish to find the result 
+
+
+
+-54- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+i f sif s 2 f f s n 
+
+that is 
+
+for some function / and starting value i. The state can be represented by a pair (t ,s), 
+where £ is the result so far computed and s is the rest of the sequence to be pro- 
+cessed. Hence, (t'.s 1 ) = F(t ,s) where t' =f (t , as) and s' = Qs . Therefore, 
+
+F(t,s) = (t'.s') = (/[r.as], Ds) 
+
+= (/. [Id||a](*,s), n.u(t.s)) = (/. [Id||a]Tn.w)(f ,s). 
+
+Hence, F = f.[ld\\a]-Q.o. 
+
+Yfhat is a terminal state? Notice that Q(s„,EOF) = &lt;f&gt;, so a terminal state will have the 
+form (r,&lt;p). Thus the set of terminal states is the set of all those states mapped into 
+by w. al\u&lt;f&gt;. Hence, 
+
+r = while[~ allcj0, F](i,S) 
+
+To put this in a more useful form, we will define a function /§£ such that r = (f§i)S. 
+This is simply 
+
+/§* = while[~allc;0. /.(Id||a)Tn.w] . (i,) 
+Then, the sum of the elements of a sequence S is just ( + §0)5. 
+
+18. Examples 
+
+In this section we will give several examples of relational programs. 
+18.1 payroll 
+
+Suppose we have a file $ of employee records, where r - $n is the record for the 
+employee with the employee number n. We will suppose that employee records are 
+functions defined so that: 
+
+
+
+-55- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+rN = employee name 
+
+rH = hours worked so far this week 
+
+rR = pay rate 
+
+We are given an update file U such that Un is the number of hours worked by employee 
+n today. We wish to generate a new payroll file $'. 
+
+SOLUTION: Let r = $n and r' = $'n be the old and new employee records. It is clear 
+that r' is the same as r except for its H field. In order to modify part of a relation, we 
+will use the conditional union (or overlaying operation) defined by: 
+
+R;S = R u ~.dom/? -&gt; S 
+
+Then, if h' represents the new value of the H field, the new employee record is 
+r' - (H,/i'); r , where h' is just the cumulative hours worked, h' = $nH + Un. Therefore, 
+by the definition of $': 
+
+$'n = r' = (H,/i'); $n 
+
+To find &lt;£&gt;' we must factor out the employee number n. To do this, note that $nH = 
+[@H](*n) = [@H].$n. That is, [@H].$ = $©H is a slice of the payroll file: the hours 
+worked for each employee. Therefore, 
+
+h' = fcH + Un = [@H].$n + Un 
+= ($@H T U)n 
+
+Now, define the updating function u by 
+
+u(n) = [H, ($SHT U)n] 
+= [H,].($SH T U)n 
+
+Then, $'n = u(n); &lt;|)n = [§\u]n. The rf ore. the solution to our problem, the new payroll 
+file, is 
+
+$' = u~\§, where u = [H,].(^®H T U) 
+
+
+
+-56- 
+
+
+
+RELATIONAL PROGRAMMING 
+18.2 check issuing 
+
+Suppose we wish to take the payroll file from the previous example and generate 
+checks for the employees. We will assume that a function C is available such that 
+C(m,p) returns a check in the amount p made out to the name m. 
+
+SOLUTION: We will ignore overtime computations. Hence, if n is an employee 
+number then $nN is his name and 
+
+p(n) = $7iH x &lt;£&gt;nR 
+
+is his pay. Therefore p = $@H x $@R. Now observe that his check c(n) is 
+c(n) = C(rn,pn) = C{$nNpn) = C($@Nn,pn) = C. ($@N7p)n. Combining these we 
+have the file F mapping employee numbers into checks: 
+
+F - C. [$@N7(«I&gt;@HX$@R)] 
+
+from which we can factor out the old payroll file: 
+
+F - C. [@NT(@HX@R)].$ 
+
+If we just want a set of checks, this is dom.invF. 
+
+18.3 pseudo-natural notation 
+
+Relational programs can be made less intimidating by using the pseudo-natural 
+notation described in [MacLennan82]. This notation uses words in place of symbols and 
+uses a comma convention to suppress many parentheses. The frequency table pro- 
+gram from §1, F - size, (all T), can be written: 
+
+'Freq-table' means all text then size. 
+
+Here, 'Freq-table' = F and 'text' = T. 
+
+The payroll example looks like this in the pseudo-natural notation: 
+
+'Updates' means: 
+Old-Master slice Hours, each add Hours-Worked, 
+then pair-with Hours. 
+
+-57- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+'New-Master' means Updates each replace Old-Master. 
+
+Here, 'Updates' = u, 'Old-Master' = $, 'slice' = @, 'Hours' = H, 'each add' = T, 'Hours- 
+Worked' = U , 'then' = |, 'pair-with = n, 'New-Master' = $', and 'each replace' = 7. 
+
+The check issuing example is also easily put into this notation: 
+
+"Checks' means 
+Old-Master then: 
+something slice Name 
+
+also something slice Hours each times something slice Rate, 
+then Write-check. 
+
+Here, 'Checks' = F , 'something' represents an omitted argument, 'Name' = N, 'also' = 
+7, 'each times' = x, 'Rate' = R, and 'Write-check' = C. 
+
+19. Implementation 
+
+19.1 introduction 
+
+The primary goal of our investigation has been to determine if relational program- 
+ming is significantly better than conventional methods. It would be premature to 
+devote much effort to implementation studies before it is even determined if relational 
+programming is an effective programming methodology. However, a brief discussion of 
+implementation possibilities is probably not out of line. 
+
+The most obvious representation of a relation is the extensional representation, in 
+which all the elements of a relation or class are explicitly represented in memory. 
+There are many kinds of extensional representations, such as hash tables, binary trees 
+and simple sorted tables. Of course, performance can be improved through the use of 
+associative memories and active memories (in which each memory cell has a limited 
+processing capability). 
+
+Some relations and classes will be so large that it is uneconomical to represent 
+them explicitly in memory. In these cases an intensional representation 
+
+-58- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+[MacLennan73] should be used. Here a class or relation is represented by a formula or 
+expression for computing that relation or class. Operations on the class or relation are 
+implemented as formal operations on the expression. This is feasible because of the 
+simple algebraic properties satisfied by relations. It can be seen that an intensional 
+representation is really just a variant of a lazy evaluation mechanism [Henderson76, 
+HendersonBO]. Sometimes an intensional representation is necessary; for instance, 
+relations of infinite cardinality, such as the numerical operators and relations, require 
+an intensional representation. 
+
+19.2 computability 
+
+It can be shown on theoretical grounds that some of the operators we have 
+described are not implementable in their full generality. For example, if unimg were 
+applicable to all computable functions, it would be possible to solve the halting prob- 
+lem, since 
+
+Halts (/ ,x) &lt;=&gt; unimg/x * 
+
+Since the halting problem is not solvable, we cannot implement unimg and the other 
+operators used in the definition of Halts so that they works on all computable func- 
+tions. Similar arguments set bounds on the implementability of many of the other 
+operators. 
+
+These limitations do not prevent the use of the relational operators as a 
+specification language. For this purpose it is only necessary that relational programs 
+precisely specify the relationships between inputs and outputs, not that the programs 
+be implementable. However, if we wish to use the relational operators for executable 
+specifications or for a full-fledged programming language, then the issue of implemen- 
+tability becomes important. 
+
+19.3 extensional representation 
+
+It should be clear that all the operators are implementable on extensionally 
+
+
+
+-59- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+represented sets and relations, that is, on sets and relations whose elements are expli- 
+citly listed in some form in the computer's memory. Obviously, only finite sets and 
+relations can be represented extensionally. Suha Futaci [Futaci82] has analyzed the 
+complexity of the algorithms associated with several different extensional representa- 
+tions. 
+
+19.4 intensional representations 
+
+Infinite sets and relations must be represented intensionally, that is, without expli- 
+citly listing their elements. There are several ways of accomplishing this. For exam- 
+ple, infinite sets can be represented by their characteristic functions: total, comput- 
+able, Boole an- valued functions that determine whether or not a given element is in the 
+set. Since we require these functions to be computable they can be expressed in a 
+finite algorithm and so are finitely reresentable in the computer's memory 3 . 
+
+Another intensional representation of infinite sets makes use of computable 
+enumeration functions. If / is an enumeration function for a set then /(l), / (2), ... 
+are distinct elements of the set. If n is greater than the cardinality of the set, then 
+f (n) might not halt. 
+
+One of the most common intensional representations of infinite relations makes use 
+of the corresponding computable function. That is, the computable function / can be 
+used to represent the relation R when y=f(x) &lt;=&gt; (x:y)&lt;ER. Clearly, this representa- 
+tion can be used only when R is right univalent. Also, if x £ dom/ then the computa- 
+tion of / (x) might not halt. 
+
+19.5 eliminating polymorphism 
+
+When we investigate each of the various extensional and intensional representations 
+of sets and relations, we find that different combinations of the operators are imple- 
+mentable on each representation. This could lead to a very confusing situation for the 
+
+
+
+3. Of course, computable characteristic functions only allow (by definition) the representation of recursive 
+sets. There is little to be lost in restricting our attention to recursive sets, however. 
+
+
+
+-60- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+
+
+TABLE 1. Sets Represented by their Characteristic Functions 
+
+
+
+Set Operation 
+
+
+Operation on Characteristic Function 
+
+
+x eS 
+
+
+S(x) 
+
+
+x £ S 
+
+
+-S(x) 
+
+
+~S 
+
+
+-.S 
+
+
+SnT 
+
+
+S7\T 
+
+
+SuT 
+
+
+SS7T 
+
+
+S\T 
+
+
+S7\-.T 
+
+
+SdT 
+
+
+-.SS7T 
+
+
+SxT 
+
+
+A.(5||70 
+
+
+xRy 
+
+
+R{x,y) 
+
+
+umragRx 
+
+
+R. (,x) 
+
+
+&amp;\\Rx 
+
+
+/?.(*,) 
+
+
+invi? 
+
+
+i?.inv 
+
+
+S-&gt;R 
+
+
+S.a7\R 
+
+
+R^S 
+
+
+R 7\S.u 
+
+
+RrS 
+
+
+R AA.(5||5) 
+
+
+R\\S 
+
+
+R.a$7\ S.u$ 
+
+
+R^S 
+
+
+R. (IdllcO A 5. (Idllw) 
+
+
+
+relational programmer. Without consulting a table of some kind the programmer 
+would never be sure whether or not a particular combination was implementable. 
+Therefore, relational programming will be simplified if we can divide the operators into 
+disjoint classes in such a way that each operator is applicable and implementable on 
+exactly one representation. Fortunately, when we investigate the use of the relational 
+operators we find that certain operators are mostly used on finite sets and relations 
+and others are mostly used on computable functions. Thus we have a basis for a divi- 
+sion of the operators. 
+
+To accomplish this goal it is necessary to eliminate any polymorphism, that is, any 
+operators that are both implementable and useful on more than one representation. 
+For example, the set operations (n, u, \, etc.) are useful and implementable on both 
+finite sets and infinite sets represented by characteristic functions. However, the set 
+operations on infinite sets are easily expressed as abstractions and compositions of the 
+Boolean operations applied to the corresponding characteristic functions; see Table 1. 
+The simplicity and directness of this representation of infinite sets and their operators 
+permits us to eliminate them as basic objects in relational programming. Thus, the set 
+operations (n, u, \, etc.) will only be allowed on finite sets and relations. 
+
+
+
+-61- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+Since we have eliminated characteristic functions as built-in representations of 
+infinite sets and relations, we are left with only two others: enumeration functions and 
+computable functions (for right univalent relations). We have chosen to eliminate 
+enumeration functions because they have few uses and these can be easily expressed 
+using the functional operations. 
+
+This leaves us with two classes of objects in relational programming: 
+
+• Finite sets (and hence relations) 
+
+• Computable functions 
+
+There are only a few operations that are both useful and implementable on both of 
+these classes. For example, the application operation can be used both for applying a 
+computable function to its argument and for looking up an item in a table (a finite rela- 
+tion). Therefore we define two versions of this operation: f@x, which applies the com- 
+putable function / to x, and tix (suggesting subscripting), which applies the finite 
+relation (table) t to x . We allow f@x to be abbreviated fx and tix to be abbreviated 
+t, 
+
+
+
+■x 
+
+
+
+For some of the polymorphic operations either the intensional version or the exten- 
+sional version can be easily expressed in terms of other operations. In these cases the 
+easily expressible version can be dropped with little loss of convenience. An example of 
+this is img.inv/p, where / is a total function and p is a characteristic function. This 
+can be written;)./ since p./ is the characteristic function of img.inv/p. 
+
+19.6 extensional operators 
+
+The results of the separation process are displayed in Tables 2-5. Table 2 lists the 
+primitive operations on finite, extensionally represented sets and relations. These 
+operations are considered primitive because they are not simply defined in terms of 
+other operations. Tables 3 and 4 show the non-primitive operations on extensionally 
+represented sets and relations, that is, those that can be simply defined in terms of 
+
+
+
+-62- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+
+
+TABLE 2. Primitive Extensional Operations 
+
+
+
+Operator 
+
+
+Meaning 
+
+
+tix 
+
+
+application 
+
+
+t \u 
+
+
+relative product 
+
+
+t~u 
+
+
+construction 
+
+
+x:y 
+
+
+pair formation 
+
+
+sut 
+
+
+union 
+
+
+una: 
+
+
+unit-set formation 
+
+
+cur t 
+
+
+Currying 
+
+
+unc t 
+
+
+un-Currying 
+
+
+i?x 
+
+
+unique element selection 
+
+
+sizes 
+
+
+cardinality 
+
+
+str£ 
+
+
+structure of relation 
+
+
+t + 
+
+
+transitive closure 
+
+
+
+TABLE 3. Non-primitive Extensional Operations (Part 1) 
+
+
+
+Operator 
+
+
+Definition 
+
+
+(*,y) 
+
+
+un{x:y) 
+
+
+
+
+(*.) 
+
+
+un.(x:) 
+
+
+
+
+(,y) 
+
+
+un.(:y) 
+
+
+
+
+Ax 
+
+
+(x,x) 
+
+
+
+
+xet 
+
+
+or.img[x=]£ 
+
+
+
+
+S£t 
+
+
+and.(img[e£])s 
+
+
+
+
+s=t 
+
+
+s^t Afcs 
+
+
+
+
+inv t 
+
+
+img[:.(Tl,Hd)!]f 
+
+
+
+
+dom t 
+
+
+img Hd t 
+
+
+
+
+rng t 
+
+
+dom. inv t 
+
+
+
+
+mem t 
+
+
+dom£ u vngt 
+
+
+
+
+Lm(x,£) 
+
+
+xedom£ 
+
+
+
+
+Rmjz.t) 
+
+
+xerng£ 
+
+
+
+
+Mm(i,i) 
+
+
+rememi 
+
+
+
+
+run t 
+
+
+and . img(l = .size.[unimg£]) 
+
+
+dom£ 
+
+
+lun t 
+
+
+run. inv t 
+
+
+
+
+bun t 
+
+
+runt A hint 
+
+
+
+
+init t 
+
+
+domi \ vngt 
+
+
+
+
+term t 
+
+
+mgt \ dom£ 
+
+
+
+
+t* 
+
+
+t + u (img :.A).mem t 
+
+
+
+
+p^t 
+
+
+filter(p.Hd)f 
+
+
+
+
+£&lt;-p 
+
+
+fflter(p.TV)f 
+
+
+
+
+trp 
+
+
+p-&gt;£ &lt;-p 
+
+
+
+
+
+other operations. Although these operations are non-primitive, we would expect that 
+they would be built-in in a relational programming system. These definitions make use 
+of several new primitive operations, which are defined in Table 5. They also make use 
+of the operations on elementary pairs: Hd = a.un and Tl = w.un. 
+
+
+
+-63- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+
+
+TABLE 4. Non-primitive Extensional Operations (Part 2) 
+
+
+
+Operator 
+
+
+Definition 
+
+
+a 
+
+
+tf.init 
+
+
+U) 
+
+
+-tf.term 
+
+
+kt 
+
+
+t -» £. term£ 
+
+
+nt 
+
+
+£ iniU -&gt; t 
+
+
+t ;u 
+
+
+tug. dom£ -&gt; u 
+
+
+x cl t 
+
+
+(x,at)ut 
+
+
+t cr x 
+
+
+tu(ut ,x) 
+
+
+min s 
+
+
+a.(img&lt;) sxs 
+
+
+max s 
+
+
+w.(img&lt;) sxs 
+
+
+SP\t 
+
+
+dom[s -» ixunO] 
+
+
+s\t 
+
+
+dom[ £ t -» sxunO] 
+
+
+\0..rn\ 
+
+
+/ m (0,unO) where / (n,s) = (71 + l.suunn) 
+
+
+\m..n] 
+
+
+img[m + ]$0..n — m \ 
+
+
+[m..n] 
+
+
+img[:.A]\m...nl 
+
+
+t@x 
+
+
+img(HdT@x. Tl)t 
+
+
+t\x 
+
+
+@xSt 
+
+
+jut 
+
+
+t \t\t + 
+
+
+indexcpt 
+
+
+img[l&lt;p~ld]t 
+
+
+select^ 
+
+
+img.(index9?) 
+
+
+joimp 
+
+
+imgu . dom . inv . || . [index^Hindex^] 
+
+
+as t 
+
+
+img[AiT Al.l+](dornt \ un.max.dom t) 
+
+
+sa t 
+
+
+/§(!.*) 
+
+
+
+
+where f[x,(i,a)] = (i + 1, au[i,x]) 
+
+
+saO t 
+
+
+/§(O.0) (/ defined above) 
+
+
+rpft 
+
+
+img[HdT/.Tl]£ 
+
+
+rpift 
+
+
+img[/.HdTTl]f 
+
+
+t cat u 
+
+
+t u rpi[+size.dom t]u 
+
+
+rsort s 
+
+
+img &lt; s xs 
+
+
+sort s 
+
+
+size. inv. all. rsort s 
+
+
+unimgfx 
+
+
+rng[unx -» t] 
+
+
+unimgf 
+
+
+img/ (domO where fx = a::(unimg£x) 
+
+
+ssm 
+
+
+unc.sa.sa$ 
+
+
+
+19.7 intensional operators 
+
+All the intensional operators can be expressed using recursive definitions and 
+lambda expressions. Nevertheless, it is useful to divide these operators into two 
+classes, primitive and non-primitive, on the basis of whether they can be easily defined 
+in terms of the other operators. The intensional operators are shown in Tables 6 and 7. 
+
+20. Conclusions 
+
+Of course, we are not the first to propose introducing aspects of a relational calculus 
+into programming. Codd [Codd70] has used a relational calculus as the basis for data 
+base systems. Although he defines several operations on relations (viz., permutation, 
+
+
+
+-64- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+
+
+TABLE 5. New Primiti ve Extensional Operations 
+
+
+
+andftrue} = true 
+and^falsej = false 
+and^ true, false I = false 
+
+or^truej = true 
+orjfalsej = false 
+or£ true, false I = true 
+
+unionJSx.Sg S n j = S^SzU ■ ■ ■ uS n 
+
+filteno5 = \x \xeS Ap(i)| (a finite seO 
+
+
+
+TABLE 6. Primitive Intensional Operations 
+
+
+
+Operator 
+
+
+Definition 
+
+
+f@x 
+
+
+/* 
+
+
+img/s 
+
+
+\fx |XGSJ 
+
+
+(f-9)* 
+
+
+/(flw) 
+
+
+xn 
+
+
+7T.(x,) 
+
+
+nx 
+
+
+n.(,x) 
+
+
+(/lb)* 
+
+
+(fz.gx) 
+
+
+fSt 
+
+
+img[/||/]i 
+
+
+(f ®9 )x 
+
+
+(fx)(gx) 
+
+
+(p -»/:&amp;) 
+
+
+if px then fx else gx 
+
+
+curry/ 
+
+
+[/■ ].tr 
+
+
+uncurry/ 
+
+
+f. a @ u 
+
+
+$p(d,r) 
+
+
+(d, ix[r fp.di]) 
+
+
+iterfp -&gt;/" ] 
+
+
+(v -* iter[p-&gt;/" 1; Id).f 
+
+
+
+TABLE 7. Non-primitive Intensional Operations 
+
+
+
+Operator 
+
+
+Definition 
+
+
+whilefp,/] 
+
+
+p ** iter[p-&gt;/]; Id 
+
+
+
+
+/fi* 
+
+
+while[0Aw, (/. [Id||a] || n.o).A].(i 
+
+
+.) 
+
+
+/ n 
+
+
+while[n*.a, l + ||/].(0,) 
+
+
+
+
+v/ 
+
+
+@.[Id||/] 
+
+
+
+
+9» 
+
+
+Id|| 
+
+
+
+
+6 
+
+
+Hid 
+
+
+
+
+n/ 
+
+
+«[/.] 
+
+
+
+
+extend(£,/) 
+
+
+edomf -&gt; ti; f 
+
+
+
+
+restricts,/) 
+
+
+img[tf . Id||/ . A]s 
+
+
+
+
+~p 
+
+
+"•P 
+
+
+
+
+
+join, tie, composition, and restriction), this small set of operations is insufficient for 
+general purpose programming. These remarks also apply to Childs' reconstituted 
+definition of relations [Childs69], which is also oriented towards data bases. Feldman 
+and Rovner [Feldman69] augmented Algol with several relational operators for associa- 
+tive access to a data base. Their operations, which are our plural description and 
+image, are quite limited, being based on a traditional von Neumann language. 
+
+
+
+-65- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+One general purpose language that does make extensive use of sets and relations is 
+SETL [Kennedy75]. It provides most of the familiar operations on sets (e.g., union, 
+intersection, difference, powerset, image). SETL differs from relational programming 
+in three significant respects: (l) it can only handle finite sets, (2) many operations 
+must still be performed in a word-at-a-time fashion using the set former, and (3) it 
+resorts to conventional control structures. 
+
+Finally, we must mention logic programming systems, such as PROLOG [Kowalski79, 
+vanEmden76], which use predicate logic to describe computational processes. These 
+systems also differ from relational programming in two significant respects: (1) they 
+have a word-at-a-time programming style due to the use of variables representing indi- 
+viduals in the clauses of the program, and (2) they are implemented using a resolution 
+theorem prover, whereas a more conventional procedural implementation suffices for 
+relational programming. Essentially the same remarks apply to Popplestone's rela- 
+tional programming [Popplestone79], which is like logic programming except that it 
+uses "forward inference" rather than "backward inference." 
+
+In summary, no other programming style that we are aware of combines the univer- 
+sal use of relations with a rich set of operations on those relations that can be imple- 
+mented in a deterministic, procedural way. It is hoped that the preceeding discussion 
+has made plausible some of the advantages claimed for relational programming in the 
+Introduction. Considerable work remains to be done in evaluating the effectiveness of 
+a relational calculus as a programming tool. For instance, the optimum set of combi- 
+nators and relational operators must be selected. Another non-trivial problem is the 
+selection of a good notation for the relational calculus. More from convenience than 
+conviction we have based our notation on [Whitehead70] and [Carnap5B]. Making rela- 
+tional programming an effective tool will require designing a notation that combines 
+readability with the manipulative advantages of a two-dimensional algebraic notation. 
+This is all preliminary to any serious considerations of software or hardware implemen- 
+tation techniques. 
+
+-66- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+21. References 
+
+[Backus78] Backus, J. Can programming be liberated from the von Neumann style? A 
+functional style and its algebra of programs, CACM 21, 8 (August 197B), 613-641. 
+
+[Carnap58] Carnap, R. Introduction to Symbolic Logic and its Applications, Dover, 
+1958. 
+
+[Childs69] Childs, D.L. Feasibility of a set-theoretic data structure based on a reconsti- 
+tuted definition of relation. IFIP 68 Proceedings, 420-430, North-Holland, 1969. 
+
+[Codd70] Codd, E.F. A relational model for large shared data banks, CACM 13, 6 (June 
+1970), 377-387. 
+
+[Curry58] Curry, H.B., Feys, R. and Craig, W. Combinatory Logic, I, North-Holland, 
+Amsterdam, 1958. 
+
+[Feldman69] Feldman, J. A. and Rovner, P.D. An Algol-based associative language, CACM 
+12, 8 (August 1969), 439-449. 
+
+[Futaci82] Futaci, Suha. Representation Techniques for Relational Languages and the 
+Worst Case Asymptotical Time Complexity Behaviour of the Related Algorithms, 
+MS Thesis, Computer Science Department, Naval Postgraduate School, June 1982. 
+
+[Kennedy75] Kennedy, K. and Schwartz, J. An introduction to the set theoretical 
+language SETL, J. Comptr. and Math, with Applications 1 (1975), 97-119. 
+
+[Kowalski79] Kowalski, R. Algorithm = logic + control, CACM 22, 7 (July 1979), 424-436. 
+
+[Henderson76] Henderson, P. and Morris, J.H., Jr. A lazy evaluator, Record 3rd ACM 
+Symp. on Principles of Programming Languages, 1976, 95-103. 
+
+[Henderson80] Henderson, P. Functional Programming Application and Implementa- 
+tion, Prentice-Hall, I960, 223-231. 
+
+[MacLennan73] MacLennan, B.J. Fen - an axiomatic basis for program semantics, CACM 
+16, 8 (August 1973), 468-474. 
+
+-67- 
+
+
+
+RELATIONAL PROGRAMMING 
+
+[MacLennan75] MacLennan, B.J. Semantic and Syntactic Specification and Extension 
+of Languages, PhD Dissertation, Purdue University, December 1975. 
+
+[MacLennanBla] MacLennan, B.J. Introduction to Relational Programming, Proceedings 
+of the 1981 Conference on Functional Programming Languages and Computer 
+Architecture, ACM, October 18-22, 1981, 213-220. 
+
+[MacLennan8lb] MacLennan, B.J. Programming with a Relational Calculus, Naval Post- 
+graduate School Computer Science Department Technical Report NPS52-81-013, 
+September 1981. 
+
+[MacLennan82] MacLennan, B.J. A Simple, Natural Notation for Applicative Languages, 
+SIGPLAN Notices 17, 10 (October 1982), 43-49. 
+
+[MacLennan83] MacLennan, B.J. Overview of Relational Programming, SIGPLAN Notices 
+IB, 3 (March 1983), 36-45. 
+
+[Popplestone79] Popplestone, R.J. Relational programming, in Hayes, J,E. et al. (eds.), 
+Machine Intelligence 9, Halsted Press, 1979, 3-26. 
+
+[Schwartz75] Schwartz, J. Automatic data structure choice in a language of very high 
+level, CACM 18, 12 (December 1975), 722-72B. 
+
+[vanEmden76] van Emden, M.H. and Kowalski, R.A. The semantics of predicate logic as 
+a programming language, J ACM 23, 4 (October 1976), 733-742. 
+
+[Whitehead70] Whitehead, A.N. and Russell, B. Principia Mathematica to *56, Cam- 
+bridge, 1970. 
+
+
+
+-68- 
+
+
+
+INITIAL DISTRIBUTION LIST 
+
+
+
+Defense Technical Information Center 2 
+
+Cameron Station 
+Alexandria, VA 22314 
+
+Dudley Knox Library 2 
+
+Code 0142 
+
+Naval Postgraduate School 
+
+Monterey, CA 93943 
+
+Office of Research Administration 1 
+
+Code 012A 
+
+Naval Postgraduate School 
+
+Monterey, CA 93943 
+
+Chairman, Code 52Hq 40 
+
+Department of Computer Science 
+Naval Postgraduate School 
+Monterey, CA 93943 
+
+Professor Bruce J. MacLennan, Code 52M1 12 
+
+Department of Computer Science 
+Naval Postgraduate School 
+Monterey, CA 93943 
+
+Dr. Robert Grafton 1 
+
+Code 433 
+
+Office of Naval Research 
+
+800 N. Quincy 
+
+Arlington, VA 22217 
+
+Dr. David Mizell 1 
+
+Office of Naval Research 
+1030 East Green Street 
+Pasadena, CA 91106 
+
+Mr. John Backus 1 
+
+IBM Research 
+5600 Cottle Road 
+San Jose, CA 95193 
+
+Professor Peter Henderson 1 
+
+Department of Computer Science 
+SUNY at Stony Brook 
+Long Island, NY 11794 
+
+Dr. Olle Olsson 1 
+
+Department of Computer Science 
+
+University of Uppsala 
+
+Box 2059 
+
+S-750 02 Uppsala 
+
+Sweden 
+
+
+
+-69- 
+
+
+
+Dr. Sueo Iimori 
+Department of Mathematics 
+Faculty of Education 
+Saga University 
+Saga City, 840 
+Japan 
+
+Professor Maurice Clint 
+Department of Computer Science 
+The Queen's University of Belfast 
+Belfast BT7 INN 
+Northern Ireland 
+
+Professor Christopher Holt 
+Department of Computer Science 
+The Queen's University of Belfast 
+Belfast BT7 INN 
+Northern Ireland 
+
+Professor D. A. Gustafson 
+Department of Computer Science 
+Fairchild Hall 
+Kansas State University 
+Manhattan, KS 66506 
+
+Professor Richard T. Snodgrass 
+Department of Computer Science 
+The University of North Carolina 
+
+at Chapel Hill 
+New West Hall 035A 
+Chapel Hill, NC 27514 
+
+Mr. Wil 1 iam Bex 
+
+726 Cowper St. 
+
+Palo Alto, CA 94301 
+
+Professor Satish Thatte 
+Department of Computer 
+
+and Communication Sciences 
+221 Angell Hall 
+435 South State 
+The University of Michigan 
+Ann Arbor, MI 48109 
+
+
+
+Dr. Michael Wise 
+
+
+
+Department 
+University 
+P.O. Box 1 
+Kensington 
+Austral ia 
+
+
+
+of Computer Science 
+of New South Wales 
+
+NSW 2033 
+
+
+
+-70- 
+
+
+
+Professor Horst Kremers 
+
+Department of Geodetic Science 
+
+Stuttgart University 
+
+Keplerstrasse 11 
+
+D-7000 Stuttgart 1 
+
+Federal Republic of Germany 
+
+Professor Harvey Abramson 
+Department of Computer Science 
+The University of British Columbia 
+2075 Wesbrook Mall 
+Vancouver, B. C. Canada 
+V6T 1W5 
+
+Dr. M. Sintzoff 
+
+Philips Research Laboratory 
+
+2 av. Van Becelaere 
+
+1170 Brussels 
+
+Belgium 
+
+Mr. A. Finelli 
+
+Universite de Paris VI 
+
+Bibliotheque Informatique Recherche 
+
+4 Place Jussieu, Tour 55 
+
+75230 Paris Cedex 05 
+
+France 
+
+Mr. W. H. Fisher 
+Engineering Research Center 
+Western Electric 
+P.O. Box 900 
+Princeton, NJ 08540 
+
+Dr. Mehdi Jazayeri 
+Synapse Computer Corporation 
+801 Buckeye Court 
+Mil pitas, CA 95035 
+
+Professor P. Raulefs 
+
+Un i vers i tat Kaiserslautern 
+
+Fachbereich Informatik 
+
+Postfach 3049 
+
+D 6750 Kaiserslautern 
+
+West Germany 
+
+Professor John Conery 
+
+Department of Computer and Information Science 
+
+University of Oregon 
+
+Eugene, OR 97403 
+
+
+
+-71- 
+
+
+
+Professor S. Ceri 
+Laboratorio di Calcolatori 
+Departimento di Elettronica 
+Poli teen i co di Milano 
+20133 - Milano 
+Italy 
+
+Mr. Mark Himmel stein 
+1323 Tulip Way 
+Livermore, CA 94550 
+
+Professor Werner Trattnig 
+ERL 457 
+
+Computer Systems Lab. 
+Stanford Unviversity 
+Stanford, CA 94305 
+
+Professor Rodney Farrow 
+Computer Science Department 
+Columbia University 
+New York, NY 10027 
+
+Professor Mark Linton 
+Computer Science Department 
+Stanford University 
+Stanford, CA 94305 
+
+CDR Mike Roth 
+
+Naval Data Automation Command 
+
+Code 40 
+
+Washington Navy Yard 
+
+Washington, D.C. 20374 
+
+Dr. Ted Glaser 
+
+849 Berkeley St. 
+
+Santa Monica, CA 90403 
+
+
+
+-72- 
+
+
+
+DUDLEY KNOX LIBRARY - RESEARCH REPORTS 
+
+in in linn ii mil iiinii II in ill mm ||||||i i 
+
+
+
+5 6853 01060375 6 
+
+
+
+U2U8718 

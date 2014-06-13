@@ -1,0 +1,1636 @@
+LIBRARY
+RESEARCH REPORTS DIVISION 
+NAVAL POSTGRADUATE SCHOC 
+MONTEREY, CALIFORNIA 9394C 
+
+
+
+NPS52-8MJ1Z. 
+
+
+
+NAVAL POSTGRADUATE SCHOOL 
+
+Monterey, California 
+
+
+
+
+FEDDOCS 
+D 208.14/2: 
+NPS-52-81-017 
+
+
+
+Overview of Relational Programming 
+
+
+
+Bruce J. MacLennan 
+
+
+
+November 1981 
+
+
+
+Approved for public release; distribution unlimited 
+
+Prepared for: 
+
+Chief of Naval Research 
+Arlington, Virginia 22217 
+
+
+
+DUDLEY KNOX LIBRARY 
+
+NAVAL POSTGRADUATE SCHOOL 
+
+MONTEREY, CA 93943-5101 
+
+
+
+NAVAL POSTGRADUATE SCHOOL 
+Monterey, California 
+
+
+
+Rear Admiral J. J. Ekelund D. A. Schrady 
+
+Superintendent Acting Provost 
+
+
+
+The work reported herein was supported in part by the Foundation Re- 
+search Program of the Naval Postgraduate School with funds provided by the 
+Chief of Naval Research. 
+
+Reproduction of all or part of this report is authorized. 
+
+This report was prepared by: 
+
+
+
+UNCLASSIFIED 
+
+
+
+SECURITY CLASSIFICATION OF THIS PAGE (Whan Data Entarad) 
+
+
+
+REPORT DOCUMENTATION PAGE 
+
+
+
+READ INSTRUCTIONS 
+BEFORE COMPLETING FORM 
+
+
+
+1 REPORT NUMBER 
+
+NPS52-81-017 
+
+
+
+2. GOVT ACCESSION NO 
+
+
+
+3. RECIPIENT'S CATALOG NUMBER 
+
+
+
+4. TITLE (and Subtitle) 
+
+
+
+5. TYPE OF REPORT 4 PERIOD COVERED 
+
+
+
+Overview of Relational Programming 
+
+
+
+Technical Report 
+
+
+
+6. PERFORMING ORG. REPORT NUMBER 
+
+
+
+7. AUTHORS.) 
+
+
+
+3. CONTRACT OR GRANT NUMBERft) 
+
+
+
+Bruce J. MacLennan 
+
+
+
+9. PERFORMING ORGANIZATION NAME AND ADDRESS 
+
+Naval Postgraduate School 
+Monterey, CA 93940 
+
+
+
+10. PROGRAM ELEMENT. PROJECT, TASK 
+AREA 4 WORK UNIT NUMBERS 
+
+61152N; RR000-01-10 
+N0001482WR20043 
+
+
+
+II. CONTROLLING OFFICE NAME AND ADDRESS 
+
+Naval Postgraduate School 
+Monterey, CA 93940 
+
+
+
+12. REPORT DATE 
+
+November 1981 
+
+
+
+13. NUMBER OF PAGES 
+
+
+
+14. MONITORING AGENCY NAME 4 AODRESSr/' dltlarant from Controlling Office) 
+
+
+
+15. SECURITY CLASS, (of thla report) 
+
+UNCLASSIFIED 
+
+
+
+15«. DECLASSIFICATION/ DOWNGRADING 
+SCHEDULE 
+
+
+
+IS. DISTRIBUTION STATEMENT (ot thla Report) 
+
+
+
+Approved for public release; distribution unlimited 
+
+
+
+17. DISTRIBUTION STATEMENT (ot the abatract entered In Block 20, It different from Report) 
+
+
+
+18. SUPPLEMENTARY NOTES 
+
+
+
+19. KEY WOROS (Continue on reverse aide if necaeaary and Identify by block number) 
+
+relational programming, functional programming, relational algebra, relations, 
+relational calculus, applicative languages, combinators, very-high-level 
+languages, logic programming 
+
+
+
+20. ABSTRACT [Continue on reveree tide If neceeeary and Identity by block number) 
+
+This report provides a brief overview of the method of programming in a re- 
+lational calculus. This is a style of programming in which entire relations 
+are manipulated as data, and in which the program itself is represented as a 
+relation. This report describes the use of the relational operators to manipu- 
+late both data and functions, and introduces an improved notation for relation- 
+al programming. 
+
+
+
+DD ,5 
+
+
+
+FORM -..j* 
+
+AN 73 1473 
+
+
+
+EDITION OF 1 NOV 65 IS OBSOLETE 
+S/N 0102- LF- 01 4- 660 1 
+
+
+
+UNCLASSIFIED 
+
+
+
+SECURITY CLASSIFICATION OF THIS PAGE (Whan Data Kntarad) 
+
+
+
+OVERVIEW OF RELATIONAL PROGRAMMING* 
+
+B. J. MacLennan 
+
+Naval Postgraduate School 
+
+Monterey, CA 93940 
+
+November 10, 1981 
+
+1 . Introduction 
+
+Relational programming is a method of programming based on the 
+use of a relational calculus. We begin by explaining why we have 
+chosen to investigate relational programming. 
+
+We began investigating relations to try to a find a high 
+level way of manipulating complex data structures. Languages 
+such as APL are very successful in the manipulation of vectors 
+and matrices, and languages such as Snobol are useful in the 
+manipulation of strings. Unfortunately, these are both examples 
+of linear data structures, and many problems in computer science 
+reauire non - 1 inear data structures, such as trees and networks. 
+Proposed extensions to APL and Snobol to handle non-linear data 
+structures have not been very successful. 
+
+It is well known that almost any data structure can be 
+described bv a relation. In effect, then, any operation on rela- 
+tions can be thought of as an operation on data structur-es. 
+T her°fore, it seemed that the high level relational operators 
+
+
+
+* ^h^ work reDorted herein was supported by the Foundation 
+
+Pesearch Program of the M aval Postgraduate School with funds 
+provided bv the Chief o r Maval Research. 
+
+
+
+
+
+
+provided by a relational calculus might provide a source of high 
+level operations for manipulating non-linear data structures. 
+This has proved to be the case. 
+
+Backus [1] has described the advantages of programming with 
+funct ionals , that is, with functions which operate on other func- 
+tions. Functionals allow the high level combination of programs 
+to yield new programs. Now notice, since every function is a 
+relation, every relational operator is in effect a functional. 
+Therefore, the same set of operators that are used for manipulat- 
+ing data can also be used for manipulating programs. The result 
+is great economy of linguistic mechanism in combination with 
+powerful means of manipulating both code and data. 
+
+A final goal in the development of relational programming 
+has been the attempt to find a means of programming that permits 
+practical proofs of real programs. The fact that relations are 
+mathematically tractable, and that there is an well-developed 
+theory of relations, has encouraged this study. 
+
+2 . Background 
+
+Relational programming has been based on naive set theory . This 
+is the set theory that most people are exposed" to in every 
+mathematics class from freshman- calculus on. It is hoped that by 
+basing this programming method on a simple and well-known 
+mathematical basis, it will be more understandable to people 
+without an extensive mathematical background. 
+
+
+
+- 2 - 
+
+
+
+There are three sorts of objects with which relational pro- 
+grams deal: 
+
+* Individuals 
+
+* Sets 
+
+* Binary Relations 
+
+The individuals are the indivisible data values with which we 
+compute. Typically they will include integers, real numbers, 
+characters, and Boolean values. Both the sets and the relations 
+may be either finite or infinite; the latter being represented on 
+a finite computer using intensional methods (discussed later). 
+Both the sets and relations are typeless , which means that there 
+are no restrictions on what sets or relations can be members of 
+other sets and relations. Axiomatizations of set theory often 
+included intricate type systems (such as Russell's "Ramified Type 
+Theory'*) to prevent contradictions. However, as is discussed in 
+C33i there are other methods of preventing contradictions that do 
+not depend on elaborate type systems. Some of the factors that 
+have convinced us that a typeless system is more appropriate to 
+programming are discussed in [3!- 
+
+We use the notation x 6 S to mean that x is a member of the 
+set S, and xRy to mean that the pair &lt;x,y&gt; is a member of the 
+relation R. The functional notation Fx denotes the unique y (if 
+it exists) such that xFy. In general spaces and the case of 
+letters will be used to improve readability. Parentheses are 
+used for grouping in the usual way. 
+
+
+
+- 3 - 
+
+
+
+3 . Relations and Functions 
+
+3 • 1 Functionals 
+
+Since every function is a relation, every operation on relations 
+is also an operation on functions, i.e., a functional. In this 
+section we will investigate several relational operators and show 
+that they have useful functional interpretations. 
+
+The relative product operation on relations performs the 
+composition of functions. That is, 
+
+
+
+f.g (x) 
+
+
+
+f(g(x)) 
+
+
+
+We will sometimes also write this in its rightward form 
+
+
+
+f;g (x) 
+
+
+
+g(f(x)) 
+
+
+
+The union operation, when applied to functions, combines them 
+This is most useful when the functions have disjoint domains 
+For example, 
+
+
+
+f|g (x) 
+
+
+
+f(x) , if x € dom f 
+g(x) , if x 6 dom g 
+
+
+
+(We write 'dom f for the domain of f.) 
+
+If the functions do not have disjoint domains, the ordered 
+union, or overlaying operation, f/g, is often useful: 
+
+
+
+f/g (x) 
+
+
+
+f (x) , if x € dom f 
+g( x ) , otherwise 
+
+
+
+- 4 - 
+
+
+
+That is, the pairs in f supercede the corresponding pairs in g. 
+
+The converse of a relation, when applied to a function, pro- 
+duces the inverse function. That is, 
+
+x = f ~ 1 (y) iff y = f(x) 
+
+Notice that this operation is always defined since a relation 
+always has a converse. Of course, the inverse of a function will 
+be a function only if the original function was one-to-one. 
+Nevertheless, because the converse is always defined it satisfies 
+simpler properties. 
+
+The restrictions are useful operations on relations; they 
+define subrelations of the given relation whose members satisfy a 
+given property. When applied to functions, the restriction 
+operations limit the domain, range, or both the domain and range 
+of a function. They are defined: 
+
+
+
+y = s -&gt; f (x) iff 
+y = f &lt;e- s (x) iff 
+fOS = s -&gt; f &lt;r s 
+
+
+
+y = f ( x ) and x € s 
+y = f ( x) and y € s 
+
+
+
+where s is any set. As will be shown later, the restriction 
+
+operations are often useful for constructing conditionals. 
+
+The image operation ," when applied to a function, gives the 
+
+image of a set under that function. This is defined: 
+
+
+
+img f (S) 
+
+
+
+{ y ! 3x €S: y = f(x) } 
+
+
+
+- 5 - 
+
+
+
+The parallel application operation applies functions to 
+corresponding elements of a sequence: 
+
+
+
+fl lg (x,y) 
+
+
+
+(f x , g y) 
+
+
+
+The dual application or construction operation applies several 
+functions to one argument, returning a sequence of the results: 
+
+
+
+f#g (x) 
+
+
+
+(f x , g x) 
+
+
+
+This is equivalent to Backus' construction operation, [f,'g]. 
+
+The closure operators effectively iterate the application of 
+a function. The transitive and non-transitive closures are 
+defined : 
+
+
+
+f° ! f 1 ! f 2 
+.2 , ,3 
+
+
+
+where f means the composition of f with itself n times. Thus 
+
+1 
+
+the result of f (x) is whichever of f (x), f (x), ... are 
+defined. (If more than one are defined we can use the restric- 
+tion operations to pick the one we want.) 
+
+3 . 2 Control Structures 
+
+So far in the development of relational programming there has 
+been no need to intoduce control structures in the conventional 
+sense. This is because the relational operators are adequate to 
+express most control flow situations. For example, suppose we 
+wish to apply f(x) if x satisfies s and g(x) otherwise; this is 
+
+
+
+- 6 - 
+
+
+
+effectively a conditional construction. It can be written this 
+way using the relational operators: 
+
+s -&gt; f / g 
+
+This is equivalent to 
+
+(s -&gt; f) ; (non s -&gt; g) 
+
+Cnon s' returns the complement of the set s.) In other words, 
+the domain of f is restricted to those things that do satisfy s 
+and the domain of g is restricted to those things that don't 
+satisfy s. This can be diagramed like this: 
+
+
+
+6 
+
+
+
+Q 
+
+
+
+&gt; f 
+
+&gt; 
+
+&gt; 9 
+
+
+
+
+
+
+The s and s can be thought of as filters on the inputs of f and 
+g. Since they are mutually exclusive, it is guaranteed that at 
+most one value will be produced for each value put in. 
+
+The relational equivalent of loops are constructed from the 
+closure and restriction operators. Consider this function: 
+
+(s -&gt;f) &lt;- non s 
+
+
+
+The application of s -&gt; f will be iterated one or more times, 
+which means that f will be applied one or more times, as long as 
+
+
+
+- 7 - 
+
+
+
+its input satisfies s. An output from this process is allowed 
+only if it doesn't satisfy s. We can diagram this function: 
+
+
+
+s s- 
+
+
+
+This is the equivalent of a "repeat until" loop in Pascal. Simi- 
+lar expressions loop zero or more times, like a Pascal "while" 
+loop . 
+
+3 . 3 Relations Obey Simple Laws 
+
+One of the reasons we have investigated relational programming is 
+that it simplifies reasoning about programs. This is because 
+relations obey many simple laws. For example, 
+
+
+
+(f.g) 
+
+
+
+- 1 
+
+
+
+- 1 _ - 1 
+g . f 
+
+
+
+is true for all relations; it is only true for functions that are 
+one-to-one . 
+
+3 . 4 Multiple-Valued Functions 
+
+A relation can be thought of as a multiple - valued function. That 
+is, there may be several y such that xFy. Functional approaches 
+to programming often exclude multiple-valued functions and non- 
+deterministic functions, even though these are often benign . 
+Relational programming deals naturally with multiple valued func- 
+tions. For example, suppose that g(x) is multiple-valued, e.g., 
+
+
+
+- 8 - 
+
+
+
+there are three values, a, b, and c, such that xga, xgb, and xgc. 
+Further suppose that the function f has the same value, y, on 
+each of a, b, c. That is, y = f(a), y = f(b), and y = f(c). 
+Then it is perfectly meaningful to write 
+
+y = f.g (x) 
+even though g is not single-valued at x. This can be visualized: 
+
+
+
+&gt; f 
+
+
+
+■&gt;y 
+
+
+
+
+
+
+4. Relations and Data 
+
+U . 1 Finite Functions 
+
+We will now turn to the representation of data by relations and 
+the high-level data manipulation functions provided by the rela- 
+tional operators. Although there are several ways that data can 
+be represented by relations, one of the simplest is by finite 
+functions , i.e., functions containing a finite number of pairs. 
+This representation is particularly suitable for arrays and 
+records. For example, 
+
+
+
+
+
+
+
+
+
+A(i) 
+
+
+
+is the application of an array A to its index i. Similarly, 
+
+
+
+z( re) 
+
+
+
+is analogous to a field selection operation z.re, but in rela- 
+
+
+
+- 9 - 
+
+
+
+tional terms it is also just the application of a function to an 
+argument . 
+
+The value of viewing data in this way is that it makes data 
+structures amenable to the relational operators. For example, 
+the converse oDerator inverts a structure. 
+
+
+
+A " 1 (x) 
+
+
+
+returns the index of the array element whose value is x. If x 
+occurs several times in A then A" is multiple-valued. We can 
+get a set of all the indices where x occurs by taking the image: 
+
+
+
+img A " (x) 
+
+
+
+The relative product or composition operation can be used 
+for many purposes, such as permuting arrays. If P is a permuta- 
+tion function (a bijection from the index set into itself), then 
+A. D is the corresponding permutation of A. This operation can 
+also be used for "cascading" data structures. For example, if 
+'address' is a table such that 
+
+a = address(n) 
+
+means that a is the address of the variable" named n, and 'value' 
+is a table such that 
+
+v = value(a) 
+
+means that v is the value contained by location a, then 
+' value .address ' is a cascaded table such that 
+
+
+
+- 10 - 
+
+
+
+v r value .address (n) 
+
+means that v is the value of the variable named n. 
+
+The restriction operation can be used to define substruc- 
+tures. For example, suppose that M is a finite function 
+representing a two-dimensional matrix: 
+
+x = M (i,j) 
+
+That is, M is a function that takes pairs of integers into the 
+correspond ing matrix elements. If I and J are index sets, the 
+submatrix of M corresponding to these index values is just 
+(IX J" 1 -*M, since this restricts the first and second indices of 
+M to be in I and J respectively. 
+
+T he union operation can be used to combine data structures. 
+For example, if S and T are tables, then S|T is a table that con- 
+tains the entries of both S and T. Also, if U and V are two 
+arrays with consecutive index sets (which is not hard to 
+arrange"* , then U'V is the catenation of U and V. 
+
+The overlaying oDeration U/V updates an array V according to 
+the pairs in U. That is, if U/Vfi) = U(i) if U(i) is defined, 
+and IJ/V(H = v(i) otherwise. 
+
+r ina!lv, the image operation can be used for mass selec- 
+tions, ^or ex am Die, if A is an array and S is a set of indices, 
+then ims* A (SI is the set of all elements of A selected by 
+indices in S. 
+
+
+
+-11- 
+
+
+
+4 . 2 Sequences 
+
+Sequences and lists have a straight-forward representation as 
+relations. If we draw the sequence of elements (a,b,c,d) like 
+this : 
+
+■ &gt;&gt; &gt;« &gt;* 
+
+S = a b c d 
+
+then you can see that this can be represented by the relation xSy 
+that relates x to y just when there is an arrow from x to y. 
+That is, 
+
+S = { &lt;a,b&gt;, &lt;b,c&gt;, &lt;c ,d&gt; } 
+
+Next we consider the effect of the relational operators on such a 
+sequence. 
+
+- 1 - 1 
+
+The converse of S is that relation S , where yS x if and 
+
+only if xSy. The effect is to reverse the arrows: 
+
+
+
+- 1 
+
+
+
+•&lt; •&lt; &lt;■ 
+
+a b c 
+
+
+
+so it can be seen that S is just the reverse of S. 
+
+Like all relations, a sequence can be thought of as a func- 
+tion. The effect of functional application is to follow an arrow 
+from one element of the sequence to another, e.g., 
+
+
+
+S(b) 
+
+
+
+and 
+
+
+
+S " 1 (c) 
+
+
+
+Of course, S goes two links 
+
+
+
+- 12 - 
+
+
+
+S 2 (b) 
+
+
+
+and 
+
+
+
+S ~ 2 (d) 
+
+
+
+and so forth. 
+
+The restriction operation can be used to define subsequences 
+of a given sequence. For example, SOP defines the subsequence 
+of S all of whose elements satisfy the predicate P. That is, if 
+P is the set of positive numbers, then this restriction has just 
+the positive members of S. 
+
+The union operation can be used in various ways to combine 
+sequences. For example, to catenate the sequences S and T we can 
+write 
+
+S ! (last S, first T) | T 
+
+This combines S and T with a third relation which is a sequence 
+from the last element of S to the first element of T. 
+
+Finally, we can use the domain functions to find dis- 
+tinguished elements of a sequence. For example, the initial 
+members of a sequence (of which there is exactly one) are those 
+members that have an arrow leaving them, but not pointing at 
+them. In other words the initial members are the elements of the 
+domain that are not in the range: 
+
+
+
+init(S) 
+
+
+
+dom(S) ~ dom(S " 1 ) 
+
+
+
+4.3 General Data Structures 
+
+
+
+Since the manipulation of non-linear data structures was a major 
+
+
+
+- 13 - 
+
+
+
+reason for investigating relations, we would expect to find that 
+the relational operators are useful. The same approach is used 
+as for sequences. For example, the graph 
+
+
+
+T = 
+
+
+
+
+is represented by the relation 
+
+T = {&lt;a,b&gt;, &lt;a,c&gt;, &lt;b,d&gt;, &lt;b,e&gt;, &lt;c,e&gt;, &lt;c,f&gt;, &lt;c,c&gt;} 
+
+Then, it is easy to see that the roots of this structure are just 
+
+its initial members, init(T), and the leaves are the initial 
+
+members of the converse relation, init(T~ ). The latter are 
+
+usually called terminal members. 
+
+Notice that T(n) follows an arrow from node n, which may be 
+multiple-valued. For example, T(b) could be d or e. Therefore, 
+it is better to ask for all the descendents of a node n, which is 
+just the image of T applied to n: 
+
+
+
+descendents( T) 
+
+
+
+img T (n) 
+
+
+
+5 . Higher Levels of Abstraction 
+
+The relational programming style is open ended and easily admits 
+even higher levels of abstraction. Observe that the relational 
+
+
+
+- 14 - 
+
+
+
+operators are themselves functions (in particular, f unctionals ) . 
+Therefore, these functions can be manipulated and combined by the 
+relational operators. Therefore, higher level operators can be 
+built without the use of a "formal" (i.e., data based) represen- 
+tation, such as that used in LISP or Backus's FFP system [1]. 
+This is a natural outgrowth of the fact that relational program- 
+ming deals with a single kind of entities, relations, and uses 
+them for all purposes. Second and higher level functionals have 
+not been seriously investigated yet, although they seem to arise 
+naturally from the attempt to eliminate variables. 
+
+6 . Status 
+
+In this section we summarize the current status of our investiga- 
+tion into relational programming. 
+
+The operators are undergoing a continuing refinement. We 
+began with the operators defined by Russell and Whitehead [7] and 
+Carnap [2]. As the requirements of using a relational calculus 
+for programming have emerged, we have modified the meaning of 
+several of their operators, dropped some, and added others. 
+
+The notation is undergoing a continuing evolution, as is 
+apparent in any comparison with our earlier reports [4, 53- The 
+notation used in this paper is more in conformity with mathemati- 
+cal custom and is easier to read and type. We anticipate that 
+this evolution will continue; it would be premature to freeze it 
+at this time. 
+
+
+
+- 15 - 
+
+
+
+In an attempt to better access the value of relational pro- 
+gramming, we have begun the implementation of several trial 
+applications. One of these is a table-driven syn tax-directed- 
+editor and generator of the type described in [6]. The resulting 
+relational program is about a page long. It will be described in 
+a future technical report. 
+
+We have consciously avoided allowing implementation con- 
+siderations to influence the early development of relational pro- 
+gramming. This is because we did not want to prejudice the study 
+by particular assumptions about machine architecture. Rather, we 
+have hoped that the investigation of relational programming will 
+guide us to the machines we should be building. Recently, how- 
+ever, we have begun the investigation of some possible represen- 
+tations of relations along with an analysis of the complexity of 
+the corresponding algorithms. This will be reported in a forth- 
+coming thesis from the Naval Postgraduate School. 
+
+We have been attempting the practical proof of some rela- 
+tional programs. This simple properties which relations satisfy 
+makes this a feasible undertaking. 
+
+Finally, we have begun the implementation of simple exten- 
+sional and intensional representations and implementations of the 
+relational operators. The goal here is to provide a system to 
+allow "hands-on"' experience with relational programming. This is 
+a necessary part of the evaluation of any new programming style. 
+
+
+
+- 16 - 
+
+
+
+7 • References 
+
+[1] Backus, J. Can programming be liberated from the von Neu- 
+mann style? A functional style and its algebra of pro- 
+grams, CACM 21 , 8 (August 1 973) , 613-641. 
+
+[2] Carnap, R. Introduction to Symbolic Logic and its Applica- 
+tions , Dover, 1958. 
+
+[33 MacLennan, B. J. Fen - an axiomatic basis for program 
+semantics, CACM 16, 8 (August 1973), 468-474. 
+
+[4] MacLennan, B. J. Programming with a_ Relational Calculus , 
+Computer Science Department Technical Report NPS52-8 1 -0 1 3 , 
+Naval Postgraduate School, September 1981. 
+
+[5] MacLennan, B. J. Introduction to relational programming, 
+Proceedings of ACM Conference on Functional Programming 
+Languages and Computer Architecture , October 18-22, 1981. 
+
+[6] MacLennan, B. J. The Automatic Generation of Syntax 
+Directed Editors , Computer Science Department Technical 
+Report MPS52-81-01 4, Naval Postgraduate School, October 
+1981 . 
+
+[7] Whitehead, A. N. and Russell, B. Principia Mathematica to 
+*56, Cambridge, 1970. 
+
+
+
+- 17 - 
+
+
+
+APPENDIX: RELATIONAL CALCULUS - REVISED NOTATION 
+
+
+
+- 1 
+
+
+
+Old Notation Name 
+
+
+
+New Notation 
+
+
+
+x € C 
+xC 
+
+xRy 
+F :x 
+
+R- 1 
+
+• :R 
+
+lem:R 
+
+Lm:R 
+
+rim : R 
+
+Rm:R 
+
+mem : R 
+
+R! 
+
+i :x 
+
+6:C 
+
+R 
+
+R 
+
+R&gt;S 
+
+S&lt;R 
+
+R3S 
+
+R A S 
+
+R V S 
+
+R-S 
+
+~R 
+
+x+y 
+
+x-y 
+
+
+
+class membership 
+
+I' 
+
+relation membership 
+function application 
+
+converse 
+
+»» 
+
+domain 
+codomain 
+
+
+
+x € C 
+
+it 
+
+xRy 
+
+F x 
+
+R" 1 
+
+inv R 
+
+dom R 
+it 
+
+dom. inv R 
+
+
+
+members 
+
+
+mem R 
+
+
+image 
+
+
+img R 
+
+
+unit class 
+
+
+un x 
+
+
+unit class selector 
+
+
+the C 
+
+
+unit image 
+
+
+unimg R 
+
+
+unit coimage 
+
+
+unimg.inv R 
+
+
+right restriction 
+
+
+R &lt;- S 
+
+
+left restriction 
+
+
+S -&gt; R 
+
+
+restriction 
+
+
+ROS 
+
+
+intersection 
+
+
+R&amp;S 
+
+
+union 
+
+
+R|S 
+
+
+difference 
+
+
+R~S 
+
+
+complement 
+
+
+non R 
+
+
+addition 
+
+
+x+y 
+
+
+subtraction 
+
+
+x-y 
+
+
+
+- 19 - 
+
+
+
+x*y 
+
+
+
+x/y 
+
+f 
+
+C$D 
+
+R|S 
+RS 
+
+a, I 
+
+init :R 
+term : R 
+oc : R 
+iu: R 
+0:R 
+A:R 
+min : C 
+max : C 
+
+x ,y 
+9 
+
+Curry :C 
+
+Curry : R 
+r_ 
+
+3 
+
+
+
+i 
+
+
+
+51 
+
+(tt) 
+(xtt) 
+
+(wy) 
+
+* 
+
+R 
+
+
+
+multiplication 
+
+division 
+
+empty class 
+
+full class 
+
+Cartesian product 
+
+relative product 
+
+functional composition 
+
+identity 
+
+initial members 
+
+terminal members 
+
+first member 
+
+last member 
+
+final members 
+
+initial members 
+
+minimum 
+
+maximum 
+
+pair 
+tt 
+
+si ze 
+
+Curry 
+
+graph 
+
+parallel application 
+
+construction 
+
+binary operator 
+
+left binding 
+
+right binding 
+
+reflexive trans, closure 
+
+
+
+x*y 
+x£y 
+&lt;6 
+
+all , non 6 
+
+CX D 
+
+R;S 
+
+R.S, R'S 
+
+= , Id 
+
+init R 
+
+init . inv R 
+
+first R 
+
+first . inv R 
+
+final R 
+
+inv . final .inv R 
+
+min C 
+
+max C 
+
+x :y 
+
+tt 
+
+size C 
+graph ~ C 
+graph R 
+
+
+
+r! is 
+
+
+
+r#s 
+
+(tt) 
+
+(xtt) 
+
+(try) 
+
+R , retrac R 
+
+
+
+- c. 
+
+
+
+- 
+
+
+
+f::g 
+
+f Rf " 1 
+
+Md:(g,f) 
+R£S 
+R -»S 
+
+e 
+
+9 
+m . .n 
+
+
+
+CX D 
+
+
+
+3 
+
+
+
+:::5) 
+
+
+
+&lt;a ,b , . . . , z&gt; 
+
+
+
+transitive closure 
+relation power 
+meta-application 
+isomorphic image 
+overlaying 
+
+subset 
+
+»f 
+
+empty relation 
+
+full relation 
+
+closed interval 
+
+cross product 
+explicit relation 
+
+catenate 
+
+sequence 
+
+reduction 
+
+
+
+R + , trac R 
+
+R n 
+
+f::g 
+
+f$R 
+
+f/g 
+
+Rgs 
+
+RCS 
+zi X 25 
+
+all X all 
+
+(unimg &gt;) m &amp; (unimg &lt;) n 
+graph(CX D) 
+
+
+
+(a:b | ... 
+
+s~t 
+
+(a ,b , . . . ,z) 
+
+f@i 
+
+
+
+y :z) 
+
+
+
+Mote! The major difference between the new and old notations is 
+that y = Fx now means xFy, whereas previously it meant yFx . This 
+means that separate operators are now needed for relative pro- 
+duct and composition. These are related by R.S = S;R. This 
+effects the interpretation of several other relations and 
+classes. For example, functions are now the right-un ivalent 
+(run) relations, whereas previously they were the left-un ivalent 
+(lun) relations. Also, the domain of a function is its left 
+members, rather than its right members. 
+
+
+
+- 21 - 
+
+
+
+INITIAL DISTRIBUTION LIST 
+
+
+
+Defense Technical Information Center 2 
+
+Cameron Station 
+Alexandria, VA 22314 
+
+Dudley Knox Library 2 
+
+Code 0142 
+
+Naval Postgraduate School 
+
+Monterey, CA 93940 
+
+Office of Research Administration 1 
+
+Code 012A 
+
+Naval Postgraduate School 
+
+Monterey, CA 93940 
+
+Chairman, Code 52Bz 40 
+
+Department of Computer Science 
+Naval Postgraduate School 
+Monterey, CA 93940 
+
+Professor Bruce J. MacLennan, Code 52M1 12 
+
+Department of Computer Science 
+Naval Postgraduate School 
+Monterey, CA 93940 
+
+Mr. Jim Bowery 1 
+
+Viewdata Corporation of America, Inc. 
+1444 Biscayne Boulevard, Suite 305 
+Miami , Florida 33132 
+
+Dr. Mehdi Jazayeri 1 
+
+Synapse Computer Corporation 
+801 Buckeye Court 
+Mil pitas, CA 95035 
+
+Dr. M. Sintzoff 1 
+
+Philips Research Laboratory 
+
+2 av. Van Becelaere 
+
+1170 Brussels 
+
+Belgium 
+
+Professor Harvey Abramson 1 
+
+Department of Computer Science 
+
+The University of British Columbia 
+
+2075 Westbrook Mall 
+
+Vancouver, B.C. Canada 
+
+V6T 1W5 
+
+Dr. Charles D. Marshall 1 
+
+Department K51 
+IBM Research 
+5600 Cottle Road 
+San Jose, CA 95193 
+
+- 22 - 
+
+
+
+V202260 
+
+
+
+DUDLEY KNOX LIBRARY - RESEARCH REPORTS 
+
+
+
+5 6853 01068013 5 

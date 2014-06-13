@@ -1,0 +1,2127 @@
+LIBRARY 
+RESEARCH REPORTS DIVISION 
+NAVAL POSTGRADUATE SCHO( 
+MONTEREY, CALIFORNIA 9394i 
+
+
+
+NPS52-82-QQ6 
+
+
+
+NAVAL POSTGRADUATE SCHOOL 
+
+Monterey, California 
+
+
+
+
+A Relational Program for a Syntax Directed Editor 
+
+
+
+Bruce J. MacLennan 
+
+
+
+April 1982 
+
+
+
+Approved for public release; distribution unlimited 
+
+
+
+
+
+Prepared for: 
+
+Chief of Naval Research 
+Arlington, Va 22217 
+
+
+FEDDOCS 
+D 208.14/2: 
+NPS-52-82-006 
+
+
+
+
+
+
+
+P^ A L EY KNOX LIBRARY 
+
+NAVAL POSTGRADUATE SPHnn, 
+MONTEREY r.A oooTo "? H00L 
+
+
+
+"ONrew/a^sss; 
+
+
+
+NAVAL POSTGRADUATE SCHOOL 
+Monterey, California 
+
+
+
+Rear Admiral J.J. Ekelund D. A. Schrady 
+
+Superintendent Acting Provost 
+
+The work reported herein was supported in part by the Foundation 
+Research Program of the Naval Postgraduate School with funds provided by the 
+Chief of Naval Research. 
+
+Reproduction of all or part of this report is authorized. 
+
+This report was prepared by: 
+
+
+
+UNCLASSIFIED 
+
+
+
+SECURITY CLASSIFICATION OF THIS PAGE (When Data Entered) 
+
+
+
+REPORT DOCUMENTATION PAGE 
+
+
+READ INSTRUCTIONS 
+BEFORE COMPLETING FORM 
+
+
+1. REPORT NUMBER 
+
+NPS52-82-006 
+
+
+2. GOVT ACCESSION NO. 
+
+
+3. RECIPIENT'S CATALOG NUMBER 
+
+
+4. TITLE (and Subtitle) 
+
+A Relational Program for a Syntax Directed 
+Editor 
+
+
+5. TYPE OF REPORT &amp; PERIOD COVERED 
+
+Technical Report 
+
+
+6. PERFORMING ORG. REPORT NUMBER 
+
+
+7. AuTHORf*,/ 
+
+Bruce J. MacLennan 
+
+
+8. CONTRACT OR GRANT NUMBER* - *.) 
+
+
+9. PERFORMING ORGANIZATION NAME AND ADDRESS 
+
+Naval Postgraduate School 
+Monterey, CA 93940 
+
+
+10. PROGRAM ELEMENT. PROJECT, TASK 
+AREA 4 WORK UNIT NUMBERS 
+
+61152N; RR000-01-10 
+N0001482WR20043 
+
+
+II. CONTROLLING OFFICE NAME AND AODRESS 
+
+Naval Postgraduate School 
+Monterey, CA 93940 
+
+
+12. REPORT OATE 
+
+April 1982 
+
+
+13. NUMBER OF PAGES 
+
+37 
+
+
+14. MONITORING AGENCY NAME 4 AOORESSfH different from Controlling Office) 
+
+
+15. SECURITY CLASS, (of thta report) 
+
+UNCLASSIFIED 
+
+
+I5«. DECLASSIFICATION/ DOWNGRADING 
+SCHEDULE 
+
+
+16. DISTRIBUTION STATEMENT (of this Report) 
+
+Approved for public release; distribution unlimited. 
+
+
+17. DISTRIBUTION STATEMENT (of the abatract entered In Block 20, If different from Report) 
+
+
+'8. SUPPLEMENTARY NOTES 
+
+
+19. KEY WORDS 'Continue on reverse aide If neceeaary and Identify by block number) 
+
+Relational Programming, Functional Programming, Applicative Languages, Very- 
+High-Level Languages, Syntax Directed Editor, Language-Oriented Editor, 
+Structure Editor. 
+
+
+20. ABSTRACT 'Continue on reverse aide It neceaaary and Identity by block number) 
+
+This report provides a basis for evaluating relational programming by pre- 
+senting an implementation of a moderately complex program using relational pro- 
+gramming. The program is a syntax-directed editor, a major component in a pro- 
+gramming environment that allows the direct construction, modification, and 
+display (unparsing) of parse trees. Relational programming is ideal for this 
+application, since the relational calculus provides a number of high-level 
+operators for manipulating trees and other complex data structures. The edi- 
+tor is presented in two notations: the usual mathematical notation and a sim- 
+
+
+
+DD ^ 
+
+
+
+F aT7 3 1473 
+
+
+
+EDITION OF I NOV 65 IS OBSOLETE 
+
+S N 0102- LF-014-6601 
+
+
+
+UNCLASSIFIED 
+
+
+
+SECURITY CLASSIFICATION OF THIS PAGe (Whan Data Entered) 
+
+
+
+UNCLASSIFIED 
+
+
+
+SECURITY CLASSIFICATION OF THIS PAGE f1Wl«n Dmtm Bntmnd) 
+
+
+
+pie natural-language-like notation, 
+
+
+
+S/N 0102- LF- 014-6601 
+
+UNCLASSIFIED 
+
+
+
+SECURITY CLASSIFICATION OF THIS PAGEfTTian Dmf Bnftmd) 
+
+
+
+A RELATIONAL PROGRAM FOR A SYNTAX DIRECTED EDITOR* 
+
+8. J. MacLennan 
+
+Computer Science Department 
+
+Naval Postgraduate School 
+
+Monterey, CA 93940 
+
+1 . Introduction 
+
+An essential part of the investigation of any new programming 
+method or programming language is the evaluation of its use in 
+typical applications. In this report we present a use of rela- 
+tional programming [4, 3, 5] to implement a moderate size appli- 
+cation, a syntax-directed editor. 
+
+The syntax-directed editor described in this report is simi- 
+lar in design to that described in [2]. This is a structure edi- 
+tor , that is, an editor which directly constructs and modifies a 
+Parse tree. The source form of the program is unparsed from this 
+tree onto the display whenever it is necessary to update the 
+screen. Other than on the user's screen, the source form of the 
+program is never explicitly stored, neither in memory nor on 
+d isk . 
+
+In addition to this unparsing function, the editor imple- 
+ments a number of language-independent commands for shifting the 
+focus of attention among the nodes of the parse tree and for 
+
+
+
+* The work reported herein was supported by the Foundation 
+Research Program of the Naval Postgraduate School with funds 
+provided by the Chief of Naval Research.- 
+
+
+
+- 1 - 
+
+
+
+deleting and moving subtrees of the parse tree. 
+
+Both the program-entry and unparsing functions are syntax- 
+directed; i.e., they are implemented as language-independent 
+functions operating on an augmented BNF grammar for the language. 
+
+Each alternative in a rule of this grammar has an associated 
+command key ; by typing this key the user causes that alternative 
+to be used to build a new part of the parse tree, provided, of 
+course, that that alternative is syntactically legal at that 
+point in the tree. 
+
+Since an editor is an interactive program that alters a 
+data-base (the parse tree) in time, it is not appropriate to 
+implement it in a purely applicative, or value-oriented, way (see 
+[6] for a discussion of this). Hence, we have a few variable- 
+like objects that can be updated by an assignment operation. The 
+most important of these are T, the parse tree, and N, the current 
+node. Object-oriented operations did not appear in previous 
+descriptions of relational programming; they are still under 
+investigation . 
+
+In the following sections we describe the data structures 
+and relational definitions required to implement the syntax- 
+directed editor. The relational notation is summarized in Appen- 
+dix 1, although the reader unfamiliar with the concepts should 
+consult [4] for a better introduction. The definitions consti- 
+tuting the syntax-directed editor are collected in Appendix 2. 
+Since some potential users of relational programming may be 
+
+
+
+- 2 - 
+
+
+
+intimidated by its symbolic notation, we have developed an alter- 
+nate natural-language-like notation, which is described in Appen- 
+dix 3- Appendix 4 contains the syntax-directed editor translated 
+into this more natural notation. The reader may be interested in 
+comparing Appendices 2 and 4. 
+
+2 . Description of Data Structures 
+
+In this section we will describe the data structures used by the 
+syntax-directed editor and their representation as relations. 
+The central data structure is, of course, the program tree, T. 
+It is described below in terms of three subrelations , 
+
+T = Tu ! Td ! Tc . 
+
+Trees are composed of node s and other values associated with the 
+nodes. The Tc relation defines the interconnections between 
+nodes. Thus, m = Tc ( n , i) means that the i-th descendent of the 
+node n is the node m. In other words, Tc is a mapping from 
+node-integer pairs into nodes: 
+
+
+
+Tc 
+
+
+
+(nodes X ints) -&gt; nodes 
+
+
+
+Each node in the tree has an associated value depending on 
+whether the node is undefined or defined . An undefined node 
+represents a part of the program that has not been entered , so it 
+has a non-terminal name associated with it. This association is 
+defined by the function Tu : 
+
+Tu € nodes -&gt; non -terms 
+
+
+
+- 3 - 
+
+
+
+Similarly, the function Td defines the mapping for defined 
+nodes. For a defined node a particular alternative of a non- 
+terminal has been selected; this alternative is identified by the 
+key code that selects it. Therefore the Td function maps nodes 
+into non-terminal name - key pairs: 
+
+Td 6 nodes -&gt; non -terms X keys 
+
+For convenience, all three relations, Tc , Tu , and Td , are com- 
+bined into one relation T which represents the program. 
+
+T = Tc ! Tu ! Td 
+
+This can be done because they all have disjoint domains. Notice 
+that it is easy to recover Tc , Tu , and Td from T: 
+
+Tc = T «- nodes 
+
+Tu = T &lt;r~ non -terms 
+
+Td = T 4- non -terms X keys 
+
+Next we will consider the representation of the grammar. Each 
+non-terminal has associated with it a set of alternatives, each 
+selected by a key character. If nt is a non-terminal name and k 
+is a key character, then Alts(nt,k) is the rule for processing 
+option k of non-terminal nt. Thus the type of Alts is: 
+
+Alts € (non-terms X keys) -&gt; rules 
+
+Each non-terminal must also designate another, forwarding , non- 
+terminal . If a non-terminal has no alternative corresponding to 
+a key character, then the key character is forwarded to its 
+
+
+
+- 4 - 
+
+
+
+forwarding non-terminal. Forw(nt) is the forwarding non-terminal 
+of nt; the type of Forw is: 
+
+
+
+Forw 
+
+
+
+non -terms -&gt; non -terms 
+
+
+
+Next we must address the representation of the grammar rules 
+themselves. Each rule has three parts, an analysis part, a syn- 
+thesis part, and a dictionary: 
+
+
+
+
+
+
+rules 
+
+
+
+analyses X syntheses X dictionaries 
+
+
+
+The analysis parts are just sequences of terminals and non&gt; 
+terminals : 
+
+
+
+analyses 
+
+
+
+(termslnon -terms) 
+
+
+
+The synthesis parts are trees that will be substituted into the 
+appropriate part of the program tree T. Thus they have the same 
+type as T: 
+
+syntheses = (nodes | nodes X ints) 
+
+-&gt; (nodes ! non -terms | non -terms X keys) 
+
+The dictionary part of a rule is used to determine the component 
+of a node associated with a particular non-terminal. It is gen- 
+erated by the grammar preprocessor when the Alts and Forw rela- 
+tions are generated. 
+
+
+
+dictionaries 
+
+
+
+non-terms -» ints 
+
+
+
+This completes the specification of the types of the program tree 
+and the grammar. They are defined in terms of the primitive 
+
+
+
+- 5 - 
+
+
+
+type 
+
+
+definition 
+
+
+
+
+ints 
+
+
+integers 
+
+
+
+
+keys 
+
+
+key characters 
+
+
+
+
+nodes 
+
+
+nodes in program tree 
+
+
+( atomic ) 
+
+
+non-terms 
+
+
+non-terminal names 
+
+
+
+
+terms 
+
+
+terminal strings 
+
+
+
+
+
+Figure 1. Primitive Types 
+types listed in the following figure. 
+
+3 • Editor Functions 
+
+3- 1 Top Level of Refinement 
+
+Each entry of a key-stroke k must define a new state. Therefore, 
+we will define a function 'process' such that process (k) will 
+take the old state into the new: 
+
+
+
+s' 
+
+
+
+process k s 
+
+
+
+The type of 'process is: 
+
+process £ keys -» (states -&gt; states) 
+
+We can define 'process' as the union of two functions: language- 
+independent editing commands and language-dependent program-entry 
+commands : 
+
+
+
+process 
+
+
+
+lang ind ! lang dep 
+
+
+
+The language-independent processing function is just the union of 
+pairs, each pair composed of an editing character and the func- 
+tion to perform the editing operation: 
+
+
+
+- 6 - 
+
+
+
+lang ind 
+
+
+
+( ' T ' :prev 1 ' v * : next 
+
+
+
+' + ' : succ 
+
+1 -» ' :in 
+•G' :get 
+
+
+
+i i i 
+
+
+
+pred 
+
+
+
+«- ' rout 
+
+
+
+l I D » 
+
+
+
+P' :put 
+
+
+
+'D'rdel ! 'U'rundel ) 
+
+The individual functions will be described below. 
+
+The language-dependent processing is performed by a function 
+'enter' which depends on the grammar. Since lang_dep(K) = enter 
+(K), lang dep = enter. This function is described later. 
+
+3. 2 Positioning Commands 
+
+In this section we will describe the language-independent posi- 
+tioning commands which shift the focus of attention of the edi- 
+tor. The focus is represented by a variable N of type node. 
+Each positioning command determines a new value of N based on the 
+old value. To accomplish shifting the focus, we define move(f) 
+which applies the positioning function f to the current node: 
+
+
+
+move( f ) 
+
+
+
+M := f(N) 
+
+
+
+Consider first the 'out' command; this shifts the focus from a 
+node to its parent. To accomplish this we need a function 
+'parent' defined so that parent(n) is the parent of node n. Sup- 
+pose that n is the i-th descendent of m: 
+
+
+
+T(m,i) 
+
+
+
+We can invert this to 
+
+
+
+- 7 - 
+
+
+
+(m,i) = T " 1 (n) 
+
+
+
+Now the parent of n is just m, so 
+
+parent(n) = first. T~ (n) 
+
+It is always possible that the user will try to move to the 
+parent of the root, which doesn't exist. Therefore, if parent(N) 
+is undefined we want 'out' to be an identity function. To accom- 
+plish this we define total(f) which makes any function f total by 
+extending it with the identity function, total(f) = f/Id. The 
+resulting definition of 'out' is: 
+
+total = (/Id) 
+
+parent = first. T 
+
+out = move. total parent 
+
+The 'in' command moves to the first descendent of the current 
+node . That is , 
+
+newM = T(oldN, 1) = T. ( , 1 ) oldN 
+
+As for 'out' , we want 'in' to be an identity if there is no first 
+descendent, i.e.. if we are at a leaf. This results in the 
+definition : 
+
+in = move .total T . ( , 1 ) 
+
+The 'next' and 'prev' commands move to the right and left 
+siblings, respectively, of the current node. Thus we must say 
+what it means for n to be the right sibling of m: n = 
+
+
+
+- 8 - 
+
+
+
+rightsib (m) . This means that m and n have a common parent p such 
+that m = T(p,k) and n = T(p,k+1). Thus (p,k) = T"" 1 (m), so 
+
+n : T.(Id ! ! ( + 1)) .T " 1 (m) 
+
+
+
+Now, the isomorphism of a relation R under a function f is 
+defined : 
+
+
+
+f$R 
+
+
+
+« - 1 
+
+
+
+R.f 
+
+
+
+so we can define the right sibling: 
+
+rightsib = T " 1 $ ( Id | | ( + 1 ) ) 
+
+As we have said, the effect of 'next' is to move to the right 
+sibling of the current node, and we have defined 'rightsib' to 
+accomplish this. What if the current node doesn't have a right 
+sibling? We could, as in the 'in' and 'out' commands leave the 
+focus where it was. A better approach is to move the focus to 
+the parent of the current node, and seek again for a right 
+sibling. This process should continue until a node with a right- 
+sibling is found, or we have reached the root of the tree. This 
+is illustrated in the Figure 2. 
+
+
+
+
+Figure 2. Effect of 'next' Command 
+
+
+
+- 9 - 
+
+
+
+The desired effect can be described as follows: as long as 
+the current node has no right sibling, move to the parent, other- 
+wise select the right sibling. This is easily expressed: 
+
+
+
+next 
+
+
+
+love. total [while( non.dom rightsib, parent); rightsib] 
+
+
+
+As usual, we have extended the function with 'total' to handle 
+nodes for which 'next' would be undefined. The 'prev' operation 
+is identical, except that "rightsib" ' replaces 'rightsib'. 
+
+The remaining two positioning commands are 'succ T and 
+'pred'. These are used for moving to the succeeding and preced- 
+ing members of a sequence. Their effect is shown in Figure 3. 
+It can be seen that 'succ' is a 'next' followed by an 'in', and 
+'pred' is an 'out' followed by a 'prev': 
+
+succ = next; in 
+pred = out ; prev 
+
+
+
+
+
+n 3 o»/ °s 
+
+Figure 3- Effect of 'succ' and 'pred' 
+3 • 3 Editing Commands 
+
+There are really only two editing commands: deleting the subtree 
+rooted at the current node, and inserting a new subtree at the 
+current node. Each of these commands exists in two forms, as is 
+
+
+
+- 10 - 
+
+
+
+described below. 
+
+The get command deletes the subtree rooted at the current 
+node, and saves it in the get - buffer . The put command reverses 
+this operation by replacing the current node with the tree in the 
+get-buffer. The delete command operates the same as get, except 
+the deleted subtree is placed in the save - buf fer . This allows a 
+later undelete command to reverse the effect of the delete. 
+Undelete is just like put except that it uses the save-buffer. 
+
+To accomplish these functions we will define 'remove' and 
+'replace' which take as an argument the buffer. 
+
+get = remove G 
+put = replace G 
+del = remove S 
+
+undel = replace S 
+
+There are two steps in removing a subtree: (1) the subtree 
+rooted at N, the current node, must be placed in the appropriate 
+buffer. (2) this subtree must be deleted from the program tree: 
+
+removed) = L := subtree N; delete 
+
+Next we define 'subtree' and 'delete'. 
+
+The subtree rooted at a node n is just that portion of the 
+program tree containing nodes reachable from n. Thus, if 'sub- 
+nodes n' is the set of all nodes reachable from n, then 
+
+
+
+-11- 
+
+
+
+subtree(n) = (m ! m X ints) -» T 
+where m = subnodes n 
+
+To find the subnodes of n we will use a function 'reach' defined 
+so that reach(S) is the set containing every node whose parent is 
+in S : 
+
+
+
+reach( S) 
+
+
+
+img T (S X ints) 
+
+
+
+Hence , 
+
+reach = (img T) . ( X ints) 
+
+Then, to find the subnodes reachable from n we apply 'reach' zero 
+or more times to the unit set containing n. Thus, 
+
+
+
+subnodes( n) 
+
+
+
+reach (un(n ) ) 
+
+
+
+Therefore , 
+
+
+
+subnodes 
+
+
+
+reach .un 
+
+
+
+This completes the definition of 'subtree'. 
+
+The 'delete' function must remove all the nodes in 
+subnodes(N). However, it also must replace the deleted subtree 
+with the non-terminal expected at that point in the tree. It 
+does this by creating an edge from the parent of N to N, and from 
+N to the non-terminal associated with N. These operations can be 
+v isuali zed : 
+
+
+
+- 12 - 
+
+
+
+
+T(N) 
+
+
+
+. N 
+
+
+
+
+nTCn) 
+
+
+
+They are accomplished by: 
+
+delete = T := T &lt;&gt; non.subnodes N j (T 
+NT = first. T 
+
+
+
+- 1 
+
+
+
+N, NT N) 
+
+
+
+The definition of NT comes about as follows: T(N) = (nt,k), the 
+non-terminal key pair that generated node N. Hence, NT(M) = 
+first. T(N) . This completes the definition of 'remove'. 
+
+Replacing the current node (assumed to be undefined) with 
+the contents of buffer L is quite simple: create a link from the 
+parent of N to the root of L, and add L to the program tree: 
+
+
+
+replace( L) 
+
+
+
+T := (T " 1 N : first L 
+
+
+
+L) / T 
+
+
+
+The root of L is just its first number. 
+
+3 . 4 Program Entry Functions 
+
+In this section we will investigate the definition of the func- 
+tion 'enter(k)' which processes the language-dependent command 
+key, k. If M is an undefined, or open, node, then T(N) is the 
+
+
+
+- 13 - 
+
+
+
+non-terminal associated with N, say, nt. This non-terminal is 
+passed along with the command key k to a function ' select ( nt , k) ' 
+for processing. Hence, 
+
+
+
+enter ( k) 
+
+
+
+select (T N , n ) 
+
+
+
+select. (T N,) n 
+
+
+
+Of course, the 'enter' function can only be applied to undefined 
+nodes, so we will restrict select to undefined nodes: 
+
+
+
+enter = udf -&gt; select . (T M,) 
+
+_ i 
+where udf = img T non -terms 
+
+
+
+Next we will consider the definition of ' select ( nt , k) ' . Recall 
+that Alts.(nt,) is the mapping of command keys to alternatives 
+for non-terminal nt. If k is in the domain of this mapping, then 
+the associated rule is selected and processed: 
+
+if (nt,k) € dom Alts 
+then process . Alts(nt ,k) 
+
+If k is not handled by rule nt, then we must process the forward- 
+ing rule for nt , Forw(nt), and retry entering k. The resulting 
+definition of 'select' is: 
+
+select ( nt ,k ) = 
+
+if (nt,k) € dom Alts 
+
+then process . Alts(nt ,k) 
+
+else process. Forw nt; enter k 
+
+= if (nt,k) € dom Alts 
+then process . Alts( nt ,k) 
+
+
+
+- 14 - 
+
+
+
+else (;) [ process. Forw nt, enter k] 
+
+
+
+Notice that 
+
+
+
+[ process . Forw nt, enter k] 
+
+
+
+(process. Forw | 1 enter) (nt,k) 
+
+
+
+Hence , 
+
+
+
+select 
+
+
+
+[ process. Alts / (;).( process . Forw || enter) ] 
+
+
+
+The only function left to define is 'process', which handles the 
+processing of a rule, i.e., which installs the synthesis part of 
+a rule, which is the rule's second component. Hence, the tree to 
+be inserted is t=new. second r, where r is the rule and 'new' 
+creates a new copy of the tree. The function replace(t) will 
+insert this new subtree. Finally, the cursor must be positioned 
+at the first descendent in the new tree. Putting this all 
+together : 
+
+
+
+process( r ) 
+
+
+
+replace .new .second r; in 
+
+
+
+Hence , 
+
+
+
+process 
+
+
+
+in .replace. new. second 
+
+
+
+3 . 5 Unparsing 
+
+The last major function we must discuss is unparsing , i.e., the 
+generation of source form of the program from the program tree. 
+We will define a function unparse(n) which unparses the subtree 
+rooted at node n. There are two cases: either node n is unde- 
+fined or it is defined. If it is undefined then T(n) is the 
+
+
+
+- 15 - 
+
+
+
+non-terminal name associated with n, and this is what must be 
+displayed. Otherwise we will use a function dispnode(n) to 
+display a defined node: 
+
+unparse = udf-»T / dispnode 
+
+The function of dispnode(n) is to display a defined node n; for 
+this it is necessary to find the grammar rule that generated this 
+node. Since n is defined, T(n) = (nt, k ) where (nt, k) is the 
+non-terminal name - key pair. If n was generated by an alterna- 
+tive, then 'Alts(nt,k)' is the rule. Otherwise, it was generated 
+by a forwarding rule and ' Forw(nt) ' is the rule. 
+
+The node n is unparsed according to rule r by disprule(n, 
+r), defined later. We can now derive the definition of 
+' dispnode ' : 
+
+dispnode(n) = disprule(n, 
+
+if (nt,k) € Alts then Alts(nt,k) 
+else Forw(nt) endif) 
+where (nt,k) = T(n) 
+
+= disprule(n , [ Alts / Forw . first ] (nt ,k ) ) 
+
+= disprule(n, [Alts / Forw . first ]. T (n)) 
+Therefore , 
+
+dispnode = disprule.dd # [ Alts/Forw . first ]. T) 
+Disprule(n, r) takes a node n and a rule r and converts it to a 
+
+- 16 - 
+
+
+
+
+
+
+character string. It will do this using an auxiliary function 
+DanalCn, r) which returns a sequence of strings, one correspond- 
+ing to each item in the analysis part of r. These strings must 
+be catenated to form the output of 'disprule'. Hence, 
+
+
+
+disprule( nt , r ) 
+
+
+
+[cat § ' ' ] (danaKnt , r) ) 
+
+
+
+Hence , 
+
+
+
+disprule 
+
+
+
+[cat @ ' ♦] .danal 
+
+
+
+Let's consider danal(n, r). The analysis part of rule r, 
+first(r), is a sequence of items, 
+
+
+
+&lt;a.j, a^i a n &gt; 
+
+
+
+We wish to return an isomorphic sequence of strings, 
+
+&lt;s r s 2 , ..., s n &gt; 
+
+such that each s. is the result of displaying item a. according 
+to the current node. For the latter purpose we use a function 
+disp(n , r , a ) . Thus , 
+
+s . = disp(n ,r ,a^ ) 
+
+Hence, the sequence s is just the image of a (the analysis part 
+of r) under disp.Cn, r,): 
+
+s = disp . (n ,r , ) $ a 
+So the definition of 'danal' is: 
+
+
+
+- 17 - 
+
+
+
+danal ( n ,r ) 
+
+
+
+disp . (n ,r ,) $ first (r ) 
+
+
+
+This brings us to 'disp'; disp(n,r,ai) displays item ai appropri- 
+ately, i.e., if ai is a terminal it is displayed directly; if it 
+is a non-terminal then the corresponding subnode of n is 
+unparsed. The latter function is performed by dispn t ( n , r ,ai ) . 
+Hence , 
+
+disp(n,r,ai) = dispnt ( n ,r , ai ) , if defined 
+
+ai , otherwise 
+
+The definition is 
+
+
+
+disp 
+
+
+
+dispnt / third 
+
+
+
+Finally, dispnt ( n , r , ai ) unparses the descendent of n correspond- 
+ing to ai. Thus dispnt must perform unparse(T(n, k)), where k is 
+the index of the descendent corresponding to ai. The index k is 
+given by the ''dictionary'', or third, part of a rule, hence k = 
+(third r) ai. This leads to the definition of 'dispnt': 
+
+dispnt (n ,r ,ai) 
+
+= unparse(T(n, third r ai)) 
+= unparse.TCn, third r ai)) 
+
+This completes the definition of the syntax-directed editor. All 
+of the definitions of the functions are gathered in Appendix 2 
+and in the natural notation in Appendix 4. 
+
+
+
+- 18 - 
+
+
+
+4. References 
+
+
+
+[1] Brown, J.C., Loglan 4 &amp; 5, A Loglan - English / English - Loglan 
+Dictionary , 2nd. Ed., Palm Springs: 1975, The Loglan Insti- 
+tute , viii-xviii . 
+
+[2] MacLennan, B.J., The Automatic Generation of Syntax 
+Directed Editors , Naval Postgraduate School Computer Sci- 
+ence Department Technical Report NPS52-8 1 -01 4 , October 
+1981 . 
+
+
+
+[3] MacLennan, B.J., Introduction to Relational Programming, 
+Proceedings of ACM Conference on Functional Programming 
+Languages and Computer Architecture , 213-220, October 18- 
+22, 1981; also Naval Postgraduate School Computer Science 
+Department Technical Report NPS52-8 1 -008 , June 1981. 
+
+[4] MacLennan, B.J., Overview of Relational Programming , Naval 
+Postgraduate School Computer Science Department Technical 
+Report NPS52-81-017, November 1981. 
+
+[5] MacLennan, B.J., P rogramming with a Relational Calculus , 
+Naval Postgraduate School Computer Science Department 
+Technical Report NPS52-8 1 -01 3 , September 1981. 
+
+[6] MacLennan, B.J., Values and Objects in Programming 
+Languages , Naval Postgraduate School Computer Science 
+Department Technical Report NPS52-8 1 -006 , April 1981. 
+
+
+
+- 19 - 
+
+
+
+1. APPENDIX: SUMMARY OF RELATIONAL OPERATORS 
+
+
+
+Symbol 
+
+
+
+Mean ing 
+
+
+
+x j y 
+x&amp;y 
+x~y 
+x :y 
+
+xry 
+
+x :=y 
+x/y 
+
+(py) 
+
+(xp) 
+
+(P) 
+f" 1 
+non x 
+f.g 
+
+f;g 
+
+f X 
+
+x ,y 
+
+f$r 
+
+while ( x , y) 
+
+x X y 
+
+x -» f 
+
+f &lt;- x 
+
+fOx 
+
+img f 
+
+
+
+union of sets or relations 
+intersection of sets or relations 
+difference of sets or relations 
+ordered pair 
+equality 
+
+assignment to variable 
+extension, = x | (non.dom x -&gt; y) 
+bind right argument of p to y 
+bind left argument of p to x 
+operator used as an operand 
+inverse (converse) 
+complement of set or relation 
+composition of f and g 
+
+relative product (reverse composition) 
+functional application 
+sequence construction 
+isomorphic image of a relation 
+iterative application 
+cartesian product 
+restrict domain 
+restrict codomain 
+restrict both domains 
+image function 
+reflexive transitive closure 
+
+
+
+- 20 - 
+
+
+
+f + 
+
+un 
+
+f! !g 
+
+f#g 
+
+Id 
+
+f@x 
+
+first 
+
+dom f 
+
+* sy 
+x € y 
+
+
+
+transitive closure 
+
+unit-set constructor 
+
+parallel application 
+
+construction 
+
+identity function (equivalent to =) 
+
+f-reduction with initial value x 
+
+first member of relation (also second etc.) 
+
+domain of function or relation 
+
+define x to be y 
+
+set membership 
+
+
+
+- 21 - 
+
+
+
+2. APPENDIX: THE SYNTAX DIRECTED EDITOR 
+
+
+
+2. 1 Top Level 
+
+
+
+process = lang ind | lang dep 
+
+
+
+lang ind 
+
+
+
+( ' T ' :prev j ' v ' : next 
+' + ' : succ | • - ' rpred 
+
+
+
+-» ' :in I ' «- ' :out 
+
+
+
+•G' :get ! 'P' :put 
+•D':del I 'U*:undel ) 
+
+
+
+lang dep = enter 
+
+
+
+2.2 Positioning 
+
+
+
+move(f) = N := f(N) 
+
+total = (/Id) 
+
+parent = first .T " 1 
+
+out = move. total parent 
+
+in = move. total T.(,1) 
+
+
+
+f$R 
+
+
+
+f " 1 .R.f 
+
+
+
+rightsib = T " 1 $( Id | | ( + 1 ) ) 
+
+
+
+next = move. total [while( non.dom rightsib, parent); rightsit 
+prev = move. total [while( non.dom rightsib™ , parent); right 
+
+
+
+succ = next; in 
+pred = out ; prev 
+
+
+
+- 22 - 
+
+
+
+2. 3 Editin, 
+
+get = 
+put = 
+del = 
+undel 
+
+
+
+remove G 
+replace G 
+remove S 
+replace S 
+
+
+
+remove(L) = L := subtree N; delete 
+subtree(n) = (m | m X ints) -» T 
+
+where m = subnodes n 
+reach = (img T).(X ints) 
+
+
+
+subnodes 
+
+
+
+reach .un 
+
+
+
+- 1 
+
+
+
+delete = T := T &lt;&gt; non. subnodes N | (T N, N, NT N) 
+
+NT = first. T 
+
+replaced) = T := (T" 1 N : first L | L) / T 
+
+2. 4 Program Entry 
+
+enter = udf -&gt; select . (T N,) 
+
+udf = img T ~ non -terms 
+
+select = [ process. Alts / (;).( process . Forw | | enter) ] 
+
+process = in .replace .new . second 
+
+2 . 5 Unparsing 
+
+unparse = udf-»T / dispnode 
+
+dispnode = disprule.(Id # [ Alts/Forw . first ]. T) 
+
+disprule = [cat @ ''j.danal 
+
+
+
+- 23 - 
+
+
+
+danal(n,r) = disp.(n,r,) $ first(r) 
+
+disp = dispnt / third 
+
+dispnt (n ,r ,ai) = unpar se . T(n , third r ai)) 
+
+
+
+- 24 - 
+
+
+
+3 . APPENDIX: NATURAL NOTATION FOR RELATIONAL PROGRAMMING 
+
+In this appendix we present a less mathematical syntax for 
+relational programming. By combining non-symbolic operator names 
+with a right-associative, infix syntax, and comma and colon rules 
+that suppress many parentheses, a natural, readable notation 
+results. Of course, some of the manipulative advantages of a 
+mathematical notation are lost. 
+
+Briefly, the syntax is as follows: All identifiers are 
+divided into three classes: niladic (x, y, z, in the following 
+examples), monadic (f, g), and dyadic (p, q, r). Monadic appli- 
+cations, whether functions or predicates, are written "f x', "f g 
+x", etc. These associate to the right, hence "f g x" means 'f(g 
+x)". Dyadic applications, whether functions or relations, are 
+written with a right-associative, infix syntax. That is, "x p y 
+q z" means "x p (y q z) M . Monadic applications are more binding 
+than dyadic applications; hence, "f x p g y 1 ' means "(f x) p (g 
+y)". 
+
+Commas and colons can be used to eliminate many parentheses. 
+A comma is equivalent to a right parenthesis; the corresponding 
+left parenthesis is at the nearest preceding colon, or at the 
+beginning of the expression, if there is no preceding colon. 
+Hence, "x p y, q z" means "(x p y) q z" and "x p: y q z, r w" 
+means "x p (y q z) r w" , which by right-associativity means M x p 
+((y q z) r w) M . These rules have been inspired by the Loglan 
+syntax [ 1 ] . 
+
+
+
+- 25 - 
+
+
+
+Since the parsing of expressions is determined by the clas- 
+sification of identifiers into niladic, monadic, and dyadic, it 
+is not possible to directly use a monadic or dyadic identifier as 
+the argument to another application. To do this it is necessary 
+to convert the monadic or dyadic identifier into a niladic iden- 
+tifier by quoting it. For example, the inverse of the dyadic 
+identifier plus must be written 
+
+inverse * plus ' 
+
+The formal grammar for this notation follows. In the following 
+appendix the syntax-directed editor is expressed in the natural 
+notation . 
+
+3- 1 Formal Syntax 
+
+
+
+assertion 
+
+expression 
+
+exp-head 
+
+factor 
+
+exp-tail 
+
+term 
+
+niladic-exp 
+
+dyadic-exp 
+
+niladic-primary 
+
+monadic-primary 
+dyadic-primary 
+
+
+
+expression . 
+
+exp-head [ exp-tail ] 
+
+{ niladic-exp | factor, } 
+
+niladic-exp [ dyadic-exp factor ] 
+
+{ dyadic-exp term ! dyadic-exp: expressi' 
+
+niladic-exp [ exp-tail ] 
+
+monadic-primary* niladic-primary 
+
+monadic-primary* dyadic-primary 
+
+{ niladic-id | "(" expression ")" 
+
+! ' { monadic-id ! dyadic-id } ' } 
+
+{ monadic-id I "[" expression "]" } 
+
+{ dyadic-id | "{" expression '' } " } 
+
+
+
+- 26 - 
+
+
+
+3.2 Vocabulary 
+
+
+
+Math. Notation Natural Notation 
+
+
+
+x ! y 
+
+
+x combine y 
+
+
+x :y 
+
+
+x maps-to y 
+
+
+x = y 
+
+
+x equals y 
+
+
+x :=y 
+
+
+x becomes y 
+
+
+x/y 
+
+
+x extend y, x else y 
+
+
+(PY) 
+
+
+something p y 
+
+
+(xp) 
+
+
+x p something 
+
+
+(P) 
+
+
+»p' 
+
+
+f" 1 
+
+
+inverse f 
+
+
+f;g 
+
+
+f then g 
+
+
+f X 
+
+
+f of x , x apply f 
+
+
+x ,y 
+
+
+x ; y , x connect y 
+
+
+f$r 
+
+
+f map r 
+
+
+while(x ,y ) 
+
+
+y do-while x 
+
+
+x X y 
+
+
+x cross y 
+
+
+x -» f 
+
+
+x filter f, f if-in x 
+
+
+img f 
+
+
+image f 
+
+
+f 
+
+
+closure f 
+
+
+un 
+
+
+unit-set 
+
+
+fOx 
+
+
+f restrict x 
+
+
+fi ig 
+
+
+f parallel g 
+
+
+f#g 
+
+
+f construct g, f also g 
+
+
+Id 
+
+
+identity 
+
+
+f§x 
+
+
+f reduce x 
+
+
+
+- 27 - 
+
+
+
+first 
+x + y 
+dom f 
+x =y 
+
+
+
+first 
+x plus y 
+domain f 
+x means y 
+
+
+
+- 28 - 
+
+
+
+4. APPENDIX: SYNTAX DIRECTED EDITOR IN NATURAL NOTATION 
+
+
+
+4.1 SDE-Specific Vocabular' 
+
+
+
+Math. Notation Natural Notation 
+
+
+
+N 
+
+G 
+
+S 
+
+T 
+
+ints 
+
+non-terms 
+
+Alts 
+
+Forw 
+
+
+
+current-node 
+move-buffer 
+save-buf f er 
+
+tree 
+
+integers 
+
+non-terminal s 
+
+alternation-rules 
+
+forwarding-rules 
+
+
+
+4 . 2 Top Level 
+
+Process means language-independent combine language-dependent 
+Language-independent 
+
+
+
+means : 
+
+
+
+maps-to move-previous, 
+
+
+
+combine "y" maps-to move-next, 
+combine "+" maps-to move-successor, 
+combine "-" maps-to move-predecessor, 
+combine 'I* maps-to move-in, 
+combine '«!' maps-to move-out , 
+combine "G" maps-to get, 
+combine "P" maps-to put, 
+combine "D" maps-to delete, 
+combine "U" maps-to undelete. 
+
+
+
+- 29 - 
+
+
+
+Language-independent means enter. 
+4. 3 Positioning 
+
+Move position-function means 
+
+ourrent-node becomes position-function of current-node. 
+Total means something extend identity. 
+Parent means inverse tree then first. 
+Move-out means parent apply total then move. 
+
+Move-in means: something maps-to 1. then tree, apply total then move. 
+Function map structure means 
+
+function then structure then inverse function. 
+Right-sibling means inverse tree map identity parallel something plus 
+Move-next means parent do-while non domain right-sibling, 
+
+then right-sibling, apply total then move. 
+Move-previous means parent do-while non domain inverse right-sibling, 
+
+then inverse right-sibling, apply total then move. 
+Move-successor means move-next then move-in. 
+Move-predecessor means move-out then move-previous. 
+
+4. 4 Editing 
+
+Get means remove-into move-buffer. 
+Put means replace-from move-buffer. 
+Delete means remove-into save-buf fer . 
+Undelete means replace-from save-buffer. 
+
+Remove-from buffer means: 
+
+buffer becomes subtree of current-node, then excise. 
+
+
+
+- 30 - 
+
+
+
+Subtree a-node means: 
+
+tree if-in the-subnodes combine the-subnodes cross integers, 
+where the-subnodes means subnodes of a-node. 
+Reach means: something cross integers, then image tree. 
+Subnodes means unit-set then closure reach. 
+
+Excise means tree becomes 
+
+tree restrict non subnodes of current-node 
+
+combine: current-node apply inverse tree, 
+
+connect current-node sequence non-term of current-node. 
+
+Non-term means tree then 'first'. 
+
+Replace-from buffer means tree becomes: 
+
+current-node apply inverse tree, maps-to first buffer, 
+combine buffer, extend tree. 
+
+4 . 5 Program Entry 
+
+Enter means: current-node apply tree, 
+
+maps-to something, then select, if-in undefined-nodes. 
+Undefined-nodes means non-terminals, apply image inverse tree. 
+Select means: alternation-rules then process, 
+
+else: forwarding-rules then process, parallel enter, 
+
+then * then ' . 
+Process means 'second' then new then replace-from then move-in 
+
+4 . 6 Unparsing 
+
+Unparse means: tree if-in undefined-nodes, else display-node. 
+Display-node means: identity construct 
+
+
+
+- 31 - 
+
+
+
+tree then alternation-rules else 'first' then forwarding-rules , 
+
+then display-rule. 
+Display-rule means display-analysis then 'catenate' reduce " ;I . 
+Display-analysis (N; R) means: N connect R sequence something, 
+
+then display, map first R. 
+Display means display-non-term else 'third'. 
+Display-non-term (N; R; non-term-name) means: 
+
+N connect non-term-name apply R then 'third', 
+
+apply tree then unparse. 
+
+
+
+- 32 - 
+
+
+
+INITIAL DISTRIBUTION LIST 
+
+
+
+Defense Technical Information Center 2 
+
+Cameron Station 
+Alexandria, VA 22314 
+
+Dudley Knox Library 2 
+
+Code 0142 
+
+Naval Postgraduate School 
+
+Monterey, CA 93940 
+
+Office of Research Administration 1 
+
+Code 012A 
+
+Naval Postgraduate School 
+
+Monterey, CA 93940 
+
+Chairman, Code 52Bz 40 
+
+Department of Computer Science 
+Naval Postgraduate School 
+Monterey, CA 93940 
+
+Professor Bruce J. MacLennan, Code 52M1 12 
+
+Department of Computer Science 
+Naval Postgraduate School 
+Monterey, CA 93940 
+
+Professor Harvey Abramson 1 
+
+Department of Computer Science 
+
+The University of British Columbia 
+
+2075 Wesbrook Mall 
+
+Vancouver, B. C. Canada 
+
+V6T 1W5 
+
+Dr. M. Sintzoff 1 
+
+Philips Research Laboratory 
+
+2 av. Van Becelaere 
+
+1170 Brussels 
+
+Belguim 
+
+Dr. Mehdi Jazayeri 1 
+
+Synapse Computer Corporation 
+801 Buckeye Court 
+Mil pitas, CA 95035 
+
+Mr. Jim Bowery 1 
+
+Viewdata Corporation of America 
+1444 Biscayne Boulevard Suite 305 
+Miami, Florida 33132 
+
+Dr. Charles D. Marshall 1 
+
+IBM Research, Department K51 
+5600 Cottle Road 
+San Jose, CA 95193 
+
+
+
+33 - 
+
+
+
+U202778 
+
+
+
+DUDLEY KNOX LIBRARY - RESEARCH REPORTS 
+
+
+
+5 6853 01068018 4 

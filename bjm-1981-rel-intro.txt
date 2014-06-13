@@ -1,0 +1,1537 @@
+LIBRARY
+TECHNICAL REPORT SECTION 
+NAVAL POSTGRADUATE SCHCKH 
+MONUrtV, CALIFORNIA 9394Q 
+
+
+
+NPS52-81-008 
+
+
+
+NAVAL POSTGRADUATE SCHOOL 
+
+Monterey, California 
+
+
+
+
+INTRODUCTION TO RELATIONAL PROGRAMMING 
+
+
+
+Bruce J. MacLennan 
+
+
+
+June 1981 
+
+
+
+Approved for public release; distribution unlimited 
+
+
+
+Prepared for: 
+feddocs ava ^ Postgraduate School 
+
+D208.14/2:NPS-52-81-008 !ontere y» Ca - 93940 
+
+
+
+NAVAL POSTGRADUATE SCHOOL 
+Monterey, California 
+
+
+
+Rear Admiral J. J. Ekelund D. A. Schrady 
+
+Superintendent Acting Provost 
+
+The work reported herein was supported by the Foundation Research 
+Program of the Naval Postgraduate School with funds provided by the Chief 
+of Naval Research. 
+
+Reproduction of all or part of this report is authorized. 
+
+This report was prepared by: ^ r 
+
+
+
+UNCLASSIFIED 
+
+
+
+SECURITY CLASSIFICATION OF THIS PAGE (When Data Entered) 
+
+
+
+REPORT DOCUMENTATION PAGE 
+
+
+
+READ INSTRUCTIONS 
+BEFORE COMPLETING FORM 
+
+
+
+1. REPORT NUMBER 
+
+NPS52-81-008 
+
+
+
+2. GOVT ACCESSION NO 
+
+
+
+3. RECIPIENT'S CAT ALOG NUMBER 
+
+
+
+4. TITLE (and Subtitle) 
+
+
+
+5. TYPE OF REPORT &amp; PERIOO COVERED 
+
+
+
+Introduction to Relational Programming 
+
+
+
+Technical Report 
+
+
+
+6. PERFORMING ORG. REPORT NUMBER 
+
+
+
+7. AUTHORfsJ 
+
+Bruce J. MacLennan 
+
+
+
+8. CONTRACT OR GRANT NUMBERf«; 
+
+
+
+9. PERFORMING ORGANIZATION NAME AND ADDRESS 
+
+Naval Postgraduate School 
+Monterey, CA 93940 
+
+
+
+10. PROGRAM ELEMENT. PROJECT. TASK 
+AREA 4 WORK UNIT NUMBERS 
+
+61152N,RR000-01-10 
+N0001481WR10034 
+
+
+
+11. CONTROLLING OFFICE NAME AND ADDRESS 
+
+Naval Postgraduate School 
+Monterey, CA 93940 
+
+
+
+12. REPORT OATE 
+
+June 1981 
+
+
+
+13. NUMBER OF PAGES 
+
+
+
+14. MONITORING AGENCY NAME 4 ADORESSf// different from Controlling Office) 
+
+
+
+IS. SECURITY CLASS, (of thla report) 
+
+
+
+UNCLASSIFIED 
+
+
+
+15a. DECLASSIFICATION/ DOWNGRADING 
+SCHEDULE 
+
+
+
+16. DISTRIBUTION ST ATEMEN T (of thla Report) 
+
+Approved for public release; distribution unlimited 
+
+
+
+17. DISTRIBUTION STATEMENT (of the abatract entered In Block 20, It different from Report) 
+
+
+
+18. SUPPLEMENTARY NOTES 
+
+
+
+Revised version to be presented at the ACM Conference on Functional 
+Programming Languages and Computer Architecture, October 18-22, 1981 
+
+
+
+19. KEY WORDS (Continue on revarae aide If necessary and Identify by block number) 
+
+
+
+Relational Programming, Functional Programming, Relational Algebra, Relations, 
+Relational Calculus, Applicative Languages, Combinators, Very-High-Level 
+Languages. 
+
+
+
+20. ABSTRACT (Continue on reveraa aide il necessary and Identify by block number) 
+
+A new method of programming, called relational programming , is introduced, 
+This is a style of programming in which entire relations are manipulated 
+rather than individual data. This is analogous to functional programming , 
+wherein entire functions are the value manipulated by the operators. Because 
+of its ability to manipulate complex data structures other than lists, 
+relational programming seems to have distinct advantages over other \/ery high 
+
+
+
+DD I JAN 73 1473 EDITION OF 1 NOV 65 IS OBSO-ETE 
+
+S/N 102-014- 6601 
+
+
+
+UNCLASSIFIED 
+
+
+
+SECURITY CLASSIFICATION OF THIS PAGE (Whan Data Entered) 
+
+
+
+U NCI A SSTF IFD 
+
+
+
+^UJHITY CLASSIFICATION OF THIS PAGErWhen Data Entered) 
+
+
+
+level languages. This paper introduces the basic concepts of relational 
+programming and a preliminary notation for expressing them; it does not 
+define a programming language, per se . 
+
+
+
+UNCLASSIFIED 
+
+
+
+SECURITY CLASSIFICATION OF THIS P KGE.(Wh«n Datm Ente 
+
+
+
+- 1 - 
+
+INTRODUCTION TO RELATIONAL PROGRAMMING* 
+
+B. J. MacLennan. 81/02/24. 
+
+Naval Postgraduate School 
+
+Monterey, CA 93940 
+
+1 . Introduction 
+
+In this paper we discuss relational programming , i.e. a 
+style of programming in which entire relations are manipulated 
+rather than individual data. This is analogous to functional 
+programming, wherein entire functions are the values manipulated 
+by the operators. We will see that relational programming sub- 
+sumes functional programming because every function is also a 
+relation. It is appropriate at this point to discuss why we have 
+chosen to investigate relational programming. 
+
+As we have noted, relational programming subsumes functional 
+programming; hence, anything that can be done with functional 
+programming can be done with relational programming. Further- 
+more, relational programming has many of the advantages of func- 
+tional programming: for instance, the ability to derive and 
+manipulate programs by algebraic manipulation. A well developed 
+algebra of relations dates back to Boole's original work and has 
+been extensively studied since then. Although relations are more 
+
+
+
+* The work reported herein was supported by the Foundation 
+Research Program of the Naval Postgraduate School with funds 
+provided by the Chief of Naval Research. 
+
+
+
+- 2 - 
+
+
+
+general than functions, their laws ate oLten simpler. For 
+instance, (fg)~ x = g f"" x is true for all relations, but true 
+only for functions that are one-to-one. Also, relational pro- 
+gramming more directly supports non-linear data structures, such 
+as trees and graphs, than does functional programming. In rela- 
+tional programming the basic data values are themselves rela- 
+tions, whereas in functional programming there is a separate 
+class of objects (lists) used for data structures. One final 
+reason for investigating relational programming is that it pro- 
+vides a possible paradigm nor utilizing associative and active 
+memories. As a teaser for what is to come, we present the fol- 
+lowing example of a relational program. We will take a text T, 
+represented as an array of words (i.e., T:i is the i-th word), 
+and generate a frequency table F so that F:w is the number of 
+occurences of word w in T. Now we will see (section 3) that T:w 
+is the set of all indices of the word w. If we let #:C be the 
+cardinality of a class, then the number of indices (occurences) 
+or w is ]ust #:(T:w). Therefore we can write F = #T (section 6). 
+For a second example, we will see in section 13 that a program to 
+update a payroll file $ can be written: 
+
+§' = MdM where u = (,H)(+)iigU 
+
+
+
+2. Classes and Relations 
+
+
+
+As is usual we will use xRy to mean that x bears the rela- 
+
+
+
+- 3 - 
+
+tion R to y. Similarly, we will write xC or x€C to mean x is in 
+the class C (i.e. x has the property C) . Our theory 01 relations 
+will be typeless, like that described in [6]; this seems more 
+appropriate to programming than systems such as Russell's "rami- 
+fied type theory." In most other respects our notation follows 
+that of Carnap [i] and Whitehead and Russell [8], There is no 
+special signiticance to the case oi variables, although we will 
+often distinguish relations (and classes) from the things they 
+relate by putting them in upper case. 
+
+We orten need to talk or the individuals that can occur on 
+the right or lent or a relation. We say that x is a left - member 
+ot R whenever there is a y such that xRy. 
+
+x Lm R «— » }y(xRy) 
+
+Right - member and member (Rm and Mm) are defined analogously. 
+
+3. Functions 
+
+We define functions as special classes or relations: A rela- 
+tion F is a function if and only if it is left-univalent : 
+
+Feiun 4— &gt; Vxyz[ yFx A zFx =» y=z ] 
+
+If F is left-univalent then we can write F:x for the unique y 
+such that yFx (if such a y exists). This differs from the usual 
+convention, in which y=F:x means xFy, but agrees with [8] and 
+
+
+
+- 4 - 
+
+works better with the rest of the notation. Right-univalent and 
+bi-univalent relations (run and bun) are defined analogously. 
+
+The fact that F:x may be meaningless makes it convenient to 
+use several other relations derived from F. One of these is the 
+plural descr iption . If F is any relation and C is a class then 
+F!:C is the set of all y such that yFx for some x in C, i.e., 
+
+y 6 Fi:C «-» }x(yFx AxC) 
+
+Notice that the operation F! :C is denned for all relations F and 
+classes C, regardless of whether F€lun or the members of C are 
+right members of F. 
+
+Related ideas are the image and converse image of an indivi- 
+dual. If R is a relation, then cRx means that c is the class of 
+individuals related to x. This class is called the image of x, 
+and is defined: 
+
+
+
+y € R:x &lt;— » yRx 
+
+The analogous idea is that of the converse image of y: 
+
+x 6 R:y &lt;— : &gt; yRx 
+
+Like the plural description, R and R are defined for all R and 
+all arguments. It is generally safer to use f than f since f:x 
+may be undefined whereas t:x is always defined. 
+
+
+
+- 5 - 
+
+4 . Combining Relations 
+
+We will next investigate ways or combining relations and 
+classes. The simplest methods ate just abstractions or the logi- 
+cal connectives used between propositions: intersection, union, 
+negation and diiterence (A, V, -) . For instance R V S is defined 
+so that: 
+
+
+
+x(R V S)y 
+
+
+
+xRy V xSy 
+
+
+
+As an example or, the use of these operations, the detinition ot 
+Mm can be written: 
+
+Mm = Lm V Rm 
+
+The logical connectives satisfy the usual properties of a Boolean 
+algebra (e.g., DeMorgan's theorem). 
+
+We will also define the converse of a relation. The rela- 
+tion R is called the converse ot R, i.e. xR x y &lt; — &gt; yRx. If f 
+is a function then t~" x is the inverse of f. 
+
+
+
+5. Limiting and Restriction 
+
+It is often useful to limit the left or right domain ot a 
+relation. Consider the relation x sin" y, which means that x is 
+an arcsine of y. We cannot write x = sin~ x :y because sin~ x is 
+not left univalent (i.e. it is not a function). We can solve 
+this problem by defining a function Sin whose arguments are 
+
+
+
+- 6 - 
+
+restricted to be in the range -ir/2 to ir/2. Let S be the class of 
+teals in this range: 
+
+S = (t: -ir/2) A (&lt;:w/2) 
+
+then we will write sin&gt;S for the sine function with its arguments 
+restricted to S f which is exactly the Sin function we sought: 
+
+Sin = sin&gt;[ (&gt;:-w/2) A (&lt;:w/2)] 
+
+This function is bi-univalent , so it is invertible. It is now 
+perfectly meaningtul to write Sin :y (it y Lm sin). The right- 
+restriction operation is defined: 
+
+x(R}S)y &lt;— » xRy A yS 
+
+The left-restriction, S&lt;R, is defined analogously. These nota- 
+tions can be combined to restrict both domains: S&lt;R)T. The com- 
+bination S&lt;R&gt;S is so common that a special restriction notation 
+is provided for it: 
+
+r8s = s&lt;r&gt;s 
+
+For instance, pred5(&gt;:0), is the predecessor relation restricted 
+to positive numbers. 
+
+6. Relative Product and Composition 
+
+If R is the relation "... is a son 01 ..." and S is the 
+relation "... is a brother of ...", then the relative product , 
+
+
+
+
+
+
+
+
+
+- 7 - 
+
+R|S, is the relation "... is a son ot a btothet of ...". Mote 
+rormally , 
+
+x(R|S)z &lt;r-» 3-y(xRy A ySz) 
+
+Where there is little chance of confusion, we will write RS for 
+R|S. It l and g are runctions it is easy to see that fig is the 
+composition or these functions. Hence, fg:x = r:(g:x). 
+
+It is convenient to have a notation for relative products of 
+a relation with itself. For instance, the "grandparent" relation 
+can be written par ent I par ent , which we abbreviate parent . In 
+gener al , 
+
+
+
+R x = R 
+
+
+
+
+
+
+R n+1 = (R n )R 
+
+
+= 
+
+
+R(R n ) 
+
+
+R -n = (R n)-l 
+
+
+= 
+
+
+(R" 1 )" 
+
+
+R° = =*(Mm:R) 
+
+
+
+
+
+
+
+It is easy to show these properties of the relative product 
+
+(rs)t = r(st) 
+r(sVt) = rsVrt 
+(r V s) t = rs V rt 
+r(sAt) C rs A rt 
+(r A s) t C rt A st 
+3-(rs) &lt;— &gt; 3-(Rm:r A Lm:s) 
+
+
+
+- 8 - 
+
+
+
+(r-V 1 = i 
+
+
+
+(rs) 
+
+
+
+-1 
+
+
+
+(s" 1 ) (r' 1 ) 
+
+
+
+r m t n _ r m+ n 
+
+
+
+/ m \ n _ t mn 
+
+
+
+( ra , n&gt;0 ) 
+
+(m,n&gt;0, or r6bun) 
+t m r n £ t m+n (t6 bun) 
+
+rt" 1 = t~ l t = r° (rSbun) 
+
+
+
+7. Structures 
+
+
+
+7.1 initial and terminal members 
+
+
+
+Suppose R is the relation represented by the following 
+d iagr am: 
+
+
+
+
+&gt; « &lt; 
+
+
+
+
+Since a=R:g and g=R -1 :a it can be seen that R follows an arrow 
+and R goes against an arrow. Now, notice that the left and right 
+members of R are: 
+
+— ^ 
+
+Lm:R = {a f b,c,d, e, f,g} 
+
+Rm:R = {g, f,e,d, i,h} 
+
+
+
+We define the initial members of R to be those members which are 
+not pointed at by an arrow. Therefore, the initial members of R 
+
+
+
+- 9 - 
+
+
+
+are the lett members that are not right members. 
+
+
+
+init:R = (Lm-Rm):R = {a, b, c} 
+
+
+
+The terminal members of a relation do not point to other members 
+
+
+
+_^ 
+
+
+
+term:R = (Rm-Lm):R = (h, i} 
+
+
+
+When a relation is used to represent a data structure, the above 
+functions become important. 
+
+For instance, a sequence is represented by a relation with 
+the structure: 
+
+
+
+s " a l a 2 a 3 
+
+
+
+a n-l a n 
+
+
+
+-&gt;* • • • &gt; « &gt; ■ 
+
+
+
+In this case init:S is the unit class containing the first ele- 
+ment ot the sequence (i.e., a-^) and term:S is the unit class con- 
+taining the last element of the sequence (i.e., a n ) . Similarly, 
+S}(-init:S) is the sequence with its first element deleted. 
+Hence, the following common sequence manipulation functions can 
+be deiined: 
+
+
+
+oc:S = 9 init: S, 
+
+ui: S = 9 term: S, 
+
+£L:S = S&gt; (-init:S) , 
+
+A:S = (-term:S)&lt;S, 
+
+
+
+"first" 
+"last" 
+"final" 
+"initial" 
+
+
+
+where 9 selects the element of a singleton set (9=(= )) 
+
+
+
+More 
+
+
+
+- 10 - 
+
+operations on sequences are discussed in the next section. 
+
+As another example or the use of 'init' and * term 1 , consider 
+a relation T representing a tree. Then, 9 init: T is the root 
+of the tree, and term:T is set of the leaves of the tree. The 
+result is analogous for forests. Given a forest F the set of 
+roots is init:F and the set of leaves is term:F. 
+
+7. 2 higher level operations 
+
+The set of nodes directly descended from n is just F :n. 
+For instance, the set of nodes directly descended from a root is 
+F""Minit:F. and the set of nodes that point to leaves is 
+F! term:F. 
+
+These operations can be used for obtaining the maximum and 
+minimum of sets. Suppose '&lt;' is the less-than relation on 
+integers and S is some set of integers. Then &lt;BS is the less 
+than relation restricted to this set, i.e. it is a sorting of the 
+set. Now note that oc: (&lt;SS) and ui: (&lt;SS) are the minimum and max- 
+imum elements of the set: 
+
+min:S = oc: (&lt;SS) 
+max:S = ua: (&lt;SS) 
+
+These operations are only defined if S has two or more elements, 
+since an irreflexive relation cannot relate less than two ele- 
+ments. That is, an irreflexive relation when restricted to a 
+
+
+
+
+
+
+- 11 - 
+
+unit ot empty class becomes the empty relation. Notice that we 
+can select the maximum and minimum based on any telation that is 
+a ser ies (i.e., transitive, iireflexive and connected). 
+
+The following are simple properties of these operations: 
+
+ini t : r = term: ( r" 1 ) 
+term: r = init : ( r ) 
+init:(r3s) = term:(r~ 1 Ss) 
+
+8 . Sequences 
+
+8. 1 pairs 
+
+In this section we will continue the discussion of sequences 
+begun in the last section. We saw that it was easy to define the 
+selector runctions on sequences (oc, uj, A, D.) . This provides us 
+with functions for taking sequences apart. We will define the 
+ordinal couple or pair , which puts them together. If x and y are 
+two objects, then 'x,y' is the relation that relates x and y but 
+no other objects. 
+
+(x,y) = • -&gt;-• 
+
+x y 
+
+Observe that 
+
+oc: (x,y) = x 
+ui: (x,y) = y 
+
+
+
+- 12 - 
+
+It will occasionally be convenient to write ordinal couples in a 
+vertical format: 
+
+
+
+(y) = (**y&gt; 
+
+
+
+The class of all the ordinal couples (or pairs) that can be made 
+from the classes S and T is SXT: 
+
+p€(SXT) «-» 3-xy[x€S A y€T A P=(x r y) ] 
+
+8 . 2 catenation and consing 
+
+If s and t are sequences then we can deiine an operation 's^t 1 , 
+which is the catenation of s and t. To form this catenation we 
+must hook the last element of s to the first element of t: 
+
+s*t = s V (ui:s, oc:t) V t 
+
+The catenation operation is only defined for sequences, which are 
+required to have at least two elements (since an irreflexive 
+relation with less than two elements is the empty relation). 
+
+How do we add a single element to the left or right of a 
+sequence? The "cons left" and "cons right" operations are easy 
+to define: 
+
+x cl s = (x, cc:s) V s 
+s cr y = s V (iu:s, y) 
+
+It is easy to show that if s is a sequence, then: 
+
+
+
+- 13 - 
+
+cc: (x cl s) = x 
+
+.Q: (x cl s) = s 
+
+m: (s cr y) = y 
+
+A: (s cry) = s 
+
+Also, it s is a sequence, then s V (ui:s, oc:s) is a ring formed by 
+joining the last element of s to the tirst element. 
+
+If s is a sequence, then s is the reverse of s. Hence, 
+
+oc:s = uks" 1 
+ai: s = oc: s 
+
+Azs"" 1 = (Urs)" 1 
+a-.s' 1 = (Ars)" 1 
+
+(s^t)"* 1 = t" l4 s _1 
+
+(x cl s)"" x = s" 1 cr x 
+
+(s cr x)~ x = x cl s 
+
+(x^)" 1 = (y,x) 
+(3 H) - (z) 
+
+9. Binary Operations 
+
+In this section we will discuss our approach to binary 
+
+operations that is, to functions with two arguments and one 
+
+result. We have already seen how unary functions are connected 
+
+
+
+- 14 - 
+
+to relations. For instance, we can write the fact that y is the 
+sine of x by either: 'y sin x' or y = sin:x. Since we only deal 
+with binary relations, we will have to have a new convention for 
+handling binary functions. This convention is: we will combine 
+the two arguments of an operation into a pair. For instance, we 
+can define a relation 'sum' such that 
+
+x s urn ( y , z ) 
+
+if and only if x is the sum of y and z. We can use our colon 
+convention as usual, e.g., 
+
+x = sum: (y,z) &lt;-&gt; x sum (y,z) 
+
+Now, it would be inconvenient to have to invent names, such as 
+'sum 1 , for each operation, such as '+'. Hence, we will adopt a 
+systematic convention for making such names: either placing the 
+conventional infix symbol for the operation in bold face or in 
+parentheses. For instance, 
+
+x+(y,z) ^— &gt; x = +:(y,z) &lt;— » x = y+z 
+x ( + ) (y,z) «— » x = (+):(y,z) «-» x = y+z 
+
+This notation will permit us to manipulate in a more regular 
+fashion the usual arithmetic operations (+, -, *, /) as well as 
+the relational operations (A» V, etc). For instance, ii S is a 
+class of classes, then 
+
+(A) !:SXS 
+
+
+
+- 15 - 
+
+is the class ot all paitwise intersections of members ot S. 
+
+It is otten convenient to be able to generate simple rela- 
+tions from a binary operation. Following Russell and Whitehead, 
+let ir represent any binary operation. We detine: 
+
+x (ttz) y 4— &gt; x = yirz 
+x (yir) z &lt;r— &gt; x = yirz 
+
+Hence , 
+
+x(-l)y «-» x = y-1 
+
+theretore (-1) is the predecessor relation. These can be used as 
+functions : 
+
+(-l):x = x-1 
+f+1) :x = x+1 
+
+This convention makes it very easy to form more complex func- 
+tions. For instance, it we want f:x = sin:(l/x) then we can 
+define f = sin(l/) To see that this works: 
+
+f:x = [sin(l/)]:x = sin:[ (l/):x ] = sin:[ 1/x ] 
+10. Combinators 
+
+
+
+In this section we will discuss several powerful operations 
+for manipulating relations. These are called combinators because 
+of their similarity to the combinators of Curry and Feys [4]. 
+
+
+
+- 16 - 
+
+
+
+First observe the action of the (x f ) and ( ,y) functions 
+
+
+
+(x,):y = (x,y) 
+(,y):x = (x,y) 
+
+
+
+Now note that 
+
+
+
+f(x,): y = f:[(x,):y] = f:(x,y) 
+
+In general, if f is a binary function, then f(x,) and f(,y) are 
+the "partially instantiated" unary functions. This is the effect 
+of Curry and Feys "B" combinator [4] , the elementary compositor . 
+
+If ' :R = R~* x then, since S~ x is the reverse of a sequence, 
+ir' is the reverse form of an operation. For instance, (-) ' is 
+the reverse subtract operation: 
+
+(-)':(x,y) = (-):(': (x,y)) 
+
+= (-):(y,x) 
+
+= y-x 
+
+Thus (-) ' can be read "subtract from" and (/) ' can be read 
+"divide into". This is Curry and Feys "C" combinator, or elemen- 
+tary permutator . 
+
+The next combinator we will discuss is the paralleling of 
+relations, ^, which is defined: 
+
+
+
+(v)(§)(y) &lt;-» uRxAvSy 
+
+
+
+- 17 - 
+
+So, ii r and g ate tunctions, 
+
+(g~) : (y) = (giy) 
+
+Hence, ~ is the element-wise combination or f and g. 
+
+Another combinator is the elementary duplicator , W, detined 
+so that 
+
+(W: r) : x = f : (x ,x) 
+
+It we detine A^ x = (*/*) then it is easy to see that W:f is just 
+i/\&gt;. For instance, (x)A 1S the squaring function: 
+
+(x)A:n = (x) : (A:n) = (x):(n,n) = nxn = n 2 
+
+It should be clear that Backus' [f,g] combining form is just our 
+^A,, since 
+
+!*« ■ (4)«(i) - (III!) 
+
+Since this combination is so common we will adopt a special nota- 
+tion for it: 
+
+Hence, §j :x = (|j*) 
+
+Some of the properties satisfied by these combinators are: 
+
+
+
+- 18 - 
+
+
+
+R T 
+S TX 
+
+
+
+fl) n - 
+
+
+
+T 
+R Tj 
+
+s o] 
+£R 
+
+©' 
+
+■a 
+
+oc 
+
+UJ 
+
+R 
+S 
+
+cl 
+ct 
+
+
+
+RT 
+
+str 
+
+
+
+RT 
+ST 
+
+RTJ 
+SO] 
+
+
+
+■ §1 
+
+
+
+S _ 
+
+R 
+
+
+
+■(§ 
+
+
+
+R&gt; (Rm:g) 
+S&gt; (Rm:f ) 
+
+
+
+sun 
+
+
+
+■ Si" 1 
+
+
+
+As an example of these combinators it is easy to show that 
+
+
+
+f = (+J-UIA 
+
+
+
+23T 
+
+
+
+is the function f:t = 
+
+
+
+t 2 +2t 
+
+
+
+Our last combinatot is the meta-application operator, 
+which corresponds to Curry and Feys' S combinator: 
+
+(f : :g) : x = (f :x) : (g:x) 
+
+
+
+For instance, [(!)'] ::init is the operation that gives the set of 
+
+
+
+descendents of roots of 
+([(!)']: :init) :F = (F" 1 ! ) : ( init :F) . 
+
+
+
+forest, F, 
+
+
+
+since 
+
+
+
+- 19 - 
+
+11. Ar tays 
+
+An array is just a runction from a contiguous subset of the 
+integers to some set of values. Ii A is an array and i Rm A then 
+A:i is the i-th element 01 A. Similarly, it I C Rm:A is a set of 
+index values then A!:I is the corresponding set of array values 
+and A&gt;I is the subarray of A selected by those indices. 
+
+It is easy to define multi-dimensional arrays: they are 
+just arrays whose elements are selected by sequences of integers, 
+e.g. M:(i,j). If M is a two-dimensional array, then M(i,) is the 
+i-th row of M and M(,j) is the j-th column of M. Also, if I is a 
+set of row indices and J is a set 01 column indices then M&gt;(IXJ) 
+is the submatrix on M selected by these sets. It is easy to see 
+that M' is the transpose of M, since 
+
+M':(i,j) = M:(':(i,j)) = M:(j,i) 
+
+More generally, if P is a permutation function (i.e. a bijection 
+from an index set into itself) then AP is the result of permuting 
+A by P. 
+
+Suppose x is an element of the array A (i.e., for some i, 
+x=A:i). Then A:x is the set of all indices for which x=A:i. 
+Therefore we can find the index of the first occurence of x in A 
+(i.e. APL ' s iota operator) by minA:x. In general, if P is some 
+property (i.e. class) , then h~^ I :P is the set of indices of all 
+elements of A that satisfy P. A sorted reflexive sequence of 
+
+
+
+- 20 - 
+
+these indices is just &lt; S (A" X 1:P) 
+
+It is easy to convert arrays to sequences and vice ver sa . 
+Suppose all the elements of A are distinct, then A" 1 is a func- 
+tion that returns the index of an element of A. We want to 
+define a sequence S such that xSy if and only if x preceeds y in 
+A, i.e. the index of x is one less than the index on y. 
+
+
+
+xSy 4-&gt; (A^rx) = (A"" 1 ^)-! 
+«-&gt; (A rl :x) (-1) (A^ry) 
+«-» x[A| (-1) |A"" 1 ]y 
+
+
+
+Hence, S = Ai-IJA" 1 
+
+
+
+We will finish our discussion of arrays by investigating the 
+generation of sorted arrays. Let S be a set of integers to be 
+sorted, then &lt;*S is a structure which relates lesser elements to 
+
+
+
+greater elements. Now if x is any element of the set, (&lt;SS):x is 
+
+
+
+the set of all elements less than x. Thus [#(&lt;SS)]:x is the 
+number of elements of S less than or equal to x. This is just 
+the index of x in the sorted array we seek. Hence if A is the 
+sorted array, xAi if and only if i [# (&lt;*S) ] x, so A = [tKSS)]"" 1 . 
+Of course this can be generalized to any ordering relation. 
+
+12. Scanning Structures 
+
+It is often useful to scan a structure while performing some 
+processing at each node. When the data structure is a sequence 
+
+
+
+- 21 - 
+
+this amounts to APL ' s reduce operator and Backus' insert opera- 
+tor. We will derine a scanning operation that works on a more 
+general class or structures. This operator can be understood 
+intuitively as follows: The state of the scanning process is 
+represented by a set or "read heads" each of which is "positioned 
+over" a node and holds state information accumulated from the 
+nodes it has already visited. A node can be processed when a 
+read head has moved to that node over each edge which leads into 
+the node. When this occurs a processing function is applied to 
+the node (as first parameter) and the union of the state informa- 
+tion of each of the read heads (as second parameter). The result 
+of this processing step becomes the state intormation associated 
+with a new set of read heads which are advanced along each edge 
+leading out from the node. The processing of the structure is 
+completed when all read heads have arrived at terminal nodes 
+(hence this scanning operation is not defined tor cyclic struc- 
+tures) . Scanning a structure is started by positioning a read 
+head with initial state information over each initial node. 
+
+The scanning operation is symbolized by fli, where f is the 
+processing function and i is the initial state for the read 
+heads. For instance, if V is a vector, (+)I0:V will scan the 
+elements of V using ( + ) (i.e. APL +/V or Backus' (/+) :V) . For a 
+more interesting example, suppose T is an attributed parse tree, 
+E is a function that evaluates attributes and B is the initial 
+set of attribute bindings. Then ElB:T propogates the values of 
+
+
+
+- 22 - 
+
+inhetited attributes down to the leaves ot the tree. Conversely, 
+ElBtCT"" 1 ) propogates the values of synthesized attributes back to 
+the root. Hence, repeated applications of ElB and (ElB) ' will 
+evaluate all of the attributes. Of course, this program will 
+work just as well if T is a forest of parse trees. The I opera- 
+tor is still undergoing evaluation as it is one of several possi- 
+ble structure-directed scanning operations. 
+
+13. Examples 
+
+In this section we will give several examples of relational 
+programs. 
+
+PAYROLL EXAMPLE: Suppose we have a file $ of employee 
+records, where r = |:n is the record for the employee with the 
+employee number n. We will suppose that employee records are 
+functions defined so that: 
+
+r :N = employee name 
+
+r:H = hours worked so far this week 
+
+r:R = pay rate 
+
+We are given an update file U such that U:n is the number of 
+hours worked by employee n today. We wish to generate a new pay- 
+roll file $• . 
+
+SOLUTION: Let r = $:n and r 1 = $':n be the old and new 
+employee records. It is clear that r 1 is the same as r except 
+
+
+
+- 23 - 
+
+tot its H field. In order to tnodiiy part of a relation, we will 
+use the Md tunction detined by: 
+
+Md: (S,R) = R V S&gt; (-Rm:R) 
+
+Then, it h 1 represents the new value of the H field, the new 
+employee record is 
+
+r ■ = Md: (r , (h 1 ,H) ) 
+
+Now, h' is just the cumulative hours worked: 
+
+
+
+h' 
+
+
+
+($:n) :H + U:n 
+
+
+
+By combining these results we have, 
+
+I' :n = r' = Md : ( $:n, (h' ,H)) 
+
+To find $ ' we must factor out the employee number n. To do this, 
+note that ($:n):H = (:H):($:n) = (:H)$:n. That is, (:H)§ is a 
+slice of the payroll file: the hours worked for each employee. 
+Therefore , 
+
+
+
+h' 
+
+
+
+($:n):H + U:n = (:H)$:n + U:n 
+
+
+
+(+)liHli 
+
+
+
+: n 
+
+
+
+Now, define the updating function u by 
+
+
+
+u:n = ( (+)IigH| :n, H ) = ( ,H) (+)Ii§U 
+
+
+
+: n 
+
+
+
+Then, §':n = Md : (f&gt; :n ,u :n) = Md^J : n. Ther f or e , the solution t&lt; 
+
+
+
+- 24 - 
+
+out problem, the new payroll file, is 
+
+where u = (,H)( + )lig!I 
+
+
+
+CHECK ISSUING EXAMPLE: Suppose we wish to take the payroll file 
+from the previous example and generate checks for the employees. 
+We will assume that a function C is available such that C:(nm,p) 
+returns a check in the amount p made out to the name nm. 
+
+SOLUTION: We will ignore overtime computations. Hence, if n 
+is an employee number then f&gt;:n:N is his name and 
+
+p:n = §:n:H x $:n:R 
+
+is his pay. Hence, his check c:n is c:n = C:(nm,p:n) = C: [n™n) 
+
+= c ./(:N)$:n\ = r (;N)S |. n 
+u ' I p:n / ' {T — I * n 
+
+Combining these we have the file F mapping employee numbers into 
+checks : 
+
+f = c-USli 
+
+
+
+nr 
+
+
+
+H£i* 
+
+
+
+from which we can factor out the old payroll file: 
+
+
+
+F = C_iiL 
+
+— nr 
+
+
+
+*4S1 
+
+
+
+If we just want a set of checks, this is Lm:F, 
+
+
+
+- 25 - 
+
+14. Implementation Notes 
+
+The primary goal on out investigation has been to determine 
+if relational programming is significantly better than conven- 
+tional methods. It would be premature to devote much effort to 
+implementation studies betore it is even determined it relational 
+programming is an effective programming methodology. However, a 
+brief discussion of implementation possibilities is probably not 
+out of line. 
+
+The most obvious representation ot a relation is the exten- 
+sional representation, in which all the elements ot a relation or 
+class are explicitly represented in memory. There are many kinds 
+of extensional representations, such as hash tables, binary trees 
+and simple sorted tables. Of course, performance can be improved 
+through the use of associative memories and active memories (in 
+which each memory cell has a limited processing capability). 
+
+Some relations and classes will be so large that it is 
+uneconomical to represent them explicitly in memory. In these 
+cases an intensional representation should be used. Here a class 
+or relation is represented by a formula or expression for comput- 
+ing that relation or class. Operations on the class or relation 
+are implemented as formal operations on the expression. This is 
+feasible because of the simple algebraic properties satisfied by 
+relations. It can be seen that an intensional representation is 
+really just a variant of a lazy evaluation mechanism. Sometimes 
+
+
+
+- 26 - 
+
+an intensional representation is necessary; for instance, rela- 
+tions of infinite cardinality, such as the numerical operators 
+and relations, require an intensional representation. 
+
+Although the programmer could be allowed to choose between 
+extensional and intensional representations for his relations, 
+this is not necessary. It is probably feasible, and certainly 
+higher level, to have the system choose representations on the 
+basis of cardinality estimates of the classes and relations 
+involved. The algebra of relations is regular enough that many 
+of these decisions can be made at compile time. Any that can't 
+can be deferred to run-time when exact cardinality information is 
+available. 
+
+15. Conclusions 
+
+Of course, we are not the first to propose introducing 
+aspects of a relational calculus into programming. Space limita- 
+tions prohibit a comparison with previous work, such as that by 
+Feldman and Rovner [5], Codd [3] and Childs [2]. What does dis- 
+tinguish this investigation is the exclusive use of relations in 
+a general purpose programming language. It is hoped that the 
+preceeding discussion has made plausible some of the advantages 
+claimed for relational programming in the Introduction. Consid- 
+erable work remains to be done in evaluating the effectiveness of 
+a relational calculus as a programming tool. For instance, the 
+
+
+
+- 27 - 
+
+optimum set of combinatots and relational operators must be 
+selected. Another non-trivial problem is the selection of a good 
+notation for the relational calculus. More from convenience than 
+conviction we have used the notation of [8] and [1], Making 
+relational programming an etfective tool will require designing a 
+notation that combines readability with the manipulative advan- 
+tages or a two-dimensional algebraic notation. This is all prel- 
+iminary to any serious considerations of software or hardware 
+implementation techniques. The reader who is interested in more 
+details about programming in a relational calculus should consult 
+[7]. 
+
+16. References 
+
+[1] Carnap, R. Introduction to Symbolic Logic and its Applica- 
+tions , Dover, 1958. 
+
+[2] Childs, D.L. Feasibility of a set-theoretic data structure 
+based on a reconstituted definition or relation. IFIP 68 
+Proceedings , 420-430, North-Holland, 1969. 
+
+[3] Codd , E.F. A relational model for large shared data banks, 
+CACM 13 , 6 (June 1970) , 377-387. 
+
+[4] Curry, H.B., Feys , R. and Craig, W. Combinatory Logic , I_, 
+North-Holland, Amsterdam, 1958. 
+
+
+
+- 28 - 
+
+[5] Feldman, J. A. and Rovnet , P.D. An Algol-based associative 
+language, CACM 12 , 8 (August 1969) , 439-449. 
+
+[6] MacLennan, B.J. Fen - an axiomatic basis for program 
+semantics, CACM 16 , 8 (August 1973), 468-474. 
+
+[7] MacLennan, B.J. Programming with a Relational Calculus , 
+Computer Science Department Technical Report, Naval Post- 
+graduate School, 1981. 
+
+[8] Whitehead, A.N. and Russell, B. Pr incipia Mathematica to 
+*56, Cambridge, 1970. 
+
+
+
+INITIAL DISTRIBUTION LIST 
+
+
+
+Defense Technical Information Center 2 
+
+Cameron Station 
+Alexandria, VA 22314 
+
+Dudley Knox Library 2 
+
+Code 0142 
+
+Naval Postgraduate School 
+
+Monterey, CA 93940 
+
+Office of Research Administration 1 
+
+Code 01 2A 
+
+Naval Postgraduate School 
+
+Monterey, CA 93940 
+
+Chairman, Code 52Bz 40 
+
+Department of Computer Science 
+Naval Postgraduate School 
+Monterey, CA 93940 
+
+Professor Bruce J. MacLennan, Code 52M1 12 
+
+Department of Computer Science 
+Naval Postgraduate School 
+Monterey, CA 93940 
+
+
+
+"197788 
+
+
+
+DUDLEY KNOX LIBRARY - RESEARCH REPORTS 
+
+minium ■ 
+
+
+
+5 6853 01057742 2 
+
+
+
+U1V/78 
