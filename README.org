@@ -1,13 +1,54 @@
 
+* relational programming
+
 Papers on relational programming by [[http://web.eecs.utk.edu/~mclennan/][Bruce J Maclennan]].
 
 | date     | title                                             | filename                     |
 |----------+---------------------------------------------------+------------------------------|
-| jun 1981 | [[https://archive.org/details/introductiontore00macl][Introduction to Relational Programming]]            | [[file:bjm-1981-rel-intro.txt][bjm-1981-rel-into.txt]]        |
-| sep 1981 | [[https://archive.org/details/programmingwithr00macl][Programming with a Relational Calculus]]            | [[file:bjm-1981-rel-calculus.org][bjm-1981-rel-calculus.org]]    |
-| nov 1981 | [[https://archive.org/details/overviewofrelati00macl][Overview of Relational Programming]]                | [[file:bjm-1981-rel-overview.txt][bjm-1981-rel-overview.txt]]    |
-| apr 1982 | [[https://archive.org/details/relationalprogra00macl][A Relational Program for a Syntax Directed Editor]] | [[file:bjm-1981-rel-syndir.txt][bjm-1981-rel-syndir.txt]]      |
-| sep 1983 | [[https://archive.org/details/relationalprogra83012macl][Relational Programming]]                            | [[file:bjm-1981-rel-programming.txt][bjm-1981-rel-programming.txt]] |
-| nov 1986 | [[https://archive.org/details/fourrelationalpr00macl][Four Relational Programs]]                          | [[file:bjm-1981-four-programs.txt][bjm-1981-four-programs.txt]]   |
+| Jun 1981 | [[https://archive.org/details/introductiontore00macl][Introduction to Relational Programming]]            | [[file:bjm-1981-rel-intro.txt][bjm-1981-rel-into.txt]]        |
+| Sep 1981 | [[https://archive.org/details/programmingwithr00macl][Programming with a Relational Calculus]]            | [[file:bjm-1981-rel-calculus.org][bjm-1981-rel-calculus.org]]    |
+| Nov 1981 | [[https://archive.org/details/overviewofrelati00macl][Overview of Relational Programming]]                | [[file:bjm-1981-rel-overview.txt][bjm-1981-rel-overview.txt]]    |
+| Apr 1982 | [[https://archive.org/details/relationalprogra00macl][A Relational Program for a Syntax Directed Editor]] | [[file:bjm-1981-rel-syndir.org][bjm-1981-rel-syndir.org]]      |
+| Sep 1983 | [[https://archive.org/details/relationalprogra83012macl][Relational Programming]]                            | [[file:bjm-1981-rel-programming.txt][bjm-1981-rel-programming.txt]] |
+| Nov 1986 | [[https://archive.org/details/fourrelationalpr00macl][Four Relational Programs]]                          | [[file:bjm-1981-four-programs.txt][bjm-1981-four-programs.txt]]   |
 
-The links in the 'title' column go to scanned copies at the internet archive.
+(The links in the 'title' column go to scanned copies at the internet archive.)
+
+* Experience with Ω
+
+The omega language and programming environment built on the relational programming concepts in the above papers, extending them to the realm of object-oriented programming.
+
+- 1985 [[https://archive.org/details/experiencewithom00macl][Part I]] :: arithmetic expressions
+- 1985 [[https://archive.org/details/experiencewithom02macl][Part II]] :: block structured definitions
+- 1985 [[https://archive.org/details/experiencewithom03macl][Part III]] :: comments and conditionals
+- 1985 [[https://archive.org/details/experiencewithom04macl][Part IV]] :: higher order functions
+- 1985 [[https://archive.org/details/experiencewithom05macl][Part V]] :: code generator
+- 1985 [[https://archive.org/details/experiencewithom06macl][Part VI]] :: a universal syntax editor
+
+* other papers
+
+| Apr 1981 | [[https://archive.org/details/valuesobjectsinp00macl][Values and Objects in programmig languages]]                                                      |
+| Aug 1981 | [[https://archive.org/details/elementsofprogra00macl][Elements of Programming Linguistics, Part 1: The Lambda Calculus and its Implementation]]         |
+| Sep 1981 | [[https://archive.org/details/structuralanalys00macl][The structural analysis of programming languages]]                                                |
+| Oct 1981 | [[https://archive.org/details/automaticgenerat00macl][The automatic generation of syntax directed editors]]                                             |
+| Nov 1981 | [[https://archive.org/details/measuringcontrol00macl][Measuring control structure complexity through execution sequence grammars]]                      |
+| Sep 1982 | [[https://archive.org/details/simplenaturalnot00macl][A Simple, Natural Notation for Application Languages]]                                            |
+| Oct 1982 | [[https://archive.org/details/simplemetricsfor00macl][Simple metrics for programming languages]]                                                        |
+| Feb 1983 | [[https://archive.org/details/viewofobjectorie00macl][A view of object-oriented programming]]                                                           |
+| Apr 1983 | [[https://archive.org/details/abstractioninint00macl][Abstraction in the INTEL iAPX-432 prototype systems implementation language]]                     |
+| Aug 1983 | [[https://archive.org/details/computersciencev00macl][A computer science version of Gödel's Theorem]]                                                   |
+| Sep 1983 | [[https://archive.org/details/concurrencysynch00macl][Concurrency and Synchronization in the INTEL iAPX-432 prototype systems implementation language]] |
+| Oct 1983 | [[https://archive.org/details/commentaryonmill00macl][A commentary on Mill's Logic Book I of names and propositions]]                                   |
+| Jun 1984 | [[https://archive.org/details/simpleproofofgen00macl][A simple proof of a generalized Church-Rosser theorem]]                                           |
+| Aug 1984 | [[https://archive.org/details/informationtheor00macl][Information-theoretic properties of languages and their grammars]]                                |
+| Dec 1984 | [[https://archive.org/details/fourformsofomega62macl][The four forms of Ω]]                                                                             |
+| Apr 1985 | [[https://archive.org/details/simplesoftwareen00macl][A simple software environment based on objects and relations]]                                    |
+| Feb 1986 | [[https://archive.org/details/preliminaryinves00macl][Preliminary investigation of a calculus of functional differences : fixed differences]]           |
+| Sep 1987 | [[https://archive.org/details/algebraicapproac00macl][An algebraic approach to a calculus of functional differences: fixed differences and integrals]]  |
+| Sep 1987 | [[https://archive.org/details/fieldcomputation00macl][Field computation and nonpropositional knowledge]]                                                |
+
+
+Since 1987, professor MacLennan has been a faculty member in the Department of Computer Science (now Electrical Engineering and Computer Science) of the University of Tennessee, Knoxville. 
+
+Some of [[http://web.eecs.utk.edu/~mclennan/papers.html][his papers from 1999-2012]] can be found via [[http://web.eecs.utk.edu/~mclennan/][his home page]].
+
