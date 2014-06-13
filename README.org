@@ -1,0 +1,13 @@
+
+Papers on relational programming by [[http://web.eecs.utk.edu/~mclennan/][Bruce J Maclennan]].
+
+| date     | title                                             | filename         |
+|----------+---------------------------------------------------+------------------|
+| jun 1981 | [[https://archive.org/details/introductiontore00macl][Introduction to Relational Programming]]            |                  |
+| sep 1981 | [[https://archive.org/details/programmingwithr00macl][Programming with a Relational Calculus]]            | file:relcalc.org |
+| nov 1981 | [[https://archive.org/details/overviewofrelati00macl][Overview of Relational Programming]]                |                  |
+| apr 1982 | [[https://archive.org/details/relationalprogra00macl][A Relational Program for a Syntax Directed Editor]] |                  |
+| sep 1983 | [[https://archive.org/details/relationalprogra83012macl][Relational Programming]]                            |                  |
+| nov 1986 | [[https://archive.org/details/fourrelationalpr00macl][Four Relational Programs]]                          |                  |
+
+The links in the 'title' column go to scanned copies at the internet archive.
