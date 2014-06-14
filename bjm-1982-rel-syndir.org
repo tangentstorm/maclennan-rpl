@@ -1,5 +1,4 @@
 #+TITLE: A Relational Program for a Syntax-Directed Editor
-#+original: https://archive.org/details/relationalprogra00macl
 
 
 * A RELATIONAL PROGRAM FOR A SYNTAX DIRECTED EDITOR [fn:nps]
@@ -7,6 +6,9 @@ B. J. MacLennan
 Computer Science Department
 Naval Postgraduate School
 Monterey, CA 93940
+
+scanned original: https://archive.org/details/relationalprogra00macl
+
 
 * 1. Introduction
 
