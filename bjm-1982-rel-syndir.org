@@ -1,4 +1,6 @@
 #+TITLE: A Relational Program for a Syntax-Directed Editor
+#+original: https://archive.org/details/relationalprogra00macl
+
 
 * A RELATIONAL PROGRAM FOR A SYNTAX DIRECTED EDITOR [fn:nps]
 B. J. MacLennan
@@ -40,7 +42,7 @@ Trees are composed of /nodes/ and other values associated with the nodes. The =T
 
 Each node in the tree has an associated value depending on whether the node is /undefined/ or /defined/. An undefined node represents a part of the program that has not been entered, so it has a non-terminal name associated with it. This association is defined by the function =Tu=:
 
-: Tu ∈ nodes → non -terms
+: Tu ∈ nodes → non-terms
 
 # page 4
 
@@ -189,7 +191,7 @@ As usual, we have extended the function with =total= to handle nodes for which =
 The remaining two positioning commands are =succ= and =pred=. These are used for moving to the succeeding and preceding members of a sequence. Their effect is shown in Figure 3. It can be seen that =succ= is a =next= followed by an =in=, and =pred= is an =out= followed by a =prev=:
 
 : succ = next; in
-: pred = out ; prev
+: pred = out; prev
 
 *** TODO Figure 3. Effect of 'succ' and 'pred'
 ** 3.3 Editing Commands
@@ -517,7 +519,7 @@ This completes the definition of the syntax-directed editor. All of the definiti
 #+begin_src text
   enter = udf → select . (T N,)
   udf = img T⁻¹ non-terms
-  select = [ process.Alts / (;).(process.Forw | | enter) ]
+  select = [ process.Alts / (;).(process.Forw || enter) ]
   process = in.replace.new.second
 #+end_src
 
