@@ -1,0 +1,7 @@
+* Source code for the RP system and papers.
+
+I contacted Dr. MacLennan in Jul 2021 to confirm I had the author
+information correct, and he was kind enough to send me the original
+=troff= sources for some of the papers, as well as RP source code for
+the example programs, and lisp code for the RP interpreter itself.
+
