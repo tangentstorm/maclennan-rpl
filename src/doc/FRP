@@ -1,4 +1,4 @@
-.fp 5 sr
+.fp 5 H
 .PH "''''"
 .PF "''-\\\\nP-''"
 .S +1
@@ -6,6 +6,7 @@
 gsize +1
 define 1st ' rom "1st" '
 define 2nd ' rom "2nd" '
+define RR ' roman '
 .EN
 .DS 2
 .ul
@@ -1108,7 +1109,7 @@ define identifier ' "identifier" '
   OR string OR bold true OR bold false ENDALT$
 .sp
 			$string~~=~~$``$~char sup *~$''
-.bp
+.sp
 		
 		$infixop~~=~~$ 
 		  sel | , : cup member nomem !subset subset = -> <- restr ; cl cr cap \e
@@ -1154,7 +1155,7 @@ transitive closure	t sup +	t sup +	$t sup +$
 empty set	empty	empty	$empty$
 .TE
 .DE
-.SP 1
+.bp
 .DS  2
 .TB "Nonprimitive Extensional Operations:  Group 1"
 .DE

@@ -1,6 +1,6 @@
-.TH EQNCHAR 7 "1 February 1983"
 .UC
 .EQ
+delim $$
 tdefine ciplus % "\o'\(pl\(ci'" %
 ndefine ciplus % O+ %
 tdefine citimes % "\o'\(mu\(ci'" %

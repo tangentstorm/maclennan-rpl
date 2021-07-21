@@ -1,4 +1,4 @@
-.fp 6 sr
+.fp 6 H
 .EQ
 define dollar ' roman "$" '
 delim $$

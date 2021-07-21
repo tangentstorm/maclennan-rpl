@@ -1,6 +1,9 @@
 .PH ""
 .PF "''- \\\\nP -''"
-.S +2
+.EQ
+delim $$
+define RR ' roman '
+.EN
 .DS 2
 RELATIONAL PROGRAMMING LANGUAGE INPUT FORMS
 .DE

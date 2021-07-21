@@ -1,6 +1,7 @@
 .ls 2
 .EQ
 delim $$
+define RR ' roman '
 define non ' wig '
 define K ' bold "K" '
 define Un ' union '

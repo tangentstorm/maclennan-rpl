@@ -1,4 +1,5 @@
 .EQ
+define RR ' roman '
 define ALT ' left { lpile {~ '
 define OR ' above~ '
 define ENDALT ' }~right } '

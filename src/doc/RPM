@@ -1,6 +1,7 @@
 .ls 2
 .EQ
 delim $$
+define RR ' roman '
 define Isa " member "
 define Of " ~ "
 define img ' roman "img" '
@@ -41,7 +42,7 @@ define final " OMEGA "
 define catn " ~ hat "
 define scan " \(dd "
 define str ' roman "size" '
-define cnv " cnv "
+define cnv ' roman "cnv" '
 define insert " \(sc "
 define arrow " \(-> "
 define equiv " <=> "

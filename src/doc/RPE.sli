@@ -7,6 +7,7 @@
 .S 26
 .EQ
 gsize 20
+define RR ' roman '
 .EN
 .DS 2
 .ul 2
