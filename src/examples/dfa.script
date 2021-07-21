@@ -1,0 +1,20 @@
+DO YOU WANT TO RESUME A PREVIOUS RPL SESSION? <y/n> y
+INPUT FILENAME 
+examples/dfa.rpl
+Loading--- Session loaded 
+?> val Q_sub_=
+
+ ( set  ( set  10  20 )  ( set  10  20 )  ( set  30 ) ) 
+
+?> val T_sub_=
+
+ ( rel  ( 1  ( rel  ( ( set  10  20 )  ( set  10  20 ) )  ( ( set  10  20 )  ( 
+ set  10  20 ) ) ) )  ( 2  ( rel  ( ( set  10  20 )  ( set  30 ) )  ( ( set  10  
+ 20 )  ( set  30 ) ) ) ) ) 
+
+?> val F_sub_=
+
+ ( set  ( set  30 ) ) 
+
+?> done
+

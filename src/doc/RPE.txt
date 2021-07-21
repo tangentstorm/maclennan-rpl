@@ -1,0 +1,231 @@
+Given $S sel i$ = $i sup th$ word.
+.sp
+$S$ =
+.DS
+.TS
+center,box;
+l|l.
+1	`to'
+2	`be'
+3	`or'
+4	`not'
+5	`to'
+6	`be'
+.TE
+.DE
+.sp 2
+Want $F sel w$ = freq. of word $w$.
+.sp
+$F$ =
+.DS
+.TS
+center,box;
+l|l.
+`to'	2
+`be'	2
+`or'	1
+`not'	1
+.TE
+.DE
+.SL
+First reverse columns
+.sp
+$S sup -1$ =
+.DS
+.TS
+center,box;
+l|l.
+`to'	1
+`be'	2
+`or'	3
+`not'	4
+`to'	5
+`be'	6
+.TE
+.DE
+.sp 2
+Form the ``unit image'' of the table
+.sp
+$rom unimage~T sup -1$ =
+.DS
+.TS
+center,box;
+l|l.
+`to'	{1, 5}
+`be'	{2, 6}
+`or'	{3}
+`not'	{4}
+
+.TE
+.DE
+Send this through the size function
+.DS
+.TS
+center,box;
+l|l.
+`to'	{1, 5}
+`be'	{2, 6}
+`or'	{3}
+`not'	{4}
+
+.TE
+.DE
+.DS 2
+$rp$
+.DE
+.DS
+.TS
+center,box;
+l|l.
+{}	0
+{1}	1
+{4}	1
+{2, 6}	2
+{4, 8}	2
+{4, 6, 7}	3
+$3dot$	$3dot$
+
+.TE
+.DE
+.DS 2
+$||$
+.DE
+.DS
+.TS
+center,box;
+l|l.
+`to'	2
+`be'	2
+`or'	1
+`not'	1
+.TE
+.DE
+The resulting program is:
+.DS 2
+$F~==~rom unimage~S sup -1~rp~card$
+.DE
+.sp 5
+We can turn it into a function definition to compute
+the frequency table for any string by:
+.DS 2
+$rom freq~S~~==~~rom unimage~S sup -1 ~rp~card$
+.DE
+.nf
+RPL INTERPRETER ON LINE!! 
+
+?> S == (list "to" "be" "or" "not" "to" "be"]
+
+?> (S sup -1]
+
+ ( rel  ( be  6 )  ( to  5 )  ( not  4 )  
+  ( or  3 )  ( be  2 )  ( to  1 ) ) 
+
+?> (unimage (S sup -1]
+
+ ( set  ( be  ( set  6  2 ) )  ( to  ( set  5  1 ) )  
+  ( not  ( set  4 ) )  ( or  ( set  3 ) )  
+  ( be  ( set  6  2 ) )  ( to  ( set  5  1 ) ) ) 
+
+?> ((unimage (S sup -1))
+ rp size]
+
+ ( rel  ( be  2 )  ( to  2 )  ( not  1 )  ( or  1 )  
+  ( be  2 )  ( to  2 ) ) 
+
+?> freq S == ((unimage (S sup -1)) rp size]
+
+?> (freq (list "to" "be" "or" "not" "to" "be"]
+
+ ( rel  ( be  2 )  ( to  2 )  ( not  1 )  ( or  1 )  
+  ( be  2 )  ( to  2 ) ) 
+
+?> done
+.DE
+.SL
+Pretty Printed Form of Program
+.sp
+.DS
+?> $rom freq~S~~==~~ rom unimage~ S sup -1   ~rp~card $
+
+?> freq <"to", "be", "or", "not", "to", "be">
+
+{"be" : 2, "to" : 2, "not" : 1, "or" : 1}
+
+?> $done$
+.DE
+.SL
+.DS 1
+RPL INTERPRETER ON LINE!! 
+?> F == (rel (124 :
+ (rel ("N" : "John") ("R" : 10) ("H" : 100)))
+(118 :
+ (rel ("N" : "Bill") ("R" : 15) ("H" : 120)))
+(207 :
+ (rel ("N" : "Sally") ("R" : 14) ("H" : 115]
+
+?> U == (rel (118 : 6) (124 : 40) (207 : 40]
+
+?> (F # U]
+
+ ( rel  ( 124  ( rel  
+   ( 1  ( rel  ( N  John )  ( R  10 )  ( H  100 ) ) )  
+   ( 2  40 ) ) )  
+  ( 118  ( rel  
+   ( 1  ( rel  ( N  Bill )  ( R  15 )  ( H  120 ) ) )  
+   ( 2 6 ) ) )  
+  ( 207  ( rel  
+   ( 1  ( rel  ( N  Sally )  ( R  14 )  ( H  115 ) ) )  
+   ( 2 40 ) ) ) ) 
+.DE
+.SL
+.DS
+?> sumhrs == ((op +) o ((rsec sel "H") || I]
+
+?> upd == ((F # U) rp 
+     (as o ((lsec "H" ,) o sumhrs]
+
+?> F' == ((upd # F) rp (op ;]
+
+?> val F'
+
+ ( rel  ( 124
+   ( rel  ( H  140 )  ( N  John )  ( R  10 ) ) )  
+  ( 118  
+   ( rel  ( H 126 )  ( N  Bill )  ( R  15 ) ) )  
+  ( 207  
+   ( rel  ( H  155 )  ( N  Sally )  ( R 14 ) ) ) ) 
+
+?> done
+
+.DE
+.DS
+(F == (rel (124 :
+  (rel ("N" : "John") ("R" : 10) ("H" : 100))) 
+ (118 :
+  (rel ("N" : "Bill") ("R" : 15) ("H" : 120)))
+ (207 :
+  (rel ("N" : "Sally") ("R" : 14) ("H" : 115)))))
+
+(U == (rel (118 : 6) (124 : 40) (207 : 40)))
+
+(sumhrs == ((op +) o ((rsec sel "H") | | I)))
+
+(upd == ((F # U) rp 
+    (as o ((lsec "H" ,) o sumhrs))))
+
+(F' == ((upd # F) rp (op ;)))
+.DE
+.SL
+.DS
+$F~~==~~ ${124 : {"N" : "John", "R" : 10, "H" : 100},
+  118 : {"N" : "Bill", "R" : 15, "H" : 120},
+  207 : {"N" : "Sally", "R" : 14, "H" : 115}}
+
+$U~~==~~ "{"   118~:~6 , ~  124~:~40 , ~  207~:~40 "}"$
+
+$rom sumhrs~~==~~  [ + ] ~o~ (  [ sel~"H" ] ~||~I ) $
+
+$rom upd~~==~~  ( F~#~U ) ~rp~ ( as~o~ (  [ "H"~, ] ~o~rom sumhrs )  ) $
+
+$F'~~==~~  ( rom upd~#~F ) ~rp~ [ ; ]   $
+.DE

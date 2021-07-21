@@ -1,0 +1,6 @@
+(F == (rel (124 : (rel ("N" : "John") ("R" : 10) ("H" : 100))) (118 : (rel ("N" : "Bill") ("R" : 15) ("H" : 120))) (207 : (rel ("N" : "Sally") ("R" : 14) ("H" : 115)))))
+(U == (rel (118 : 6) (124 : 40) (207 : 40)))
+(sumhrs == ((op +) o ((rsec sel "H") || I)))
+(upd == ((F # U) rp (as o ((lsec "H" ,) o sumhrs))))
+(F' == ((upd # F) rp (op ;)))
+EOF

@@ -1,0 +1,24 @@
+.DS 1
+-- Gaussian Elimination
+
+$rom con~k~==~ func~x~k $
+$rom revr~f~==~  f~o~ (  [ sel~2 ] ~ , bar ~ [ sel~1 ]  )  $
+$x~divide~y~==~  [   [ =~3 ] ~o~ [ sel~2 ]   ~->~  rom con~0.33  ~;~  rom con~0.2   ] ~ <x,~y >  $
+$rom transmap~f~==~  [ rp~f ] ~o~ [ # ]  $
+$rom vecdif~==~ rom transmap~ [ - ]  $
+$rom scaprod~ ( k~v ) ~==~ v~rp~ [ k~times ]  $
+$rom outerprod~ ( u~v ) ~==~ u~rp~ ( rom scaprod~o~ [  ,~v ]   ) $
+$rom matdif~==~ rom transmap~rom vecdif $
+$rom column~ ( k~M ) ~==~ M~rp~ [ sel~k ]  $
+$rom unit~ ( k~M ) ~==~  < 1~to~ size~M  > ~rp~ [ [ =~k ] ~->~ rom con~1 ~;~ rom con~0  ] $
+$rom diag~ ( k~M ) ~==~  M~sel~k ~sel~k $
+$rom get~ ( k~M ) ~==~ M~sel~k $
+$f~for~S~==~  [ @~S ] ~o~ [ f~red ]  $
+$V~==~ rom scaprod~o~ (  (  [ 1~divide ] ~o~rom diag ) ~ , bar ~ ( rom vecdif~o~ ( rom column~ , bar ~rom unit )  )  )  $
+$rom elim~==~ rom matdif~o~ (  [ sel~2 ] ~ , bar ~ ( rom outerprod~o~ ( V~ , bar ~rom get )  )  )  $
+$rom Gauss~M~==~  (  rom revr~rom elim ~for~ < 1~to~ size~M  >  ) ~M $
+$M~==~ <  < 3,~9, ~33 >, ~ < 2,~-1,~1 >  > $
+$a~==~ rom diag~ < 1,~M >  $
+$b~==~ rom vecdif~ < rom column~ < 1,~M > ,~ rom unit~ < 1,~M >   >  $
+$v~==~ rom scaprod~ < 0.33,~b >  $
+.DE

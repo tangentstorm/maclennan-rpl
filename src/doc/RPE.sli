@@ -1,0 +1,380 @@
+.PH ""
+.de SL
+.S 10
+.SK
+.S 20
+..
+.S 26
+.EQ
+gsize 20
+.EN
+.DS 2
+.ul 2
+Relational
+.sp
+Programming
+.sp 2
+B. J. MacLennan
+Computer Science Department
+Naval Postgraduate School
+Monterey, CA 93943
+.DE
+.SL
+Given $S sel i$ = $i sup th$ word.
+.sp
+$S$ =
+.DS
+.TS
+center,box;
+l|l.
+1	`to'
+2	`be'
+3	`or'
+4	`not'
+5	`to'
+6	`be'
+.TE
+.DE
+.sp 2
+Want $F sel w$ = freq. of word $w$.
+.sp
+$F$ =
+.DS
+.TS
+center,box;
+l|l.
+`to'	2
+`be'	2
+`or'	1
+`not'	1
+.TE
+.DE
+.SL
+First reverse columns
+.sp
+$S sup -1$ =
+.DS
+.TS
+center,box;
+l|l.
+`to'	1
+`be'	2
+`or'	3
+`not'	4
+`to'	5
+`be'	6
+.TE
+.DE
+.sp 2
+Form the ``unit image'' of the table
+.sp
+$rom unimage~T sup -1$ =
+.DS
+.TS
+center,box;
+l|l.
+`to'	{1, 5}
+`be'	{2, 6}
+`or'	{3}
+`not'	{4}
+
+.TE
+.DE
+.SL
+Send this through the size function
+.DS
+.TS
+center,box;
+l|l.
+`to'	{1, 5}
+`be'	{2, 6}
+`or'	{3}
+`not'	{4}
+
+.TE
+.DE
+.DS 2
+$rp$
+.DE
+.DS
+.TS
+center,box;
+l|l.
+{}	0
+{1}	1
+{4}	1
+{2, 6}	2
+{4, 8}	2
+{4, 6, 7}	3
+$3dot$	$3dot$
+
+.TE
+.DE
+.DS 2
+$||$
+.DE
+.DS
+.TS
+center,box;
+l|l.
+`to'	2
+`be'	2
+`or'	1
+`not'	1
+.TE
+.DE
+.SL
+The resulting program is:
+.DS 2
+$F~==~rom unimage~S sup -1~rp~card$
+.DE
+.sp 5
+We can turn it into a function definition to compute
+the frequency table for any string by:
+.DS 2
+$rom freq~S~~==~~rom unimage~S sup -1 ~rp~card$
+.DE
+.SL
+.DS
+RPL INTERPRETER ON LINE!! 
+
+?> S == (list "to" "be" "or" "not" "to" "be"]
+
+?> (S sup -1]
+
+ ( rel  ( be  6 )  ( to  5 )  ( not  4 )  
+  ( or  3 )  ( be  2 )  ( to  1 ) ) 
+
+?> (unimage (S sup -1]
+
+ ( set  ( be  ( set  6  2 ) )  ( to  ( set  5  1 ) )  
+  ( not  ( set  4 ) )  ( or  ( set  3 ) )  
+  ( be  ( set  6  2 ) )  ( to  ( set  5  1 ) ) ) 
+
+?> ((unimage (S sup -1))
+ rp size]
+
+ ( rel  ( be  2 )  ( to  2 )  ( not  1 )  ( or  1 )  
+  ( be  2 )  ( to  2 ) ) 
+
+.DE
+.SL
+.DS
+?> freq S == ((unimage (S sup -1)) rp size]
+
+?> (freq (list "to" "be" "or" "not" "to" "be"]
+
+ ( rel  ( be  2 )  ( to  2 )  ( not  1 )  ( or  1 )  
+  ( be  2 )  ( to  2 ) ) 
+
+?> done
+.DE
+.SL
+Pretty Printed Form of Program
+.sp
+.DS
+?> $rom freq~S~~==~~ rom unimage~ S sup -1   ~rp~card $
+
+?> freq <"to", "be", "or", "not", "to", "be">
+
+{"be" : 2, "to" : 2, "not" : 1, "or" : 1}
+
+?> $done$
+.DE
+.SL
+.DS 1
+RPL INTERPRETER ON LINE!! 
+?> F == (rel (124 :
+ (rel ("N" : "John") ("R" : 10) ("H" : 100)))
+(118 :
+ (rel ("N" : "Bill") ("R" : 15) ("H" : 120)))
+(207 :
+ (rel ("N" : "Sally") ("R" : 14) ("H" : 115]
+
+?> U == (rel (118 : 6) (124 : 40) (207 : 40]
+
+?> (F # U]
+
+ ( rel  ( 124  ( rel  
+   ( 1  ( rel  ( N  John )  ( R  10 )  ( H  100 ) ) )  
+   ( 2  40 ) ) )  
+  ( 118  ( rel  
+   ( 1  ( rel  ( N  Bill )  ( R  15 )  ( H  120 ) ) )  
+   ( 2 6 ) ) )  
+  ( 207  ( rel  
+   ( 1  ( rel  ( N  Sally )  ( R  14 )  ( H  115 ) ) )  
+   ( 2 40 ) ) ) ) 
+.DE
+.SL
+.DS
+?> sumhrs == ((op +) o ((rsec sel "H") || I]
+
+?> upd == ((F # U) rp 
+     (as o ((lsec "H" ,) o sumhrs]
+
+?> F' == ((upd # F) rp (op ;]
+
+?> val F'
+
+ ( rel  ( 124
+   ( rel  ( H  140 )  ( N  John )  ( R  10 ) ) )  
+  ( 118  
+   ( rel  ( H 126 )  ( N  Bill )  ( R  15 ) ) )  
+  ( 207  
+   ( rel  ( H  155 )  ( N  Sally )  ( R 14 ) ) ) ) 
+
+?> done
+
+.DE
+.SL
+.DS
+(F == (rel (124 :
+  (rel ("N" : "John") ("R" : 10) ("H" : 100))) 
+ (118 :
+  (rel ("N" : "Bill") ("R" : 15) ("H" : 120)))
+ (207 :
+  (rel ("N" : "Sally") ("R" : 14) ("H" : 115)))))
+
+(U == (rel (118 : 6) (124 : 40) (207 : 40)))
+
+(sumhrs == ((op +) o ((rsec sel "H") | | I)))
+
+(upd == ((F # U) rp 
+    (as o ((lsec "H" ,) o sumhrs))))
+
+(F' == ((upd # F) rp (op ;)))
+.DE
+.SL
+.DS
+$F~~==~~ ${124 : {"N" : "John", "R" : 10, "H" : 100},
+  118 : {"N" : "Bill", "R" : 15, "H" : 120},
+  207 : {"N" : "Sally", "R" : 14, "H" : 115}}
+
+$U~~==~~ "{"   118~:~6 , ~  124~:~40 , ~  207~:~40 "}"$
+
+$rom sumhrs~~==~~  [ + ] ~o~ (  [ sel~"H" ] ~||~I ) $
+
+$rom upd~~==~~  ( F~#~U ) ~rp~ ( as~o~ (  [ "H"~, ] ~o~rom sumhrs )  ) $
+
+$F'~~==~~  ( rom upd~#~F ) ~rp~ [ ; ]   $
+.DE
+.SL
+.DS
+-- DFA Minimization
+
+-- Utility Functions
+
+$1st~~==~~ [ sel~1 ] $
+
+$2nd~~ ==~~ [ sel~2 ] $
+
+$r~ppd~s~~ ==~~ r~|~  s~|~r sup -1 $
+
+$sigma~f~~ ==~~  ( f~o~ ( 1st~ , bar ~ ( epsilon~o~2nd )  )  ) ~ , bar$
+  $(  [ setdif ] ~o~   ( I~ , bar ~ ( un~o~epsilon )  ) ~o~2nd   )  ) $
+
+$f~rho~i~~ ==~~ 1st~o~   (   sigma~f  ~while~ (  [ !=~empty ] ~o~2nd )  ) ~o~ [ i~, ]    $
+
+$union~~ ==~~  [ cup ] ~rho~empty  $
+.DE
+.SL
+.DS
+
+-- Example DFA
+
+$SIGMA~~ ==~~ "{" 1,~2 "}" $
+
+$T~~ ==~~ "{"  1~:~ "{"  10~:~10 , ~ 20~:~20 "}", ~  2~:~ "{"   10~:~30 , ~  20~:~30"}" "}"$
+
+$Q~~ ==~~ "{" 10,~20,~30 "}" $
+
+$F~~ ==~~ "{" 30 "}" $
+
+.DE
+.SL
+.DS
+-- Minimization
+
+$Q sup 2~~ ==~~ Q~cart~Q  $
+
+$n~~ ==~~ card~Q sup 2  $
+
+$R sub 0~~ ==~~ F~cart~ ( Q~setdif~F )  $
+
+$psi~R~~ ==~~ R~cup~  union ( rng~ ( T~rp~ [ ppd~R ]    )  ) $
+
+$R sub inf~~ ==~~  psi sup n  ~R sub 0  $
+
+$R sub =~~ ==~~  ( Q sup 2~setdif~R sub inf ) ~cap~ ( Q sup 2~setdif~ R sub inf sup -1 )   $
+
+$rom eclass~~ ==~~ [ R sub =~unimg ] $
+
+$rom equiv~~ ==~~  [ rom eclass~img ]$
+
+$Q sub =~~ ==~~ rom equiv~Q$
+
+$T sub =~~ ==~~ T~rp~ [ rom eclass~isom ]  $
+
+$F sub =~~ ==~~ rom equiv~F$
+.DE
+.SL
+.EQ
+define RR ' roman '
+define con ' RR "con" '
+define transmap ' RR "transmap" '
+define vecdif ' RR "vecdif" '
+define scaprod ' RR "scaprod" '
+define outerprod ' RR "outerprod" '
+define matdif ' RR "matdif" '
+define column ' RR "column" '
+define unit ' RR "unit" '
+define diag ' RR "diag" '
+define elim ' RR "elim" '
+define Gauss ' RR "Gauss" '
+.EN
+.DS
+-- Gaussian Elimination
+
+-- Utility Functions
+
+$con~k~~==~~ func~x~k $
+
+$transmap~f~~ ==~~  [ rp~f ] ~o~ [ # ]  $
+
+$vecdif~~ ==~~ transmap~ [ - ]  $
+
+$scaprod~ < k,~v > ~~ ==~~ v~rp~ [ k~times ]  $
+
+$outerprod~ < u,~v > ~~ ==~~ u~rp~ ( scaprod~o~ [ ,~v ]  )  $
+
+$matdif~~ ==~~ transmap~vecdif $
+
+$column~ < M,~k > ~~ ==~~ M~rp~ [ sel~k ]  $
+
+$unit~ < M,~k > ~~ ==~~  < 1~to~  card~M  > ~rp~$
+    $ [  [ =~k ] ~->~ con~1 ;~ con~0 ]  $
+
+$diag~ < M,~k > ~~ ==~~  M~sel~k ~sel~k $
+
+$f~for~S~~ ==~~  [ @~S ] ~o~ [ f~red ]  $
+
+.DE
+.SL
+.DS
+-- Gaussian Elimination
+
+$V~~ ==~~ scaprod~o~ (  (  [ 1.0~divide ] ~o~diag ) ~ , bar ~ $
+    $( vecdif~o~ ( column~ , bar ~unit )  )  )  $
+
+$elim~~ ==~~ matdif~o~$
+    $ (  [ sel~1 ] ~ , bar ~ ( outerprod~o~ ( V~ , bar ~ [ sel ] ~ )  )  )  $
+
+$Gauss~M~~ ==~~  ( elim~for~ <1~to~ card~M >  ) ~M $
+
+.DE
+.SL
+.DS
+-- Example Matrix
+
+$M~~ ==~~ <  < 3,~9,~33 >, ~ < 2,~-1,~1 > >  $
+.DE

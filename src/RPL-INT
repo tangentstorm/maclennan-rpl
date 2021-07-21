@@ -1,0 +1,2152 @@
+(FILECREATED "20-JUN-85 11:35:41" /work/brown/RPL-INT.;3 52492  
+
+      changes to:  (FNS INIT_SYS_NAMES)
+
+      previous date: "12-JUN-85 10:17:03" /work/brown/RPL-INT.;2)
+
+
+(PRETTYCOMPRINT RPL-INTCOMS)
+
+(RPAQQ RPL-INTCOMS ((FNS * RPL-INTFNS)
+		    (VARS DEFS)))
+
+(RPAQQ RPL-INTFNS (RPL INIT_SYS_NAMES SET_USER_ENV EXECUTE DEF_BINDING DISPLAY ERROR_HANDLER EXIT EV 
+		       EV_SPECIAL_CASES MAPEV EVRANGE EVSEQ INFIXOP PREFIXOP RPAPPLY BINDARGS 
+		       BIF_APPLY ARRAY_CONCATENATION ARRAY_REDUCTION ARRAY_TO_SEQ CART_PROD 
+		       CONSTRUCTION CONVERSE CURRY_EXT DOMAIN DO_SUBSET FILE_READ FILE_WRITE FILTER 
+		       FNC_BODY FORM_PAIR HEAD MAPIMG MAPRP MAPRP_INV MAP_ISOMORPHISM MAX_SET MEM 
+		       MIN_SET RANGE REFLEXIVE_TRANSITIVE_CLOSURE RELATIVE_PRODUCT REPEAT_COMPOSITION 
+		       REQUAL REVERSE_ARRAY RNOT RPL_REPEAT SEL SEQ_TO_ARRAY SUPERSCRIPT TAIL 
+		       TRANSITIVE_CLOSURE UNCURRY_EXT ALL_PAIRS BINARY_LIST COERCE_TO_REL 
+		       CURRY_ELEMENT DISPLAY_ENV GET_ENV LIST_TO_REL LOOKUP MAKE_UNIQUE NUMERIC_SET 
+		       POSIT PRINT_LIST READCMD READTERM READ_USER_DEFS SAVEF SELECT_ALL SEQ_TO_REL 
+		       SHOW_ATOM SHOW_ENV TF TYPE WRITE WRITE_USER_DEFS))
+(DEFINEQ
+
+(RPL
+  [LAMBDA NIL                                               (* edited: "29-MAY-85 16:44")
+    (PROG NIL
+          (INIT_SYS_NAMES)
+          (SETQ FILTER_ON
+	    NIL)
+          (WRITE (QUOTE (Loading RPL---)))
+          (SETQ E SYSOPS)
+          (SETQ ERRORCODE (QUOTE ERRORFREE))
+          (SETQ TEMPNAMES OPNAMES)
+          (SETQ OPNAMES NIL)
+          (MAPCAR INTOPS (QUOTE EXECUTE))
+          (SETQ OPNAMES TEMPNAMES)
+          (SETQ PREFIX_OPNAMES
+	    BUILT_IN_PREFIX_OPS)
+          (SETQ E (CONS (CONS (QUOTE SYSTEM)
+			      (QUOTE SYSTEM))
+			E))
+          (SETQ SYSTEM_ENV
+	    E)
+          (SETQ USERDEFS NIL)
+          (SET_USER_ENV)
+          (TERPRI)
+          (TERPRI)
+          (WRITE (QUOTE (RPL INTERPRETER ON LINE!!)))
+          (TERPRI)
+          (TERPRI)
+      LOOP(SETQ ERRORCODE (QUOTE ERRORFREE))
+          (PRIN1 (QUOTE ?>))
+          (SPACES 1)
+          (SETQ CMD (READCMD))
+          (TERPRI)
+          (EXECUTE CMD)
+          (GO LOOP])
+
+(INIT_SYS_NAMES
+  [LAMBDA NIL                                               (* edited: "20-JUN-85 11:33")
+    (SETQ USERDEFS NIL)
+    (SETQ OPNAMES
+      (QUOTE (! != !subset # $ + , - -> / : ; < <- <= <> <> = > >= @ @hat ALPHA DELTA I Lm Mm OMEGA 
+		PHI PHIaux PI Rm SYSTEM \ all alpha and and andsign as bun cap cart cat cl cnv cr cup 
+		cur curry delta dis display divide dom done empty env epsilon extend false file 
+		filter func hd if img index init iter join list listrange lsec lun max mem member min 
+		mu nomem not o omega op or or orsign phi red rel restr restrict rev rng rp rpi rsec 
+		rsort run sa sel select seq seqrange set setrange size sort ssm subset sup term theta 
+		times tl true un unc uncurry unimg upsilon uset val while wig xi %|)))
+    (SETQ BUILT_IN_PREFIX_OPS
+      (QUOTE (ALPHA DELTA I OMEGA PI all alpha as bun cnv cur curry delta dom epsilon hd if init iter 
+		    join lsec lun max mem min mu not omega op phi rev rng rsec rsort run sa select 
+		    size sort ssm term theta tl un unc uncurry upsilon uset while wig)))
+    (SETQ PREFIX_OPNAMES
+      NIL)
+    [SETQ SYSOPS (QUOTE ((unimg closure select_all)
+			  (hd closure Hd)
+			  (tl closure Tl)
+			  (filter closure filter)
+			  (run closure run)
+			  (# closure construction)
+			  (size closure cardinality)
+			  (rpi closure rel_prod_inv)
+			  (rp closure rel_prod)
+			  (img closure img)
+			  (empty Eset)
+			  (true true)
+			  (false false)
+			  (+ closure +)
+			  (- closure -)
+			  (times closure *)
+			  (divide closure /)
+			  (/ closure /)
+			  (< closure <)
+			  (> closure >)
+			  (<= closure <=)
+			  (>= closure >=)
+			  (not closure not)
+			  (or closure or)
+			  (and closure and)
+			  (orsign closure or)
+			  (andsign closure and)
+			  (epsilon closure elementselect)
+			  (theta closure unitset_select)
+			  (un closure unitset)
+			  (cup closure union)
+			  (cap closure intersection)
+			  (\ closure setdiff)
+			  (cart closure cart)
+			  (subset closure subset)
+			  (!subset closure !subset)
+			  (= closure =)
+			  (!= closure <>)
+			  (<> closure <>)
+			  (member closure member)
+			  (nomem closure nomem)
+			  (%| closure %|)
+			  (file closure file)
+			  (sel closure sel)
+			  (: closure :)
+			  (dom closure dom)
+			  (rng closure rng)
+			  (cnv closure converse)
+			  (sup closure superscript)
+			  (rev closure reverse_array)
+			  (** closure star)
+			  ($ closure isomorphism)
+			  (as closure array_to_seq)
+			  (sa closure seq_to_array)
+			  (min closure min)
+			  (max closure max)
+			  (cat closure concatenation)
+			  (cur closure curry_ext)
+			  (unc closure uncurry_ext)
+			  (rsort closure rsort)
+			  (sort closure sort)
+			  (red closure reduction)
+			  (uset closure unique_set]
+    (SETQ BIFTAG_INFIX
+      (QUOTE (!subset * + - / : < <= <> = > >= and cart concatenation construction filter img 
+		      intersection isomorphism member nomem or reduction rel_prod rel_prod_inv sel 
+		      select_all seq_to_array setdiff subset superscript union %|)))
+    [SETQ INTOPS (QUOTE ([o ==(func (f g)
+				    (func x (f (g x]
+			  (lun t ==((run o cnv)
+				t))
+			  (bun t ==((run t) and (lun t)))
+			  (x Rm t ==(x member (rng t)))
+			  (x Lm t ==(x member (dom t)))
+			  (mem t ==((dom t)
+				cup
+				(rng t)))
+			  (term t ==((rng t)
+				 \
+				 (dom t)))
+			  (x Mm t ==(x member (mem t)))
+			  (init t ==((dom t)
+				 \
+				 (rng t)))
+			  (t <- p ==((p o tl)
+				filter t))
+			  (p -> t ==((p o hd)
+			      filter t))
+			  (t restr p ==((p -> t)
+			      <- p))
+			  (t ; u ==(t cup ((rsec member ((dom u)
+						  \
+						  (dom t)))
+				       -> u)))
+			  (alpha t ==((theta o init)
+				  t))
+			  (omega t ==((theta o term)
+				  t))
+			  [ALPHA s ==(s <-(rsec nomem (term s]
+			  (OMEGA t ==((rsec nomem (init t))
+				  -> t))
+			  (x cl t ==((rel (x :(alpha t)))
+			      cup t))
+			  [t cr x ==(t cup (rel ((omega t): x]
+			  (f @ x ==(f x))
+			  (x , y ==(list x y))
+			  [%|%| ==(func (f g)
+					(func (x y)
+					      (list (f x)
+						    (g y]
+			  (I x == x)
+			  (wig p ==(not o p))
+			  (DELTA x ==(list x x))
+			  (phi ==(lsec I %|%|))
+			  (delta ==(rsec %|%| I))
+			  (f while p ==(if p -> (iter p -> f)
+					   ; I))
+			  (PI f ==(delta (lsec f ,)))
+			  (upsilon f ==((op @)
+				    o
+				    (I %|%| f)))
+			  (t extend f ==(if (rsec member (dom t)) -> (lsec t sel)
+					    ; f))
+			  (s restrict f ==(((op :)
+			       o
+			       ((I %|%| f)
+				o DELTA))
+			      img s))
+			  (x index t ==(((rsec sel x)
+			       (: bar)
+			       I)
+			      img t))
+			  (t @hat x ==((hd (: bar)
+					   ((rsec @ x)
+					    o tl))
+			      img t))
+			  (t ! x ==((rsec @ x)
+			     $ t))
+			  [mu t ==(t \ (t %| (t sup +]
+			  (p xi r ==(mu ((r sup +)
+					 restr p)))
+			  [t PHIaux s ==((s sel 1)
+			      ,
+			      ((rsec Lm t)
+			       xi
+			       (s sel 2]
+			  (p PHI s ==(((s sel 1)
+			       <- p)
+			      PHIaux s))
+			  (ssm t ==((unc o (rsec sa 1))
+				((rsec sa 1)
+				 $ t)))
+			  (y all t ==((cnv t)
+			      unimg y))
+			  [x select d ==(rng o (rsec -> (x index d]
+			  (x join dp ==([(lsec (cup o (hd (, bar)
+							  tl))
+					       img)
+			       o
+			       (((rsec sel 1)
+				 (%| bar)
+				 (rsec sel 2))
+				o
+				((cnv %|%| I)
+				 o
+				 ((lsec x index)
+				  %|%|
+				  (lsec x index]
+			      dp))
+			  [curry f ==(func x (func y (f (x , y]
+			  (uncurry f ==(func (x y)
+					     ((f x)
+					      y]
+    (SETQ SETS (QUOTE (set setrange seq seqrange list listrange rel)))
+    (SETQ SPECIAL_CASES
+      (QUOTE (Eset Erel set setrange seq seqrange list listrange rel op lsec rsec func if when iter 
+		   repeat reduce)))
+    (SETQ NUMOP (QUOTE (+ - * / < > <= >=)))
+    (SETQ SETOP (QUOTE (cart union intersection setdiff subset !subset)))
+    (SETQ EMSG (QUOTE ((BAD_CMD
+			  bad command)
+			(UBI unbound individual)
+			(PARAM number of parameters in error)
+			(BAD_RANGE
+			  bad range variables)
+			(BAD_SEQ
+			  bad sequence)
+			(EXP_SET
+			  set, relation, sequence or list expected)
+			(EXP_SEQ
+			  sequence expected)
+			(EXP_NUM
+			  numeric arguments expected)
+			(EXP_REL
+			  relation expected)
+			(UBTE unbound table element)
+			(EXP_FUNC
+			  function expected)
+			(UDF undefined function)
+			(BAD_SYNTAX
+			  syntax error)
+			(EXP_BOOL
+			  boolean predicate expected)
+			(BAD_ARGS
+			  invalid arguments)
+			(EXP_UNITSET
+			  unit set expected)
+			(EXP_INFIX
+			  infix operator expected)
+			(EXP_PAIR
+			  elementary pair expected)
+			(EXP_NSET
+			  numeric set expected)
+			(EXP_ARRAY
+			  array expected)
+			(ZERO_DIV
+			  zero divisor)
+			(EXP_NEMPTY
+			  non-empty set expected)
+			(BIF built in function or RPL keyword])
+
+(SET_USER_ENV
+  [LAMBDA NIL                                               (* edited: " 3-JUN-85 14:43")
+    (PROG (RESP FILENAME)
+          (WRITE (QUOTE (DO YOU WANT TO RESUME A PREVIOUS RPL SESSION? <y/n>)))
+          (SETQ RESP (READTERM))
+          (COND
+	    ((MEMBER RESP (QUOTE (y Y)))
+	      (WRITE (QUOTE (INPUT FILENAME)))
+	      (TERPRI)
+	      (SETQ FILENAME (READTERM))
+	      (READ_USER_DEFS
+		FILENAME])
+
+(EXECUTE
+  [LAMBDA (CMD)                                             (* edited: "28-MAY-85 18:16")
+    (PROG (X)
+          (SETQ X (POSIT CMD (QUOTE ==)))
+          (RETURN (COND
+		    ((AND (EQ X 2)
+			  (EQ (LENGTH CMD)
+			      3))
+		      (DEF_BINDING
+			CMD))
+		    [(AND (EQ X 3)
+			  (EQ (LENGTH CMD)
+			      4))
+		      (COND
+			((EQ (CAR CMD)
+			     (QUOTE file))
+			  (FILE_WRITE
+			    (EV (CADR CMD)
+				E)
+			    (EV (CADDDR CMD)
+				E)))
+			(T (DEF_BINDING
+			     CMD]
+		    ((AND (EQ X 4)
+			  (EQ (LENGTH CMD)
+			      5))
+		      (DEF_BINDING
+			CMD))
+		    [(EQ X 0)
+		      (COND
+			((AND (MEMBER (CAR CMD)
+				      (QUOTE (display dis d env val)))
+			      (EQ (LENGTH CMD)
+				  2))
+			  (DISPLAY CMD))
+			((EQ (CAR CMD)
+			     (QUOTE done))
+			  (EXIT))
+			[(EQ (LENGTH CMD)
+			     1)
+			  (COND
+			    ((EQ (CAR CMD)
+				 (QUOTE env))
+			      (DISPLAY (LIST (QUOTE env)
+					     NIL)))
+			    (T (DISPLAY (CONS (QUOTE d)
+					      CMD]
+			(T (ERROR_HANDLER
+			     (QUOTE BAD_CMD)
+			     CMD]
+		    (T (ERROR_HANDLER
+			 (QUOTE BAD_CMD)
+			 CMD])
+
+(DEF_BINDING
+  [LAMBDA (DEXP)                                            (* edited: " 8-JUN-85 13:36")
+    (PROG (NAME EXP NEWNAME RESP)
+          [COND
+	    ((EQ (LENGTH DEXP)
+		 5)
+	      (SETQ NAME (CADR DEXP)))
+	    (T (SETQ NAME (CAR DEXP]
+          [COND
+	    ((MEMB NAME OPNAMES)
+	      (WRITE (QUOTE (SYSTEM DEFINED FUNCTION OR KEYWORD, OVERWRITE? <y/n>)))
+	      (SETQ RESP (READTERM))
+	      (TERPRI)
+	      (COND
+		([NOT (MEMB RESP (QUOTE (Y y]
+		  (WRITE (QUOTE (ABORT AT USER'S REQUEST)))
+		  (TERPRI)
+		  (TERPRI)
+		  (GO EXIT]
+          (COND
+	    ((EQ (LOOKUP NAME E)
+		 NIL)
+	      (SETQ NEWNAME NIL)
+	      (SETQ E (CONS (CONS NAME NIL)
+			    E)))
+	    (T (SETQ NEWNAME T)))
+          [COND
+	    ((EQ (LENGTH DEXP)
+		 4)
+	      (SETQ EXP (LIST (QUOTE closure)
+			      (CADR DEXP)
+			      (CADDDR DEXP)
+			      E)))
+	    ((EQ (LENGTH DEXP)
+		 5)
+	      (SETQ EXP (LIST (QUOTE closure)
+			      (LIST (CAR DEXP)
+				    (CADDR DEXP))
+			      (CADDDR (CDR DEXP))
+			      E)))
+	    (T (SETQ EXP (EV (CAR (LAST DEXP))
+			     E]
+          BIND_NAME
+          [RETURN (COND
+		    [(EQ ERRORCODE (QUOTE ERRORFREE))
+		      (COND
+			((EQ NEWNAME T)
+			  [COND
+			    ((AND (MEMB NAME PREFIX_OPNAMES)
+				  (EQ (LENGTH DEXP)
+				      5))
+			      (LDIFFERENCE PREFIX_OPNAMES
+					   (LIST NAME)))
+			    ((AND (NOT (MEMB NAME PREFIX_OPNAMES))
+				  (NOT (EQ (LENGTH DEXP)
+					   5)))
+			      (SETQ PREFIX_OPNAMES
+				(CONS NAME PREFIX_OPNAMES]
+			  (COND
+			    ((NOT (MEMB NAME OPNAMES))
+			      (RPLACD (SASSOC NAME USERDEFS)
+				      DEXP)))
+			  (RPLACD (SASSOC NAME E)
+				  EXP)
+			  (SPACES 1)
+			  (WRITE (LIST NAME (QUOTE Redefined)))
+			  (TERPRI)
+			  (TERPRI))
+			(T (SETQ USERDEFS (CONS (CONS NAME DEXP)
+						USERDEFS))
+			   [COND
+			     ((AND (LISTP EXP)
+				   (EQ (CAR EXP)
+				       (QUOTE closure)))
+			       (COND
+				 ((OR (EQ (LENGTH DEXP)
+					  4)
+				      (EQ (LENGTH DEXP)
+					  3))
+				   (SETQ PREFIX_OPNAMES
+				     (CONS NAME PREFIX_OPNAMES]
+			   (RPLACD (SASSOC NAME E)
+				   EXP]
+		    (T (WRITE (QUOTE (BINDING CANNOT BE MADE)))
+		       (TERPRI)
+		       (TERPRI)
+		       (COND
+			 ((NOT (EQ NEWNAME T))
+			   (SETQ E (CDR E]
+      EXIT])
+
+(DISPLAY
+  [LAMBDA (CMD)                                             (* edited: "28-MAY-85 21:12")
+    (PROG (KEY EXP EVEXP)
+          (SETQ KEY (CAR CMD))
+          (SETQ EXP (CADR CMD))
+          [COND
+	    [(MEMBER KEY (QUOTE (d dis display)))
+	      (COND
+		[(LITATOM EXP)
+		  (SETQ EVEXP (LOOKUP EXP USERDEFS))
+		  (COND
+		    ((NULL EVEXP)
+		      (PRINT (QUOTE Undefined)))
+		    (T (PRINT EVEXP]
+		(T (SETQ EVEXP (EV EXP E))
+		   (COND
+		     ((NULL EVEXP)
+		       (PRINT (QUOTE Undefined)))
+		     (T (SHOW_ATOM
+			  EVEXP)
+			(TERPRI]
+	    (T [COND
+		 ((NOT (NULL EXP))
+		   (SETQ EVEXP (EV EXP E]
+	       (COND
+		 ((EQ ERRORCODE (QUOTE ERRORFREE))
+		   (COND
+		     [(AND (EQ KEY (QUOTE val))
+			   (LITATOM (CADR CMD)))
+		       (COND
+			 ((NULL EVEXP)
+			   (PRINT (QUOTE Undefined)))
+			 (T (SHOW_ATOM
+			      EVEXP)
+			    (TERPRI]
+		     ((AND (EQ KEY (QUOTE env))
+			   (NULL EXP))
+		       (DISPLAY_ENV
+			 EXP))
+		     ((AND (EQ KEY (QUOTE env))
+			   (LITATOM (CADR CMD))
+			   (EQ (TYPE EVEXP)
+			       (QUOTE closure))
+			   (EQ (LENGTH EVEXP)
+			       4))
+		       (DISPLAY_ENV
+			 EXP))
+		     ((EQ KEY (QUOTE env))
+		       (ERROR_HANDLER
+			 (QUOTE EXP_FUNC)
+			 CMD))
+		     (T (ERROR_HANDLER
+			  (QUOTE BAD_SYNTAX)
+			  CMD]
+          (TERPRI])
+
+(ERROR_HANDLER
+  [LAMBDA (CODE EXP)                                        (* edited: " 5-MAY-85 20:47")
+    (PROG NIL
+          (COND
+	    ((EQ FILTER_ON
+		 T)
+	      (GO EXIT)))
+          (WRITE (QUOTE (*** ERROR ***)))
+          (WRITE (LOOKUP CODE EMSG))
+          (TERPRI)
+          (WRITE (QUOTE (Cause of error ==>)))
+          (PRINT_LIST
+	    EXP)
+          (TERPRI)
+      EXIT(SETQ ERRORCODE CODE)
+      NIL])
+
+(EXIT
+  [LAMBDA NIL                                               (* edited: " 3-JUN-85 14:40")
+    (WRITE (QUOTE (DO YOU WANT TO SAVE ENVIRONMENT FOR FUTURE USE? <y/n>)))
+    (SETQ RESP (READTERM))
+    (COND
+      ((MEMBER RESP (QUOTE (y Y)))
+	(WRITE (QUOTE (INPUT FILENAME)))
+	(TERPRI)
+	(SETQ FILENAME (READTERM))
+	(WRITE_USER_DEFS
+	  FILENAME)))
+    (TERPRI)
+    (WRITE (QUOTE (EXIT TO LISP - PRESS ^D)))
+    (TERPRI)
+    (WRITE (QUOTE (EXIT TO UNIX - PRESS ^C)))
+    (TERPRI)
+    (WRITE (QUOTE (CONTINUE RPL - PRESS <RETURN>)))
+    (TERPRI)
+    (READTERM)
+    (TERPRI)
+    (WRITE (QUOTE (DO YOU WANT TO CLEAR CURRENT ENVIRONMENT? <y/n>)))
+    (SETQ RESP (READTERM))
+    (TERPRI)
+    (COND
+      ((MEMBER RESP (QUOTE (y Y)))
+	(SETQ E SYSTEM_ENV)
+	(SETQ USERDEFS NIL)
+	(SETQ PREFIX_OPNAMES
+	  BUILT_IN_PREFIX_OPS)))
+    (SET_USER_ENV])
+
+(EV
+  [LAMBDA (EXP E)
+    (PROG (X TAG)
+          (RETURN (COND
+		    ((NUMBERP EXP)
+		      EXP)
+		    ((STRINGP EXP)
+		      EXP)
+		    ((ATOM EXP)
+		      (SETQ X (LOOKUP EXP E))
+		      (COND
+			((EQ X NIL)
+			  (ERROR_HANDLER
+			    (QUOTE UBI)
+			    EXP))
+			(T X)))
+		    (T (SETQ TAG (CAR EXP))
+		       (COND
+			 ((MEMBER TAG SPECIAL_CASES)
+			   (EV_SPECIAL_CASES
+			     EXP E))
+			 ((EQ (LENGTH EXP)
+			      2)
+			   (PREFIXOP EXP E))
+			 [(EQ (LENGTH EXP)
+			      3)
+			   (COND
+			     ((LISTP (CADR EXP))
+			       (EV_SPECIAL_CASES
+				 EXP E))
+			     (T (INFIXOP EXP E]
+			 (T (ERROR_HANDLER
+			      (QUOTE PARAM)
+			      EXP])
+
+(EV_SPECIAL_CASES
+  [LAMBDA (EXP E)                                           (* edited: " 6-JUN-85 03:03")
+    (PROG (TAG LOW HIGH F)
+          (SETQ TAG (CAR EXP))
+          (RETURN (COND
+		    [(MEMBER TAG SETS)
+		      (COND
+			[(EQ TAG (QUOTE set))
+			  (SETQ EXP (CONS (QUOTE Eset)
+					  (MAKE_UNIQUE
+					    (CDR EXP)
+					    NIL E]
+			((EQ TAG (QUOTE rel))
+			  (SETQ EXP (CONS (QUOTE Erel)
+					  (MAKE_UNIQUE
+					    (CDR EXP)
+					    NIL E)))
+			  (COND
+			    ((NOT (ALL_PAIRS
+				    (CDR EXP)))
+			      (ERROR_HANDLER
+				(QUOTE EXP_REL)
+				EXP))
+			    (T EXP)))
+			[(EQ TAG (QUOTE setrange))
+			  (COND
+			    [(AND (EQ (LENGTH EXP)
+				      4)
+				  (EQ (CADDR EXP)
+				      (QUOTE to)))
+			      (SETQ LOW (EV (CADR EXP)
+					    E))
+			      (SETQ HIGH (EV (CADDDR EXP)
+					     E))
+			      (COND
+				[(EQ ERRORCODE (QUOTE ERRORFREE))
+				  (SETQ EXP (CONS (QUOTE Eset)
+						  (EVRANGE LOW HIGH]
+				(T (QUOTE impossible]
+			    (T (ERROR_HANDLER
+				 (QUOTE BAD_RANGE)
+				 EXP]
+			[(MEMBER TAG (QUOTE (seq seqrange)))
+			  (SETQ EXP (CONS (QUOTE Erel)
+					  (EVSEQ EXP E]
+			[(MEMBER TAG (QUOTE (list listrange)))
+			  (SETQ EXP (CONS (QUOTE Erel)
+					  (EVSEQ EXP E]
+			(T (QUOTE impossible]
+		    ((MEMBER TAG (QUOTE (Eset Erel)))
+		      EXP)
+		    ((EQ TAG (QUOTE func))
+		      (LIST (QUOTE closure)
+			    (CADR EXP)
+			    (CADDR EXP)
+			    E))
+		    [(AND (EQ TAG (QUOTE op))
+			  (EQ (LENGTH EXP)
+			      2))
+		      (SETQ F (EV (CADR EXP)
+				  E))
+		      (COND
+			([OR (NOT (EQ (TYPE F)
+				      (QUOTE closure)))
+			     (AND (EQ (LENGTH F)
+				      2)
+				  (MEMBER (CADR EXP)
+					  PREFIX_OPNAMES))
+			     (AND (EQ (LENGTH F)
+				      4)
+				  (ATOM (CADR F]
+			  (ERROR_HANDLER
+			    (QUOTE EXP_INFIX)
+			    (CADR EXP)))
+			(T (LIST (QUOTE closure)
+				 (QUOTE ?x)
+				 (LIST (LIST (QUOTE ?x)
+					     (QUOTE sel)
+					     1)
+				       (CADR EXP)
+				       (LIST (QUOTE ?x)
+					     (QUOTE sel)
+					     2))
+				 E]
+		    ((AND (EQ TAG (QUOTE lsec))
+			  (EQ (LENGTH EXP)
+			      3))
+		      (LIST (QUOTE closure)
+			    (QUOTE ?x)
+			    (LIST (CADR EXP)
+				  (CADDR EXP)
+				  (QUOTE ?x))
+			    E))
+		    ((AND (EQ TAG (QUOTE rsec))
+			  (EQ (LENGTH EXP)
+			      3))
+		      (LIST (QUOTE closure)
+			    (QUOTE ?x)
+			    (LIST (QUOTE ?x)
+				  (CADR EXP)
+				  (CADDR EXP))
+			    E))
+		    ((AND (EQ TAG (QUOTE if))
+			  (EQ (LENGTH EXP)
+			      6)
+			  (EQ (CADDR EXP)
+			      (QUOTE ->))
+			  (EQ (CADDDR (CDR EXP))
+			      (QUOTE ;)))
+		      (LIST (QUOTE closure)
+			    (QUOTE ?x)
+			    (LIST (QUOTE when)
+				  (LIST (CADR EXP)
+					(QUOTE ?x))
+				  (QUOTE do)
+				  (LIST (CADDDR EXP)
+					(QUOTE ?x))
+				  (QUOTE elsedo)
+				  (LIST (CADDDR (CDDR EXP))
+					(QUOTE ?x)))
+			    E))
+		    [(EQ TAG (QUOTE when))
+		      (COND
+			((EQ (EV (CADR EXP)
+				 E)
+			     (QUOTE true))
+			  (EV (CADDDR EXP)
+			      E))
+			((EQ (EV (CADR EXP)
+				 E)
+			     (QUOTE false))
+			  (EV (CADDDR (CDDR EXP))
+			      E))
+			(T (ERROR_HANDLER
+			     (QUOTE EXP_BOOL)
+			     (LIST (CADR EXP)
+				   (QUOTE in)
+				   EXP]
+		    ((AND (EQ TAG (QUOTE iter))
+			  (EQ (LENGTH EXP)
+			      4)
+			  (EQ (CADDR EXP)
+			      (QUOTE ->)))
+		      (LIST (QUOTE closure)
+			    (QUOTE ?x)
+			    (LIST (QUOTE repeat)
+				  (CADDDR EXP)
+				  (QUOTE until_not)
+				  (CADR EXP))
+			    E))
+		    ((EQ TAG (QUOTE repeat))
+		      (RPL_REPEAT
+			EXP E))
+		    ((AND (LISTP (CADR EXP))
+			  (EQ (LENGTH (CADR EXP))
+			      2)
+			  (EQ (CADADR EXP)
+			      (QUOTE bar)))
+		      (LIST (QUOTE closure)
+			    (QUOTE ?x)
+			    (LIST (LIST (CAR EXP)
+					(QUOTE ?x))
+				  (CAADR EXP)
+				  (LIST (CADDR EXP)
+					(QUOTE ?x)))
+			    E))
+		    ((EQ TAG (QUOTE reduce))
+		      (ARRAY_REDUCTION
+			EXP E))
+		    (T (ERROR_HANDLER
+			 (QUOTE BAD_SYNTAX)
+			 EXP])
+
+(MAPEV
+  [LAMBDA (L E)
+    (MAPCAR L (QUOTE (LAMBDA (X)
+			     (EV X E])
+
+(EVRANGE
+  [LAMBDA (LOW HIGH)
+    (PROG (L)
+          (SETQ L NIL)
+          (COND
+	    ((AND (NUMBERP LOW)
+		  (NUMBERP HIGH)
+		  (LEQ LOW HIGH))
+	      (GO MAKE_LIST))
+	    (T (ERROR_HANDLER
+		 (QUOTE BAD_RANGE)
+		 (LIST LOW HIGH))
+	       (GO EXIT)))
+          MAKE_LIST
+          (COND
+	    ((EQ LOW HIGH)
+	      (SETQ L (CONS LOW L)))
+	    (T (SETQ L (CONS HIGH L))
+	       (SETQ HIGH (DIFFERENCE HIGH 1))
+	       (GO MAKE_LIST)))
+      EXIT(RETURN L])
+
+(EVSEQ
+  [LAMBDA (SQ E)
+    (PROG (TAG S HIGH LOW)
+          (SETQ TAG (CAR SQ))
+          (SETQ S (CDR SQ))
+          [COND
+	    ((AND (MEMBER TAG (QUOTE (seq list)))
+		  (GREATERP (LENGTH S)
+			    1))
+	      (SETQ S (MAPEV S E))
+	      (GO COERCE))
+	    (T (COND
+		 ((AND (EQ (LENGTH S)
+			   3)
+		       (EQ (CADR S)
+			   (QUOTE to)))
+		   (SETQ LOW (EV (CAR S)
+				 E))
+		   (SETQ HIGH (EV (CADDR S)
+				  E))
+		   (COND
+		     ((EQ ERRORCODE (QUOTE ERRORFREE))
+		       (SETQ S (EVRANGE LOW HIGH))
+		       (GO COERCE))
+		     (T NIL)))
+		 (T (ERROR_HANDLER
+		      (QUOTE BAD_SEQ)
+		      S]
+      COERCE
+          (RETURN (COND
+		    [(EQ ERRORCODE (QUOTE ERRORFREE))
+		      (COND
+			((MEMBER TAG (QUOTE (seq seqrange)))
+			  (SEQ_TO_REL
+			    S))
+			(T (LIST_TO_REL
+			     S]
+		    (T NIL])
+
+(INFIXOP
+  [LAMBDA (IEXP ENV-I)                                      (* edited: " 3-JUN-85 15:23")
+    (PROG (L OP R A)
+          (SETQ L (EV (CAR IEXP)
+		      ENV-I))
+          (SETQ OP (EV (CADR IEXP)
+		       ENV-I))
+          (SETQ R (EV (CADDR IEXP)
+		      ENV-I))
+          (RETURN (COND
+		    ((EQ ERRORCODE (QUOTE ERRORFREE))
+		      (COND
+			((EQ (TYPE OP)
+			     (QUOTE closure))
+			  (SETQ A (LIST (QUOTE Erel)
+					(CONS 1 L)
+					(CONS 2 R)))
+			  (RPAPPLY OP A))
+			(T (ERROR_HANDLER
+			     (QUOTE EXP_FUNC)
+			     (CADR IEXP])
+
+(PREFIXOP
+  [LAMBDA (PEXP ENV-P)
+    (PROG (OP ARG)
+          (SETQ OP (EV (CAR PEXP)
+		       ENV-P))
+          (SETQ ARG (EV (CADR PEXP)
+			ENV-P))
+          (RETURN (COND
+		    ((EQ ERRORCODE (QUOTE ERRORFREE))
+		      (COND
+			((EQ (TYPE OP)
+			     (QUOTE closure))
+			  (RPAPPLY OP ARG))
+			(T (ERROR_HANDLER
+			     (QUOTE EXP_FUNC)
+			     (CAR PEXP])
+
+(RPAPPLY
+  [LAMBDA (F A)
+    (PROG (FORMALS LE EE)
+          (RETURN (COND
+		    ((EQ (LENGTH F)
+			 2)
+		      (BIF_APPLY
+			F A))
+		    (T (SETQ FORMALS (CADR F))
+		       [COND
+			 [(ATOM FORMALS)
+			   (SETQ EE (CONS (CONS FORMALS A)
+					  (CADDDR F]
+			 (T (COND
+			      [(EQ (DIFFERENCE (LENGTH A)
+					       1)
+				   (LENGTH FORMALS))
+				(SETQ LE (BINDARGS FORMALS A))
+				(SETQ EE (APPEND LE (CADDDR F]
+			      (T (ERROR_HANDLER
+				   (QUOTE PARAM)
+				   (LIST (QUOTE (number of parameters in error]
+		       (COND
+			 ((EQ ERRORCODE (QUOTE ERRORFREE))
+			   (EV (CADDR F)
+			       EE])
+
+(BINDARGS
+  [LAMBDA (F A)
+    (MAP2CAR F (CDR A)
+	     (QUOTE (LAMBDA (X Y)
+			    (CONS X (CDR Y])
+
+(BIF_APPLY
+  [LAMBDA (F ARG)                                           (* edited: " 6-JUN-85 03:56")
+    (PROG (L R OP)
+          (SETQ OP (CADR F))
+          (RETURN (COND
+		    [(MEMB OP BIFTAG_INFIX)
+		      (COND
+			((AND (NOT (EQ (TYPE ARG)
+				       (QUOTE Erel)))
+			      (NOT (EQ (LENGTH ARG)
+				       3)))
+			  (ERROR_HANDLER
+			    (QUOTE BAD_ARGS)
+			    ARG))
+			(T (SETQ L (SEL ARG 1))
+			   (SETQ R (SEL ARG 2))
+			   (COND
+			     [(EQ OP (QUOTE reduction))
+			       (COND
+				 ((EQ (TYPE L)
+				      (QUOTE closure))
+				   (LIST (QUOTE closure)
+					 (QUOTE ?A)
+					 (LIST (QUOTE reduce)
+					       (QUOTE ?A)
+					       (QUOTE by)
+					       L
+					       (QUOTE from)
+					       R)
+					 ENV-I))
+				 (T (ERROR_HANDLER
+				      (QUOTE EXP_FUNC)
+				      (CAR ARG]
+			     [(MEMB OP NUMOP)
+			       (COND
+				 [(AND (NUMBERP L)
+				       (NUMBERP R))
+				   (COND
+				     ((EQ OP (QUOTE +))
+				       (PLUS L R))
+				     ((EQ OP (QUOTE -))
+				       (DIFFERENCE L R))
+				     ((EQ OP (QUOTE *))
+				       (TIMES L R))
+				     [(EQ OP (QUOTE /))
+				       (COND
+					 ((ZEROP R)
+					   (ERROR_HANDLER
+					     (QUOTE ZERO_DIV)
+					     (CADDR IEXP)))
+					 (T (QUOTIENT L R]
+				     ((EQ OP (QUOTE <))
+				       (TF (LESSP L R)))
+				     ((EQ OP (QUOTE >))
+				       (TF (GREATERP L R)))
+				     ((EQ OP (QUOTE <=))
+				       (TF (LEQ L R)))
+				     ((EQ OP (QUOTE >=))
+				       (TF (GEQ L R)))
+				     (T (QUOTE impossible]
+				 (T (ERROR_HANDLER
+				      (QUOTE EXP_NUM)
+				      (LIST (CAR IEXP)
+					    (QUOTE or)
+					    (CADDR IEXP]
+			     [(EQ OP (QUOTE or))
+			       (COND
+				 ((OR (EQ L (QUOTE true))
+				      (EQ R (QUOTE true)))
+				   (QUOTE true))
+				 (T (QUOTE false]
+			     [(EQ OP (QUOTE and))
+			       (COND
+				 ((AND (EQ L (QUOTE true))
+				       (EQ R (QUOTE true)))
+				   (QUOTE true))
+				 (T (QUOTE false]
+			     [(MEMB OP SETOP)
+			       (COND
+				 [[AND (MEMB (TYPE L)
+					     (QUOTE (Eset Erel)))
+				       (MEMB (TYPE R)
+					     (QUOTE (Eset Erel]
+				   (COND
+				     [(EQ OP (QUOTE union))
+				       (COND
+					 [(OR (EQ (CAR L)
+						  (QUOTE Eset))
+					      (EQ (CAR R)
+						  (QUOTE Eset)))
+					   (CONS (QUOTE Eset)
+						 (UNION (CDR L)
+							(CDR R]
+					 (T (CONS (QUOTE Erel)
+						  (UNION (CDR L)
+							 (CDR R]
+				     [(EQ OP (QUOTE intersection))
+				       (COND
+					 [(OR (EQ (CAR L)
+						  (QUOTE Erel))
+					      (EQ (CAR R)
+						  (QUOTE Erel)))
+					   (CONS (QUOTE Erel)
+						 (INTERSECTION (CDR L)
+							       (CDR R]
+					 (T (CONS (QUOTE Eset)
+						  (INTERSECTION (CDR L)
+								(CDR R]
+				     [(EQ OP (QUOTE setdiff))
+				       (COND
+					 [(EQ (CAR L)
+					      (QUOTE Eset))
+					   (CONS (QUOTE Eset)
+						 (LDIFFERENCE (CDR L)
+							      (CDR R]
+					 (T (CONS (QUOTE Erel)
+						  (LDIFFERENCE (CDR L)
+							       (CDR R]
+				     [(EQ OP (QUOTE cart))
+				       (CONS (QUOTE Erel)
+					     (CART_PROD
+					       (CDR L)
+					       (CDR R]
+				     [(EQ OP (QUOTE !subset))
+				       (COND
+					 ((GREATERP (LENGTH L)
+						    (LENGTH R))
+					   (QUOTE false))
+					 (T (DO_SUBSET
+					      (CDR L)
+					      (CDR R]
+				     [(EQ OP (QUOTE subset))
+				       (COND
+					 ((GEQ (LENGTH L)
+					       (LENGTH R))
+					   (QUOTE false))
+					 (T (DO_SUBSET
+					      (CDR L)
+					      (CDR R]
+				     (T (QUOTE impossible]
+				 (T (ERROR_HANDLER
+				      (QUOTE EXP_SET)
+				      (LIST (CAR IEXP)
+					    (QUOTE or)
+					    (CADDR IEXP]
+			     ((EQ OP (QUOTE =))
+			       (REQUAL L R ENV-I))
+			     ((EQ OP (QUOTE <>))
+			       (RNOT (REQUAL L R ENV-I)))
+			     ((EQ OP (QUOTE member))
+			       (MEM L R))
+			     ((EQ OP (QUOTE nomem))
+			       (RNOT (MEM L R)))
+			     [(MEMB OP (QUOTE (%| construction concatenation)))
+			       (COERCE_TO_REL
+				 L)
+			       (COERCE_TO_REL
+				 R)
+			       (COND
+				 ((EQ ERRORCODE (QUOTE ERRORFREE))
+				   (COND
+				     [(EQ OP (QUOTE %|))
+				       (CONS (QUOTE Erel)
+					     (RELATIVE_PRODUCT
+					       (CDR L)
+					       (CDR R]
+				     ((EQ OP (QUOTE construction))
+				       (CONSTRUCTION L R))
+				     ((EQ OP (QUOTE concatenation))
+				       (ARRAY_CONCATENATION
+					 L R]
+			     [(MEMB OP (QUOTE (sel seq_to_array select_all rel_prod)))
+			       (COERCE_TO_REL
+				 L)
+			       (COND
+				 ((EQ ERRORCODE (QUOTE ERRORFREE))
+				   (COND
+				     ((EQ OP (QUOTE sel))
+				       (SEL L R))
+				     ((EQ OP (QUOTE seq_to_array))
+				       (SEQ_TO_ARRAY
+					 L R))
+				     ((EQ OP (QUOTE select_all))
+				       (SELECT_ALL
+					 R
+					 (CDR L)))
+				     ((EQ OP (QUOTE rel_prod))
+				       (COND
+					 [(EQ (TYPE R)
+					      (QUOTE closure))
+					   (CONS (QUOTE Erel)
+						 (MAPRP R (CDR L]
+					 (T (ERROR_HANDLER
+					      (QUOTE EXP_FUNC)
+					      R]
+			     ((EQ OP (QUOTE :))
+			       (FORM_PAIR
+				 L R))
+			     [(EQ OP (QUOTE img))
+			       (COND
+				 ([AND (EQ (TYPE L)
+					   (QUOTE closure))
+				       (MEMB (TYPE R)
+					     (QUOTE (Eset Erel]
+				   (CONS (QUOTE Eset)
+					 (MAPIMG L (CDR R)
+						 ENV-I)))
+				 (T (COND
+				      ((EQ (TYPE L)
+					   (QUOTE closure))
+					(ERROR_HANDLER
+					  (QUOTE EXP_SET)
+					  (CADDR IEXP)))
+				      (T (ERROR_HANDLER
+					   (QUOTE EXP_FUNC)
+					   (CAR IEXP]
+			     [(MEMB OP (QUOTE (rel_prod_inv isomorphism)))
+			       (COERCE_TO_REL
+				 R)
+			       (COND
+				 [(AND (EQ (TYPE L)
+					   (QUOTE closure))
+				       (EQ ERRORCODE (QUOTE ERRORFREE)))
+				   (COND
+				     [(EQ OP (QUOTE rel_prod_inv))
+				       (CONS (QUOTE Erel)
+					     (MAPRP_INV
+					       L
+					       (CDR R]
+				     ((EQ OP (QUOTE isomorphism))
+				       (CONS (QUOTE Erel)
+					     (MAP_ISOMORPHISM
+					       L
+					       (CDR R]
+				 (T (COND
+				      ((NOT (EQ (TYPE L)
+						(QUOTE closure)))
+					(ERROR_HANDLER
+					  (QUOTE EXP_FUNC)
+					  L]
+			     [(EQ OP (QUOTE filter))
+			       (COND
+				 ([AND (EQ (TYPE L)
+					   (QUOTE closure))
+				       (MEMB (TYPE R)
+					     (QUOTE (Eset Erel]
+				   (CONS (CAR R)
+					 (FILTER L (CDR R)
+						 ENV-I)))
+				 (T (COND
+				      ((EQ (TYPE L)
+					   (QUOTE closure))
+					(ERROR_HANDLER
+					  (QUOTE EXP_SET)
+					  (CADDR IEXP)))
+				      (T (ERROR_HANDLER
+					   (QUOTE EXP_BOOL)
+					   (CAR IEXP]
+			     ((EQ OP (QUOTE superscript))
+			       (SUPERSCRIPT L R]
+		    (T (COND
+			 ((EQ OP (QUOTE not))
+			   (RNOT ARG))
+			 ((EQ OP (QUOTE file))
+			   (FILE_READ
+			     ARG))
+			 [(EQ OP (QUOTE unitset))
+			   (COND
+			     ((OR (ATOM ARG)
+				  (STRINGP ARG))
+			       (LIST (QUOTE Eset)
+				     ARG))
+			     (T (COND
+				  ((MEMB (CAR ARG)
+					 (QUOTE (Eset Erel closure)))
+				    (LIST (QUOTE Eset)
+					  ARG))
+				  (T (LIST (QUOTE Erel)
+					   ARG]
+			 [(MEMB OP (QUOTE (unitset_select elementselect)))
+			   (COND
+			     [(MEMB (TYPE ARG)
+				    (QUOTE (Eset Erel)))
+			       (COND
+				 [(EQ OP (QUOTE unitset_select))
+				   (COND
+				     ((EQ (LENGTH (CDR ARG))
+					  1)
+				       (CADR ARG))
+				     (T (ERROR_HANDLER
+					  (QUOTE EXP_UNITSET)
+					  (CADR PEXP]
+				 ((EQ OP (QUOTE elementselect))
+				   (COND
+				     ((NULL (CDR ARG))
+				       (ERROR_HANDLER
+					 (QUOTE EXP_NEMPTY)
+					 (CADR PEXP)))
+				     (T (CADR ARG]
+			     (T (ERROR_HANDLER
+				  (QUOTE EXP_SET)
+				  (CADR PEXP]
+			 [(EQ OP (QUOTE cardinality))
+			   (COND
+			     ((MEMB (TYPE ARG)
+				    (QUOTE (Eset Erel)))
+			       (LENGTH (CDR ARG)))
+			     (T (ERROR_HANDLER
+				  (QUOTE EXP_SET)
+				  (CADR PEXP]
+			 [(MEMB OP (QUOTE (converse rng dom array_to_seq run reverse_array curry_ext 
+						    uncurry_ext)))
+			   (COERCE_TO_REL
+			     ARG)
+			   (COND
+			     ((EQ ERRORCODE (QUOTE ERRORFREE))
+			       (COND
+				 ((EQ OP (QUOTE converse))
+				   (CONVERSE ARG))
+				 ((EQ OP (QUOTE dom))
+				   (DOMAIN ARG))
+				 ((EQ OP (QUOTE rng))
+				   (RANGE ARG))
+				 [(EQ OP (QUOTE run))
+				   (COND
+				     ([EQ (LENGTH (MAKE_UNIQUE
+						    (CDR (RANGE ARG))
+						    NIL ENV-P))
+					  (LENGTH (CDR (RANGE ARG]
+				       (QUOTE true))
+				     (T (QUOTE false]
+				 ((EQ OP (QUOTE reverse_array))
+				   (REVERSE_ARRAY
+				     ARG))
+				 ((EQ OP (QUOTE array_to_seq))
+				   (ARRAY_TO_SEQ
+				     ARG))
+				 ((EQ OP (QUOTE curry_ext))
+				   (CURRY_EXT
+				     ARG))
+				 ((EQ OP (QUOTE uncurry_ext))
+				   (UNCURRY_EXT
+				     ARG]
+			 ((EQ OP (QUOTE Hd))
+			   (HEAD ARG))
+			 ((EQ OP (QUOTE Tl))
+			   (TAIL ARG))
+			 [(MEMB OP (QUOTE (min max unique_set)))
+			   (COND
+			     [(EQ (TYPE ARG)
+				  (QUOTE Eset))
+			       (COND
+				 ((EQ OP (QUOTE min))
+				   (MIN_SET
+				     ARG))
+				 ((EQ OP (QUOTE max))
+				   (MAX_SET
+				     ARG))
+				 ((EQ OP (QUOTE unique_set))
+				   (MAKE_UNIQUE
+				     (CDR ARG)
+				     NIL ENV-P]
+			     (T (ERROR_HANDLER
+				  (QUOTE EXP_SET)
+				  ARG]
+			 ((MEMB OP (QUOTE (rsort sort)))
+			   (COND
+			     [(NUMERIC_SET
+				 (CDR ARG))
+			       (COND
+				 [(EQ OP (QUOTE rsort))
+				   (CONS (QUOTE Erel)
+					 (SEQ_TO_REL
+					   (SORT (CDR ARG)
+						 (QUOTE LESSP]
+				 (T (CONS (QUOTE Erel)
+					  (LIST_TO_REL
+					    (SORT (CDR ARG)
+						  (QUOTE LESSP]
+			     (T (ERROR_HANDLER
+				  (QUOTE EXP_NSET)
+				  ARG])
+
+(ARRAY_CONCATENATION
+  [LAMBDA (A1 A2)                                           (* edited: "30-APR-85 21:51")
+    (COND
+      [[AND (NUMERIC_SET
+	      (CDR (DOMAIN A1)))
+	    (NUMERIC_SET
+	      (CDR (DOMAIN A2]
+	(PROG (INDEX)
+	      (SETQ INDEX (CAAR (REVERSE A1)))
+	      (RETURN (APPEND A1 (MAPCAR (CDR A2)
+					 (QUOTE (LAMBDA (X)
+							(SETQ INDEX (PLUS 1 INDEX))
+							(CONS INDEX (CDR X]
+      (T (ERROR_HANDLER
+	   (QUOTE EXP_ARRAY)
+	   (LIST A1 (QUOTE or)
+		 A2])
+
+(ARRAY_REDUCTION
+  [LAMBDA (EXP EA)                                          (* edited: " 4-JUN-85 12:10")
+    (PROG (ARRAY FNC START ARGS ANS)
+          (SETQ ARRAY (EV (CADR EXP)
+			  EA))
+          (COND
+	    ((COERCE_TO_REL
+		ARRAY)
+	      (SETQ FNC (CADDDR EXP))
+	      (SETQ START (CADDDR (CDDR EXP)))
+	      (SETQ ARGS (CDR (RANGE ARRAY)))
+	      (SETQ ANS START)
+	      [MAPCAR ARGS (QUOTE (LAMBDA (X)
+					  (SETQ ANS (RPAPPLY FNC (LIST (QUOTE Erel)
+								       (CONS 1 ANS)
+								       (CONS 2 X]
+	      (RETURN ANS))
+	    (T (ERROR_HANDLER
+		 (QUOTE EXP_REL)
+		 ARRAY])
+
+(ARRAY_TO_SEQ
+  [LAMBDA (ARRAY)                                           (* edited: "30-APR-85 22:15")
+    (PROG (S1 S2 SEQ)
+          (SETQ S1 (CDR (RANGE ARRAY)))
+          (SETQ S2 (CDR S1))
+          (SET SEQ NIL)
+      LOOP(COND
+	    [(NULL S2)
+	      (RETURN (CONS (QUOTE Erel)
+			    (REVERSE SEQ]
+	    (T (SETQ SEQ (CONS (CONS (CAR S1)
+				     (CAR S2))
+			       SEQ))
+	       (SETQ S1 (CDR S1))
+	       (SETQ S2 (CDR S2))
+	       (GO LOOP])
+
+(CART_PROD
+  [LAMBDA (A B)
+    (COND
+      ((NULL A)
+	NIL)
+      (T (APPEND [MAPCAR B (QUOTE (LAMBDA (X)
+					  (CONS (CAR A)
+						X]
+		 (CART_PROD
+		   (CDR A)
+		   B])
+
+(CONSTRUCTION
+  [LAMBDA (TBL1 TBL2)
+    (CONS (QUOTE Erel)
+	  (MAPCAR (CDR (INTERSECTION (DOMAIN TBL1)
+				     (DOMAIN TBL2)))
+		  (QUOTE (LAMBDA (X)
+				 (CONS X (LIST (QUOTE Erel)
+					       (CONS 1 (SEL TBL1 X))
+					       (CONS 2 (SEL TBL2 X])
+
+(CONVERSE
+  [LAMBDA (R)                                               (* edited: "28-MAY-85 18:25")
+    (CONS (CAR R)
+	  (REVERSE (MAPCAR (CDR R)
+			   (QUOTE (LAMBDA (X)
+					  (CONS (CDR X)
+						(CAR X])
+
+(CURRY_EXT
+  [LAMBDA (TBL)                                             (* edited: " 5-MAY-85 20:18")
+    (PROG (PTBL TAG FIRST KEY SUBTBL CTBL)
+          (SETQ TAG (CAR TBL))
+          (SETQ PTBL (CDR TBL))
+          (SETQ CTBL NIL)
+      LOOP[COND
+	    [(NULL PTBL)
+	      (RETURN (CONS TAG (REVERSE CTBL]
+	    (T (SETQ FIRST (CAR PTBL))
+	       (COND
+		 ((BINARY_LIST
+		     (CAR FIRST))
+		   (SETQ KEY (LOOKUP 1 (CAR FIRST)))
+		   (SETQ SUBTBL NIL)
+		   [MAPCAR PTBL (QUOTE (LAMBDA (X)
+					       (COND
+						 [(BINARY_LIST
+						     (CAR X))
+						   (COND
+						     ((EQ (CDADAR X)
+							  KEY)
+						       (SETQ SUBTBL (CONS X SUBTBL]
+						 (T (GO EXIT]
+		   (SETQ CTBL (CONS (CURRY_ELEMENT
+				      KEY SUBTBL)
+				    CTBL))
+		   (SETQ PTBL (LDIFFERENCE PTBL SUBTBL)))
+		 (T (GO EXIT]
+          (GO LOOP)
+      EXIT])
+
+(DOMAIN
+  [LAMBDA (R)
+    (CONS (QUOTE Eset)
+	  (MAPCAR (CDR R)
+		  (QUOTE CAR])
+
+(DO_SUBSET
+  [LAMBDA (S1 S2)
+    (COND
+      ((NULL S1)
+	(QUOTE true))
+      ((MEMBER (CAR S1)
+	       S2)
+	(DO_SUBSET
+	  (CDR S1)
+	  S2))
+      (T (QUOTE false])
+
+(FILE_READ
+  [LAMBDA (FNAME)
+    (SETQ FNAME (MKATOM FNAME))
+    (PROG (INPUT)
+          (SETQ INPUT (INFILEP FNAME))
+          (COND
+	    ((NULL INPUT)
+	      (WRITE (QUOTE (file not found)))
+	      (GO EXIT)))
+          (INFILE INPUT)
+          (RETURN (READ INPUT))
+      EXIT(TERPRI)
+          (CLOSEALL NIL])
+
+(FILE_WRITE
+  [LAMBDA (FNAME EXP)
+    (SETQ FNAME (MKATOM FNAME))
+    (PROG (OUTPUT)
+          (SETQ OUTPUT (OUTFILEP FNAME))
+          (OUTFILE OUTPUT)
+          (PRINT EXP OUTPUT)
+          (CLOSEALL NIL])
+
+(FILTER
+  [LAMBDA (P S)
+    (PROG (FSET ARG)
+          (SETQ FSET NIL)
+          (SETQ FILTER_ON
+	    T)
+          [MAPCAR S (QUOTE (LAMBDA (X)
+				   [COND
+				     ((EQ (RPAPPLY P X)
+					  (QUOTE true))
+				       (SETQ FSET (CONS X FSET]
+				   (SETQ ERRORCODE (QUOTE ERRORFREE]
+          (SETQ FILTER_ON
+	    NIL)
+          (RETURN (REVERSE FSET])
+
+(FNC_BODY
+  [LAMBDA (N)
+    (PROG (ANS)
+          (SETQ ANS (LIST (QUOTE f)
+			  (QUOTE x)))
+      LOOP(COND
+	    ((EQ N 0)
+	      (RETURN ANS))
+	    (T (SETQ ANS (LIST (QUOTE f)
+			       ANS))
+	       (SETQ N (DIFFERENCE N 1))
+	       (GO LOOP])
+
+(FORM_PAIR
+  [LAMBDA (X Y)
+    (CONS X Y])
+
+(HEAD
+  [LAMBDA (X)                                               (* edited: " 1-MAY-85 14:02")
+    (COND
+      ((AND (LISTP X)
+	    (NOT (NULL X)))
+	(CAR X))
+      (T (ERROR_HANDLER
+	   (QUOTE EXP_PAIR)
+	   X])
+
+(MAPIMG
+  [LAMBDA (F S)
+    (MAPCAR S (QUOTE (LAMBDA (X)
+			     (RPAPPLY F X])
+
+(MAPRP
+  [LAMBDA (F TBL)
+    (MAPCAR TBL (QUOTE (LAMBDA (X)
+			       (CONS (CAR X)
+				     (RPAPPLY F (CDR X])
+
+(MAPRP_INV
+  [LAMBDA (F TBL)
+    (MAPCAR TBL (QUOTE (LAMBDA (X)
+			       (CONS (RPAPPLY F (CAR X))
+				     (CDR X])
+
+(MAP_ISOMORPHISM
+  [LAMBDA (F TBL)
+    (MAPCAR TBL (QUOTE (LAMBDA (X)
+			       (CONS (RPAPPLY F (CAR X))
+				     (RPAPPLY F (CDR X])
+
+(MAX_SET
+  [LAMBDA (S)                                               (* edited: "30-APR-85 22:31")
+    (PROG (MAX SET)
+          (SETQ SET (CDR S))
+          (COND
+	    ((NUMERIC_SET
+		SET)
+	      (SETQ MAX (CAR SET))
+	      [MAPCAR SET (QUOTE (LAMBDA (X)
+					 (COND
+					   ((GREATERP X MAX)
+					     (SETQ MAX X]
+	      (RETURN MAX)))
+          (T (ERROR_HANDLER
+	       (QUOTE EXP_NSET)
+	       SET])
+
+(MEM
+  [LAMBDA (X S)
+    (COND
+      [(MEMBER (TYPE S)
+	       (QUOTE (Eset Erel)))
+	(COND
+	  ((EQ (MEMBER X S)
+	       NIL)
+	    (QUOTE false))
+	  (T (QUOTE true]
+      (T (ERROR_HANDLER
+	   (QUOTE EXP_SET)
+	   S])
+
+(MIN_SET
+  [LAMBDA (S)                                               (* edited: "30-APR-85 22:27")
+    (PROG (MIN SET)
+          (SETQ SET (CDR S))
+          (COND
+	    ((NUMERIC_SET
+		SET)
+	      (SETQ MIN (CAR SET))
+	      [MAPCAR SET (QUOTE (LAMBDA (X)
+					 (COND
+					   ((LESSP X MIN)
+					     (SETQ MIN X]
+	      (RETURN MIN))
+	    (T (ERROR_HANDLER
+		 (QUOTE EXP_NSET)
+		 SET])
+
+(RANGE
+  [LAMBDA (R)
+    (CONS (QUOTE Eset)
+	  (MAPCAR (CDR R)
+		  (QUOTE CDR])
+
+(REFLEXIVE_TRANSITIVE_CLOSURE
+  [LAMBDA (R)
+    (PROG (TAG MEM)
+          (SETQ TAG (CAR R))
+          [SETQ MEM (UNION (CDR (DOMAIN R))
+			   (CDR (RANGE R]
+          (RETURN (CONS TAG (UNION [MAPCAR MEM (QUOTE (LAMBDA (X)
+							      (CONS X X]
+				   (CDR (TRANSITIVE_CLOSURE
+					  R])
+
+(RELATIVE_PRODUCT
+  [LAMBDA (TBL1 TBL2)                                       (* edited: " 5-MAY-85 19:37")
+    (COND
+      ((NULL TBL1)
+	NIL)
+      (T (APPEND [MAPCAR (CDR (SELECT_ALL
+				(CDAR TBL1)
+				TBL2))
+			 (QUOTE (LAMBDA (X)
+					(CONS (CAAR TBL1)
+					      X]
+		 (RELATIVE_PRODUCT
+		   (CDR TBL1)
+		   TBL2])
+
+(REPEAT_COMPOSITION
+  [LAMBDA (FNC P)
+    (PROG (SE)
+          (SETQ SE (CONS (CONS (QUOTE f)
+			       FNC)
+			 (CADDDR FNC)))
+          (RETURN (LIST (QUOTE closure)
+			(QUOTE x)
+			(FNC_BODY
+			  P)
+			SE])
+
+(REQUAL
+  [LAMBDA (X Y)                                             (* edited: " 8-MAY-85 19:53")
+    (COND
+      [[AND (MEMBER (TYPE X)
+		    (QUOTE (Eset Erel)))
+	    (MEMBER (TYPE Y)
+		    (QUOTE (Eset Erel]
+	(COND
+	  ((AND (EQ (DO_SUBSET
+		      (CDR X)
+		      (CDR Y))
+		    (QUOTE true))
+		(EQ (DO_SUBSET
+		      (CDR Y)
+		      (CDR X))
+		    (QUOTE true)))
+	    (QUOTE true))
+	  (T (QUOTE false]
+      (T (TF (EQUAL X Y])
+
+(REVERSE_ARRAY
+  [LAMBDA (LST)                                             (* edited: "28-MAY-85 18:30")
+    (PROG (TAG DOM K)
+          (SETQ TAG (CAR LST))
+          (SETQ DOM (SORT (CDR (DOMAIN LST))
+			  (QUOTE LESSP)))
+          (SETQ K (PLUS (CAR (REVERSE DOM))
+			(CAR DOM)))
+          (RETURN (CONS TAG (REVERSE (MAPCAR (CDR LST)
+					     (QUOTE (LAMBDA (X)
+							    (CONS (DIFFERENCE K (CAR X))
+								  (CDR X])
+
+(RNOT
+  [LAMBDA (B)
+    (COND
+      ((EQ B (QUOTE true))
+	(QUOTE false))
+      (T (QUOTE true])
+
+(RPL_REPEAT
+  [LAMBDA (EXP ER)                                          (* edited: " 6-JUN-85 03:05")
+    (PROG (F P X RESULT)
+          (SETQ F (EV (CADR EXP)
+		      ER))
+          (SETQ P (EV (CADDDR EXP)
+		      ER))
+          (SETQ X (EV (QUOTE ?x)
+		      ER))
+          (COND
+	    ([NOT (AND (EQ ERRORCODE (QUOTE ERRORFREE))
+		       (EQ (TYPE F)
+			   (QUOTE closure))
+		       (EQ (TYPE P)
+			   (QUOTE closure]
+	      (ERROR_HANDLER
+		(QUOTE EXP_FUNC)
+		(QUOTE (boolean predicate missing or bad function definition in iter)))
+	      (GO EXIT)))
+          (SETQ RESULT (RPAPPLY F X))
+      LOOP(COND
+	    ((EQ (RPAPPLY P RESULT)
+		 (QUOTE true))
+	      (SETQ RESULT (RPAPPLY F RESULT))
+	      (GO LOOP)))
+          (RETURN RESULT)
+      EXIT])
+
+(SEL
+  [LAMBDA (TBL TGT)
+    (PROG (X)
+          (SETQ X (SASSOC TGT (CDR TBL)))
+          (RETURN (COND
+		    ((EQ X NIL)
+		      (ERROR_HANDLER
+			(QUOTE UBTE)
+			(LIST TGT (QUOTE (not found in))
+			      TBL)))
+		    (T (CDR X])
+
+(SEQ_TO_ARRAY
+  [LAMBDA (SEQ INDEX)                                       (* edited: "30-APR-85 21:43")
+    (PROG (FIRST ARRAY)
+          [SETQ FIRST (CAR (LDIFFERENCE (DOMAIN SEQ)
+					(RANGE SEQ]
+          (SETQ ARRAY (LIST (CONS INDEX FIRST)))
+      LOOP(SETQ FIRST (LOOKUP FIRST (CDR SEQ)))
+          (COND
+	    [(EQ FIRST NIL)
+	      (RETURN (CONS (QUOTE Erel)
+			    (REVERSE ARRAY]
+	    (T (SETQ INDEX (PLUS 1 INDEX))
+	       (SETQ ARRAY (CONS (CONS INDEX FIRST)
+				 ARRAY))
+	       (GO LOOP])
+
+(SUPERSCRIPT
+  [LAMBDA (OPND PWR)                                        (* edited: "28-MAY-85 18:36")
+    (COND
+      ((AND (EQUAL PWR (QUOTE (closure +)))
+	    (EQ (TYPE OPND)
+		(QUOTE Erel)))
+	(TRANSITIVE_CLOSURE
+	  OPND))
+      ((AND (EQUAL PWR (QUOTE (closure star)))
+	    (EQ (TYPE OPND)
+		(QUOTE Erel)))
+	(REFLEXIVE_TRANSITIVE_CLOSURE
+	  OPND))
+      ((AND (NUMBERP PWR)
+	    (EQ PWR -1)
+	    (EQ (TYPE OPND)
+		(QUOTE Erel)))
+	(CONVERSE OPND))
+      ((AND (NUMBERP PWR)
+	    (GREATERP PWR 0)
+	    (EQ (TYPE OPND)
+		(QUOTE closure)))
+	(REPEAT_COMPOSITION
+	  OPND PWR))
+      (T (ERROR_HANDLER
+	   (QUOTE BAD_SYNTAX)
+	   IEXP])
+
+(TAIL
+  [LAMBDA (X)                                               (* edited: " 1-MAY-85 14:02")
+    (COND
+      ((AND (LISTP X)
+	    (NOT (NULL X)))
+	(CDR X))
+      (T (ERROR_HANDLER
+	   (QUOTE EXP_PAIR)
+	   X])
+
+(TRANSITIVE_CLOSURE
+  [LAMBDA (R)                                               (* edited: " 7-MAY-85 15:19")
+    (PROG (TMP ANS)
+          (SETQ TMP (CDR R))
+          (SETQ ANS (CDR R))
+      RPLOOP
+          (COND
+	    ((NULL TMP)
+	      (RETURN (CONS (CAR R)
+			    ANS)))
+	    (T (SETQ TMP (RELATIVE_PRODUCT
+		   TMP
+		   (CDR R)))
+	       (SETQ ANS (UNION ANS TMP))
+	       (GO RPLOOP])
+
+(UNCURRY_EXT
+  [LAMBDA (TBL)                                             (* edited: " 5-MAY-85 18:39")
+    (PROG (TAG PTBL KEY SUBTBL UTBL)
+          (SETQ TAG (CAR TBL))
+          (SETQ PTBL (CDR TBL))
+      LOOP[COND
+	    ((NULL PTBL)
+	      (RETURN (CONS TAG UTBL)))
+	    (T (SETQ KEY (CAAR PTBL))
+	       (SETQ SUBTBL (CDAR PTBL))
+	       (COND
+		 ((COERCE_TO_REL
+		     SUBTBL)
+		   (SETQ SUBTBL (CDR SUBTBL))
+		   [SETQ UTBL (APPEND UTBL (MAPCAR SUBTBL
+						   (QUOTE (LAMBDA
+							    (X)
+							    (CONS [CONS (QUOTE Erel)
+									(LIST_TO_REL
+									  (LIST KEY (CAR X]
+								  (CDR X]
+		   (SETQ PTBL (CDR PTBL))
+		   (GO LOOP]
+      EXIT])
+
+(ALL_PAIRS
+  [LAMBDA (S)                                               (* edited: "30-APR-85 15:44")
+    (COND
+      ((NULL S)
+	T)
+      ([AND (LISTP (CAR S))
+	    (NOT (MEMB (CAAR S)
+		       (QUOTE (Eset Erel closure]
+	(ALL_PAIRS
+	  (CDR S])
+
+(BINARY_LIST
+  [LAMBDA (REL)                                             (* edited: " 5-MAY-85 10:54")
+    (COND
+      ((COERCE_TO_REL
+	  REL)
+	(COND
+	  ((AND (EQ (CAADR REL)
+		    1)
+		(EQ (CAADDR REL)
+		    2))
+	    T)
+	  (T (ERROR_HANDLER
+	       (QUOTE BAD_ARG)
+	       (LIST REL (QUOTE (not a binary list])
+
+(COERCE_TO_REL
+  [LAMBDA (S)                                               (* edited: "30-APR-85 15:59")
+    (PROG (STYPE)
+          (SETQ STYPE (TYPE S))
+          (RETURN (COND
+		    ((EQ STYPE (QUOTE Erel)))
+		    ((AND (EQ STYPE (QUOTE Eset))
+			  (ALL_PAIRS
+			    (CDR S)))
+		      S)
+		    (T (ERROR_HANDLER
+			 (QUOTE EXP_REL)
+			 S])
+
+(CURRY_ELEMENT
+  [LAMBDA (KEY TBL)                                         (* edited: " 5-MAY-85 11:54")
+    (CONS KEY (CONS (QUOTE Erel)
+		    (REVERSE (MAPCAR TBL (QUOTE (LAMBDA (X)
+							(CONS (LOOKUP 2 (CAR X))
+							      (CDR X])
+
+(DISPLAY_ENV
+  [LAMBDA (FNC)                                             (* edited: "29-MAY-85 20:00")
+    (PROG (ENV)
+          (SETQ ENV (GET_ENV
+	      USERDEFS FNC))
+      LOOP(COND
+	    ((NULL ENV)
+	      (SPACES 1)
+	      (WRITE (QUOTE (System Defined Functions)))
+	      (TERPRI))
+	    (T (SPACES 1)
+	       (WRITE (CDAR ENV))
+	       (TERPRI)
+	       (SETQ ENV (CDR ENV))
+	       (GO LOOP])
+
+(GET_ENV
+  [LAMBDA (L FNAME)                                         (* edited: "28-MAY-85 19:58")
+    (PROG (ENV)
+          (COND
+	    ((NULL FNAME)
+	      (RETURN L))
+	    (T (SETQ ENV L)
+	       (MAPCAR L (QUOTE (LAMBDA (X)
+					(COND
+					  ((EQ (CAR X)
+					       FNAME)
+					    (RETURN ENV))
+					  (T (SETQ ENV (CDR ENV])
+
+(LIST_TO_REL
+  [LAMBDA (D)
+    (PROG (R C)
+          (SETQ R NIL)
+          (SETQ C (PLUS (LENGTH D)
+			1))
+      LOOP(SETQ C (DIFFERENCE C 1))
+          (COND
+	    ((GREATERP C 0)
+	      (SETQ R (CONS C R))
+	      (GO LOOP))
+	    (T R))
+          (RETURN (MAP2CAR R D (QUOTE CONS])
+
+(LOOKUP
+  [LAMBDA (TGT TBL)
+    (PROG (X)
+          (SETQ X (SASSOC TGT TBL))
+          (RETURN (COND
+		    ((EQ X NIL)
+		      NIL)
+		    (T (CDR X])
+
+(MAKE_UNIQUE
+  [LAMBDA (INPUT RESULT ENV)
+    (COND
+      ((NULL INPUT)
+	(REVERSE RESULT))
+      (T (COND
+	   ((MEMBER (EV (CAR INPUT)
+			ENV)
+		    RESULT)
+	     (MAKE_UNIQUE
+	       (CDR INPUT)
+	       RESULT ENV))
+	   (T (SETQ RESULT (CONS (EV (CAR INPUT)
+				     ENV)
+				 RESULT))
+	      (MAKE_UNIQUE
+		(CDR INPUT)
+		RESULT ENV])
+
+(NUMERIC_SET
+  [LAMBDA (SET)                                             (* edited: "30-APR-85 19:15")
+    (PROG NIL
+          [MAPCAR SET (QUOTE (LAMBDA (X)
+				     (COND
+				       ((NOT (NUMBERP X))
+					 (GO EXIT]
+          (RETURN T)
+      EXIT(RETURN NIL])
+
+(POSIT
+  [LAMBDA (L TARGET)
+    (PROG (N)
+          (SET (QUOTE N)
+	       0)
+      LOOP(COND
+	    ((NULL L)
+	      (RETURN 0))
+	    ((EQUAL TARGET (CAR L))
+	      (RETURN (PLUS N 1)))
+	    (T (SET (QUOTE N)
+		    (PLUS N 1))
+	       (SET (QUOTE L)
+		    (CDR L))
+	       (GO LOOP])
+
+(PRINT_LIST
+  [LAMBDA (S)
+    (COND
+      ((NULL S)
+	NIL)
+      ([OR (ATOM S)
+	   (STRINGP S)
+	   (EQ (CAR S)
+	       (QUOTE closure))
+	   (MEMB (CAR S)
+		 (QUOTE (Eset Erel]
+	(SHOW_ATOM
+	  S))
+      (T (SHOW_ATOM
+	   (CAR S))
+	 (PRINT_LIST
+	   (CDR S])
+
+(READCMD
+  [LAMBDA NIL
+    (WAITFORINPUT)
+    (READLINE])
+
+(READTERM
+  [LAMBDA NIL
+    (WAITFORINPUT)
+    (CAR (READLINE])
+
+(READ_USER_DEFS
+  [LAMBDA (FNAME)
+    (PROG (INPUT DEFIN)
+          (SETQ INPUT (INFILEP FNAME))
+          (COND
+	    ((NULL INPUT)
+	      (WRITE (QUOTE (file not found)))
+	      (GO EXIT)))
+          (INFILE INPUT)
+          (WRITE (QUOTE (Loading---)))
+          (SETQ DEFIN (READ INPUT))
+      LOOP(COND
+	    ((EQ DEFIN (QUOTE EOF))
+	      (WRITE (QUOTE (Session loaded)))
+	      (GO EXIT))
+	    (T (SETQ ERRORCODE (QUOTE ERRORFREE))
+	       (EXECUTE DEFIN)
+	       (SETQ DEFIN (READ INPUT))
+	       (GO LOOP)))
+      EXIT(TERPRI)
+          (CLOSEALL NIL])
+
+(SAVEF
+  [LAMBDA (FNAME DEFS VARS)
+    [SETQ FCOMS (PACK (LIST FNAME (QUOTE COMS]
+    [SETQ FFNS (PACK (LIST FNAME (QUOTE FNS]
+    (SET FFNS DEFS)
+    (SET FCOMS (LIST (LIST (QUOTE FNS)
+			   (QUOTE *)
+			   FFNS)
+		     (LIST (QUOTE VARS)
+			   VARS)))
+    (MAKEFILE FNAME])
+
+(SELECT_ALL
+  [LAMBDA (TGT TBL)                                         (* edited: " 7-MAY-85 16:07")
+    (PROG (SET)
+          (SETQ SET NIL)
+          [MAPCAR TBL (QUOTE (LAMBDA (X)
+				     (COND
+				       ((EQ (CAR X)
+					    TGT)
+					 (SETQ SET (CONS (CDR X)
+							 SET]
+          (RETURN (CONS (QUOTE Eset)
+			(REVERSE SET])
+
+(SEQ_TO_REL
+  [LAMBDA (S)
+    (COND
+      ((LEQ (LENGTH S)
+	    1)
+	NIL)
+      (T (CONS (CONS (CAR S)
+		     (CADR S))
+	       (SEQ_TO_REL
+		 (CDR S])
+
+(SHOW_ATOM
+  [LAMBDA (X)                                               (* edited: "29-APR-85 12:27")
+    (SPACES 1)
+    [COND
+      ((ATOM X)
+	(PRIN1 X))
+      ((STRINGP X)
+	(PRIN1 X))
+      [(MEMB (CAR X)
+	     (QUOTE (Eset Erel)))
+	(COND
+	  ((EQ (LENGTH X)
+	       1)
+	    (PRIN1 (QUOTE empty)))
+	  ((EQ (CAR X)
+	       (QUOTE Eset))
+	    (PRIN1 (QUOTE %())
+	    (PRINT_LIST
+	      (CONS (QUOTE set)
+		    (CDR X)))
+	    (PRIN1 (QUOTE %))))
+	  (T (PRIN1 (QUOTE %())
+	     (PRINT_LIST
+	       (CONS (QUOTE rel)
+		     (CDR X)))
+	     (PRIN1 (QUOTE %)]
+      [(EQ (CAR X)
+	   (QUOTE closure))
+	(COND
+	  [(EQ (LENGTH X)
+	       4)
+	    (PRIN1 (LIST (CAR X)
+			 (CADR X)
+			 (CADDR X]
+	  (T (PRIN1 X]
+      (T (PRIN1 (QUOTE %())
+	 (PRINT_LIST
+	   X)
+	 (PRIN1 (QUOTE %)]
+    (SPACES 1])
+
+(SHOW_ENV
+  [LAMBDA (ENV)
+    (PROG (X)
+          (SETQ X (CAR ENV))
+          (RETURN (COND
+		    ((MEMB (CAR X)
+			   OPNAMES)
+		      (WRITE (QUOTE (System Defined Functions)))
+		      (TERPRI))
+		    (T [COND
+			 ((LEQ (LENGTH X)
+			       4)
+			   (SHOW_ATOM
+			     X)
+			   (TERPRI))
+			 (T (COND
+			      [(AND (EQ (CADR X)
+					(QUOTE closure))
+				    (EQ (LENGTH X)
+					5))
+				(PRINT (LIST (CAR X)
+					     (CADR X)
+					     (CADDR X)
+					     (CADDDR X]
+			      (T (SHOW_ATOM
+				   X)
+				 (TERPRI]
+		       (SHOW_ENV
+			 (CDR ENV])
+
+(TF
+  [LAMBDA (B)
+    (COND
+      ((EQ B NIL)
+	(QUOTE false))
+      (T (QUOTE true])
+
+(TYPE
+  [LAMBDA (X)
+    (COND
+      ((OR (ATOM X)
+	   (STRINGP X))
+	(QUOTE atom))
+      (T (CAR X])
+
+(WRITE
+  [LAMBDA (L)
+    (MAPCAR L (QUOTE (LAMBDA (X)
+			     (PRIN2 X)
+			     (SPACES 1])
+
+(WRITE_USER_DEFS
+  [LAMBDA (FNAME)
+    (PROG (OUTPUT DEFOUT)
+          (SETQ OUTPUT (OUTFILEP FNAME))
+          (OUTFILE OUTPUT)
+          (SETQ DEFOUT (REVERSE USERDEFS))
+          [MAPCAR DEFOUT (QUOTE (LAMBDA (X)
+					(PRINT (CDR X)
+					       OUTPUT]
+          (PRINT (QUOTE EOF)
+		 OUTPUT)
+          (CLOSEALL NIL])
+)
+
+(RPAQQ DEFS (RPL INIT_SYS_NAMES SET_USER_ENV EXECUTE DEF_BINDING DISPLAY ERROR_HANDLER EXIT EV 
+		 EV_SPECIAL_CASES MAPEV EVRANGE EVSEQ INFIXOP PREFIXOP RPAPPLY BINDARGS BIF_APPLY 
+		 ARRAY_CONCATENATION ARRAY_REDUCTION ARRAY_TO_SEQ CART_PROD CONSTRUCTION CONVERSE 
+		 CURRY_EXT DOMAIN DO_SUBSET FILE_READ FILE_WRITE FILTER FNC_BODY FORM_PAIR HEAD 
+		 MAPIMG MAPRP MAPRP_INV MAP_ISOMORPHISM MAX_SET MEM MIN_SET RANGE 
+		 REFLEXIVE_TRANSITIVE_CLOSURE RELATIVE_PRODUCT REPEAT_COMPOSITION REQUAL 
+		 REVERSE_ARRAY RNOT RPL_REPEAT SEL SEQ_TO_ARRAY SUPERSCRIPT TAIL TRANSITIVE_CLOSURE 
+		 UNCURRY_EXT ALL_PAIRS BINARY_LIST COERCE_TO_REL CURRY_ELEMENT DISPLAY_ENV GET_ENV 
+		 LIST_TO_REL LOOKUP MAKE_UNIQUE NUMERIC_SET POSIT PRINT_LIST READCMD READTERM 
+		 READ_USER_DEFS SAVEF SELECT_ALL SEQ_TO_REL SHOW_ATOM SHOW_ENV TF TYPE WRITE 
+		 WRITE_USER_DEFS))
+(DECLARE: DONTCOPY
+  (FILEMAP (NIL (1194 51616 (RPL 1204 . 2210) (INIT_SYS_NAMES 2212 . 8907) (SET_USER_ENV 8909 . 9355) (
+EXECUTE 9357 . 10496) (DEF_BINDING 10498 . 12740) (DISPLAY 12742 . 14067) (ERROR_HANDLER 14069 . 14516
+) (EXIT 14518 . 15419) (EV 15421 . 16103) (EV_SPECIAL_CASES 16105 . 20033) (MAPEV 20035 . 20116) (
+EVRANGE 20118 . 20583) (EVSEQ 20585 . 21420) (INFIXOP 21422 . 22000) (PREFIXOP 22002 . 22385) (RPAPPLY
+ 22387 . 23022) (BINDARGS 23024 . 23127) (BIF_APPLY 23129 . 32678) (ARRAY_CONCATENATION 32680 . 33184)
+ (ARRAY_REDUCTION 33186 . 33800) (ARRAY_TO_SEQ 33802 . 34266) (CART_PROD 34268 . 34446) (CONSTRUCTION 
+34448 . 34718) (CONVERSE 34720 . 34934) (CURRY_EXT 34936 . 35792) (DOMAIN 35794 . 35878) (DO_SUBSET 
+35880 . 36050) (FILE_READ 36052 . 36373) (FILE_WRITE 36375 . 36586) (FILTER 36588 . 36948) (FNC_BODY 
+36950 . 37201) (FORM_PAIR 37203 . 37249) (HEAD 37251 . 37474) (MAPIMG 37476 . 37563) (MAPRP 37565 . 
+37685) (MAPRP_INV 37687 . 37812) (MAP_ISOMORPHISM 37814 . 37960) (MAX_SET 37962 . 38383) (MEM 38385 . 
+38612) (MIN_SET 38614 . 39016) (RANGE 39018 . 39101) (REFLEXIVE_TRANSITIVE_CLOSURE 39103 . 39409) (
+RELATIVE_PRODUCT 39411 . 39747) (REPEAT_COMPOSITION 39749 . 39966) (REQUAL 39968 . 40426) (
+REVERSE_ARRAY 40428 . 40869) (RNOT 40871 . 40970) (RPL_REPEAT 40972 . 41772) (SEL 41774 . 42013) (
+SEQ_TO_ARRAY 42015 . 42540) (SUPERSCRIPT 42542 . 43218) (TAIL 43220 . 43443) (TRANSITIVE_CLOSURE 43445
+ . 43849) (UNCURRY_EXT 43851 . 44525) (ALL_PAIRS 44527 . 44782) (BINARY_LIST 44784 . 45111) (
+COERCE_TO_REL 45113 . 45475) (CURRY_ELEMENT 45477 . 45726) (DISPLAY_ENV 45728 . 46146) (GET_ENV 46148
+ . 46486) (LIST_TO_REL 46488 . 46774) (LOOKUP 46776 . 46930) (MAKE_UNIQUE 46932 . 47287) (NUMERIC_SET 
+47289 . 47560) (POSIT 47562 . 47848) (PRINT_LIST 47850 . 48119) (READCMD 48121 . 48182) (READTERM 
+48184 . 48251) (READ_USER_DEFS 48253 . 48832) (SAVEF 48834 . 49113) (SELECT_ALL 49115 . 49457) (
+SEQ_TO_REL 49459 . 49617) (SHOW_ATOM 49619 . 50422) (SHOW_ENV 50424 . 50995) (TF 50997 . 51085) (TYPE 
+51087 . 51190) (WRITE 51192 . 51287) (WRITE_USER_DEFS 51289 . 51614)))))
+STOP

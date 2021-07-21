@@ -1,0 +1,4 @@
+pic $1 | /usr/local/dtbl >s.roff
+/usr/local/deqn /usr/pub/eqncharq /work/maclen/myeqncharq s.roff>t.roff
+qtroff -rO1i -mm -Q $2 t.roff > junk &
+echo "  $1 sent."

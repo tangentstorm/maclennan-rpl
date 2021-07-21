@@ -1,0 +1,216 @@
+.PH ""
+.PF "''- \\\\nP -''"
+.S +2
+.DS 2
+RELATIONAL PROGRAMMING LANGUAGE INPUT FORMS
+.DE
+.S
+.DS 2
+B. J. MacLennan
+Computer Science Department
+Naval Postgraduate School
+Monterey, CA 93943
+86/10/31
+.DE
+.DS
+.TB "Primitive Extensional Operations"
+.TS
+center,box;
+l|l|l.
+Name	Input Form	Publication Form
+_
+selection	t sel x	$t~sel~x$
+relative product	t | u	$t~|~u$
+construction	t , bar u	$t~, bar~u$
+pair formation	x : y	$x~:~y$
+union	x cup y	$x~cup~y$
+unit set	un x	$rom un~x$
+currying	cur x	$rom cur~x$
+uncurrying	unc x	$rom unc~x$
+unique element selection	theta x	$theta~x$
+cardinality	size x	$card~x$
+structure	str t	$rom str~t$
+transitive closure	t sup +	$t sup +$
+empty set	empty	$empty$
+.TE
+.DE
+.DS
+.TB "Nonprimitive Extensional Operations:  Group 1"
+.TS
+center,box;
+l|l|l.
+Name	Input Form	Publication Form
+_
+pair list	(x, y)	$(x,~y)$
+left pair section	(x,)	$(x,)$
+right pair section	(,y)	$(,y)$
+duplication	DELTA x	$DELTA~x$
+membership	x member t	$x~member~t$
+nonmembership	x nomem t	$x~nomem~t$
+improper subset	s !subset t	$s~!subset~t$
+proper subset	s subset t	$s~subset~t$
+equality	s = t	$s~=~t$
+inverse	inv t, t sup -1	$rom inv~t,~t sup -1$
+domain	dom t	$rom dom~t$
+range	rng t	$rom rng~t$
+members	mem t	$rom mem~t$
+left member	Lm (x,t)	$rom Lm~(x,t)$
+right member	Rm (x,t)	$rom Rm~(x,t)$
+member	Mm (x,t)	$rom Mm~(x,t)$
+right univalent	run t	$rom run~t$
+left univalent	lun t	$rom lun~t$
+bi-univalent	bun t	$rom bun~t$
+initial members	init t	$rom init~t$
+terminal members	term t	$rom term~t$
+reflexive transitive closure	t sup *	$t sup *$
+domain restriction	p -> t	$p~->~t$
+range restriction	t <- p	$t~<-~p$
+restriction	t restr p	$t~restr~p$
+.TE
+.DE
+.DS
+.TB "Nonprimitive Extensional Operations:  Group 2"
+.TS
+center,box;
+l|l|l.
+Name	Input Form	Publication Form
+_
+first member	alpha t	$alpha~t$
+last member	omega t	$omega~t$
+initial sequence	ALPHA t	$ALPHA~t$
+final sequence	OMEGA t	$OMEGA~t$
+ordered union	t ; u	$t~;~u$
+cons left	x cl t	$x~rom cl~t$
+cons right	t cr x	$t~rom cr~x$
+minimum	min s	$rom min~s$
+maximum	max s	$rom max~s$
+intersection	s cap t	$s~cap~t$
+set difference	s \e t	$s~"\e"~t$
+subrange set	{m .. n}	$"{"m ,..., n"}"$
+subrange sequence	[m .. n]	$[m ,..., n]$
+apply functional record	t @ hat x	$t~@hat~x$
+apply functional structure	t ! x	$t~!~x$
+minimize	mu t	$mu~t$
+database index	index x t	$rom index~x~t$
+database select	select x	$rom select~x$
+database join	join x	$rom join~x$
+array to sequence	as t	$rom as~t$
+sequence to array	sa t	$rom sa~t$
+seq. to zero-origin array	sa0 t	$rom sa0~t$
+relative product	rp f t	$rom rp~f~t$
+relative product inverse	rpi f t	$rom rpi~f~t$
+array catenation	t cat u	$t~rom cat~u$
+relation sort	rsort s	$rom rsort~s$
+sort	sort s	$rom sort~s$
+unit image	unimg t x	$rom unimg~t~x$
+all	all t	$rom all~t$
+sequence to matrix	ssm t	$rom ssm~t$
+.TE
+.DE
+.DS
+.TB "Primitive Intensional Operations"
+.TS
+center,box;
+l|l|l.
+Name	Input Form	Publication Form
+_
+application	f @ x	$f~@~x$
+image	img f s	$rom img~f~s$
+composition	f . g	$f~.~g,~f~cdot~g,~f~comp~g$
+left section	(x+), (x-), ...	$(x+),~(x-),~...$
+right section	(+y), (-y), ...	$(+y),~(-y),~...$
+paralleling	f | | g	$f~||~g$
+isomorphism	f $dollar$ t	$f~dollar~t$
+formal application	f @ bar g	$f~@bar~g$
+functional condition	(p -> f; g)	$(p~->~f;~g)$
+curry	curry f	$rom curry~f$
+uncurry	uncurry f	$rom uncurry~f$
+filtering	PHI p (d, r)	$PHI~p~(d,~r)$
+iteration	iter [p -> f]	$rom iter~[p~->~f]$
+formalization	+ bar, times bar, ...	$+ bar ,~times bar$
+identity	Id	$rom Id$
+.TE
+.DE
+.DS
+.TB "Nonprimitive Intensional Operations"
+.TS
+center,box;
+l|l|l.
+Name	Input Form	Publication Form
+_
+while loop	while [p, f]	$rom while~[p,~f]$
+reduction	f red i	$f~red~i$
+repeated composition	f sup n	$f sup n$
+value of node	upsilon f	$upsilon~f$
+operate on form	phi f	$phi~f$
+operate on data	delta f	$delta~f$
+image of structure	PI f	$PI~f$
+extension	extend (t, f)	$rom extend~(t,~f)$
+restriction	restrict (s, f)	$rom restrict~(s,~f)$
+formal negation	wig p	$wig p$
+.TE
+.DE
+.DS
+.TB "Miscellaneous Operations"
+.TS
+center,box;
+l|l|l.
+Name	Input Form	Publication Form
+_
+sum	x + y	$x~+~y$
+difference	x - y	$x~-~y$
+product	x times y	$x~times~y$
+quotient	x divide y	$x~divide~y$
+inequality	x != y	$x~!=~y$
+less	x < y	$x~<~y$
+greater	x > y	$x~>~y$
+less or equal	x <= y	$x~<=~y$
+greater or equal	x >= y	$x~>=~y$
+conjunction	x andsign y	$x~andsign~y$
+disjunction	x orsign y	$x~orsign~y$
+negation	not x	$not x$
+cartesian product	s cart t	$s~cart~t$
+.TE
+.DE
+.DS
+.TB "Miscellaneous Syntax"
+.TS
+center,box;
+l|l|l.
+Name	Input Form	Publication Form
+_
+parentheses	( )	$(~)$
+brackets	[ ]	$[~]$
+braces	{ }	$"{"~"}"$
+sequences	<x, y, ... >	$<x,~y,~...~>$
+identifiers	a, b', total, etc.	$a,~b ' ,~rom total ,~etc.$
+strings	``abcd''	``abcd''
+data definition	x == y	$x~==~y$
+function definition	f x == y	$f~x~==~y$
+output	display x	$bold display~x$
+.TE
+.DE
+.DS
+.TB "Example Program in Publication Form"
+.TS
+center,box;
+ll.
+	-- $F$ = old file, $U$ = update file
+$H~~==~~$``Hours''	-- Field name for hours worked
+$u~~==~~[H,]~.~(F~@hat~H~+ bar~U)$	-- Updating function
+$F '~~==~~u~; bar~F$	-- New file
+$bold display~F '$	-- Display result
+.TE
+.DE
+.DS
+.TB "Example Program in Input Form"
+.TS
+center,box;
+ll.
+	-- F = old file, U = update file
+H == ``Hours''	-- Field name for hours worked
+u == [H,] . (F @ hat H + bar U)	-- Updating function
+F' == u ; bar F	-- New file
+display F'	-- Display result
+.TE
+.DE

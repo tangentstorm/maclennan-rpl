@@ -1,0 +1,92 @@
+.TH EQNCHAR 7 "1 February 1983"
+.UC
+.EQ
+tdefine ciplus % "\o'\(pl\(ci'" %
+ndefine ciplus % O+ %
+tdefine citimes % "\o'\(mu\(ci'" %
+ndefine citimes % Ox %
+tdefine =wig % "\z\(eq\v'-.3m'\h'-.05m'\(ap\v'.3m'\h'.05m'"%
+ndefine =wig % ="~" %
+tdefine bigstar % "\z\(pl\(mu" %
+ndefine bigstar % X|- %
+tdefine =dot % "\z\(eq\v'-.5m'\h'-.3m'\s+2 .\s-2\h'.3m'\v'.5m'" %
+ndefine =dot % = dot %
+tdefine orsign % "\s-2\v'-.15m'\z\e\e\h'-.3m'\z\(sl\(sl\v'.15m'\h'.3m'\s+2" %
+ndefine orsign % \e/ %
+tdefine andsign % "\s-2\v'-.15m'\(sl\h'-.5m'\e\v'.15m'\h'.5m'\s+2" %
+ndefine andsign % /\e %
+tdefine =del % "\v'.3m'\z=\v'-.5m'\h'.05m'\s-2\(*D\s+2\v'.2m'\h'-.05m'" %
+ndefine =del % = to DELTA %
+tdefine oppA % "\s-2\v'-.15m'\z\e\e\h'-.3m'\z\(sl\z\(sl\v'.15m'\h'-.1m'-\s+2\h'.4m'"%
+ndefine oppA % V- %
+tdefine oppE %"\s-3\v'.2m'\z\(em\v'-.5m'\z\(em\v'-.5m'\(em\h'-.07m'\v'.4m'\(br\h.07m'\v'.4m'\s+3" %
+ndefine oppE % E/ %
+tdefine incl % "\s-1\h'-.1m'\v'-.1m'\z\(or\h'.1m'\v'-.35m'\z\(em\v'.85m'\z\(em\v'.2m'\(em\v'-6m'\s+1" %
+ndefine incl % C_ %
+tdefine nomem % "\z\(mo\h'.1m'\(sl\h'-.1m'" %
+ndefine nomem % C-/ %
+tdefine angstrom % "\fR\zA\v'-.3m'\h'.2m'\(de\v'.3m'\fP\h'.2m'" %
+ndefine angstrom % A to o %
+tdefine star %{ roman "\v'.5m'\s+3*\s-3\v'-.5m'"}%
+ndefine star % * %
+tdefine || % \(or\(or %
+tdefine <wig % "\z<\v'.4m'\(ap\v'-.4m'" %
+ndefine <wig %{ < from "~" }%
+tdefine >wig % "\z>\v'.4m'\(ap\v'-.4m'" %
+ndefine >wig %{ > from "~" }%
+tdefine langle % "\s-3\b'\(sl\e'\s0" %
+ndefine langle %<%
+tdefine rangle % "\s-3\b'\e\(sl'\s0" %
+ndefine rangle %>%
+tdefine hbar % "\zh\v'-.7m'\h'.05m'\(ru\v'.7m'" %
+ndefine hbar % h\u-\d %
+ndefine ppd % _| %
+tdefine ppd % "\z\(ru\s-2\\h'.3m'\v'-.2m'\(or\v'.2m'\h'-.3m'\s+2" %
+tdefine <-> % "\o'\(<-\(->'" %
+ndefine <-> % "<-->" %
+tdefine <=> % "\s-2\z<\v'.04m'\h'.3m'\z=\h'.55m'=\h'-.5m'\v'-.04m'>\s+2" %
+ndefine <=> % "<=>" %
+tdefine |< % "\o'<\(or'" %
+ndefine |< % <| %
+tdefine |> % "\o'>\(or'" %
+ndefine |> % |> %
+tdefine ang % "\v'-.15m'\h'-.2m'\z\s-2\(sl\h'.2m'\s+2\v'.15m'\(ru" %
+ndefine ang % /_ %
+tdefine rang % "\z\(or\h'.2m'\v'.1m'\(ru\h'-.2m'\v'-.1m'" %
+ndefine rang % L %
+tdefine 3dot % "\v'-.8m'\z.\v'.5m'\z.\v'.5m'.\v'-.2m'" %
+ndefine 3dot % .\u.\u.\d\d %
+tdefine thf % ".\v'-.5m'.\v'.5m'." %
+ndefine thf % ..\u.\d %
+tdefine quarter %"\s-2\v'-.3m'1\h'-.25m'\v'+.15m'/\h'-.17m'\v'+.15m'4\s+2"%
+ndefine quarter % 1/4 %
+tdefine 3quarter %"\s-2\v'-.3m'3\h'-.25m'\v'+.15m'/\h'-.17m'\v'+.15m'4\s+2"%
+ndefine 3quarter % 3/4 %
+tdefine degree % \(de %
+ndefine degree % nothing sup o %
+tdefine square % \(sq %
+ndefine square % [] %
+tdefine circle % \(ci %
+ndefine circle % O %
+tdefine blot % "\f3\(sq\fP" %
+ndefine blot % HIX %
+tdefine bullet % \(bu %
+ndefine bullet % oxe %
+tdefine -wig % "\(~=" %
+ndefine -wig % - to "~" %
+tdefine wig % \(ap %
+ndefine wig % "~" %
+tdefine prop % \(pt %
+ndefine prop % oc %
+tdefine empty % \(es %
+ndefine empty % O/ %
+tdefine member % \(mo %
+ndefine member % C- %
+tdefine cup % \(cu %
+ndefine cup % U %
+define cap % \(ca %
+define subset % \(sb %
+define supset % \(sp %
+define !subset % \(ib %
+define !supset % \(ip %
+.EN

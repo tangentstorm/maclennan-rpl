@@ -1,0 +1,21 @@
+.nf
+         $1st~~mark ==~~ [ sel~1 ] $
+$2nd~~lineup ==~~ [ sel~2 ] $
+$r~ppd~s~~lineup ==~~ r~|~  s~|~  cnv~r  $
+$sigma~f~~lineup ==~~  ( f~o~ ( 1st~ , bar ~ ( epsilon~o~2nd )  )  ) ~ , bar ~ (  [ setdif ] ~o~   ( I~ , bar ~ ( un~o~epsilon )  ) ~o~2nd   )  ) $
+$f~rho~i~~lineup ==~~ 1st~o~   (   sigma~f  ~while~ (  [ !=~empty ] ~o~2nd )  ) ~o~ [ i~, ]    $
+$union~~lineup ==~~  [ cup ] ~rho~empty  $
+$SIGMA~~lineup ==~~ "{" 1,~2 "}" $
+$T~~lineup ==~~ "{"  1~:~ "{"  10~:~10 , ~ 20~:~20 "}", ~  2~:~ "{"   10~:~30 , ~  20~:~30"}" "}"$
+$Q~~lineup ==~~ "{" 10,~20,~30 "}" $
+$F~~lineup ==~~ "{" 30 "}" $
+$Q sup 2~~lineup ==~~ Q~cart~Q  $
+$n~~lineup ==~~ card~Q sup 2  $
+$R sub 0~~lineup ==~~ F~cart~ ( Q~setdif~F )  $
+$psi~R~~lineup ==~~ R~cup~  union ( rng~ ( T~rp~ [ ppd~R ]    )  ) $
+$R sub inf~~lineup ==~~  psi sup n  ~R sub 0  $
+$R sub =~~lineup ==~~  ( Q sup 2~setdif~R sub inf ) ~cap~ ( Q sup 2~setdif~ cnv~R sub inf )   $
+$rom eclass~~lineup ==~~ [ R sub =~unimg ] $
+$rom equiv~~lineup ==~~  [ rom eclass~img ] ~o~mem $
+$Q sub =~~lineup ==~~ rom equiv~R sub = $
+$T sub =~~lineup ==~~ T~rp~ [ rom eclass~isom ]  $

@@ -1,0 +1,21 @@
+.EQ
+ndefine ppd % _| %
+tdefine ppd % "\v'-.3m'\(ul\v'+.2m'\h'-.3m'\s-4\z\(or\z\(or\(or\s+4\h'.3m'\v'+.1m'" %
+tdefine myciplus  % "\z\(ci\h'.05m'\s+2\(pl\s-2" %
+tdefine mycitimes % "\z\(ci\h'.05m'\s+2\(mu\s-2" %
+tdefine orsign  % "\s-2\v'-.15m'\z\e\e\h'-.18m'\z\(sl\(sl\v'.15m'\s+2" %
+tdefine andsign % "\s-2\v'-.15m'\z\(sl\(sl\h'-.18m'\z\e\e\v'.15m'\s+2" %
+tdefine << % < "\h'-.5m'" < %
+tdefine >> % > "\h'-.5m'" > %
+tdefine oppA % "\s-2\v'-.15m'\z\e\e\h'-.2m'\z\(sl\z\(sl\v'.10m'\h'-.1m'-\s+2\h'.2m'"%
+tdefine oppE %"\s-3\v'.5m'\z\(em\v'-.5m'\z\(em\v'-.5m'\(em\h'-.25m'\v'.30m'\(br\h'.18m'\v'.22m'\s+3" %
+tdefine =>  % "\s-2\z=\h'.55m'=\h'-.59m'\v'-.02m'>\s+2" %
+ndefine =>  % "=>" %
+tdefine --> % "\s-6\v'-.2m'\z\(or\h'.05m'\v'.2m'\s+6" -> %
+ndefine --> % \(or -> %
+tdefine scirc % "\v'.3m'" degree "\v'-.3m'" %
+tdefine tiebar % "\s+8\s+6\v'+.4m'\h'-.1m'^\h'+.01m'\v'-.4m'\s-6\s-8" %
+tdefine bec % "\v'-.5m'.\v'.5m'.\v'-.5m'.\v'.5m'" %
+tdefine !=wig % "\z/\v'.15m'\z\(eq\v'-.3m'\h'-.05m'\(ap\v'.15m'\h'.05m'"%
+ndefine !=wig % =/"~" %
+.EN

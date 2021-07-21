@@ -1,0 +1,85 @@
+.EQ
+define dollar ' "$" '
+delim $$
+define rom ' roman '
+define sel ' \(da '
+define restr ' \(ua '
+define ALPHA ' rom A '
+define comp ' degree '
+define red ' \(sc '
+define times ' \(mu '
+define divide ' \(di '
+define not ' \(no '
+define cart ' fat times '
+define @bar % "\s-2\v'-.5m'\b'_@'\v'.5m'\s0" %
+define @hat % "\s-2\z@\s0\v'-.3m'^\v'.3m'" %
+define ALT ' left { lpile {~ '
+define OR ' above~ '
+define ENDALT ' }~right } '
+define OPT ' left [ lpile {~ '
+define ENDOPT ' }~right ] '
+define infix ' "infix" '
+define infixop ' "infixop" '
+define prefixid ' "prefixid" '
+define prefixop ' "prefixop" '
+define identifier ' "identifier" '
+.EN
+.SA 1
+.PH ""
+.PF "'' ''"
+.S +2
+.DS 2
+APPENDIX A - ORIGINAL RPL GRAMMAR
+.DE
+.S
+.SP 2
+.nf
+			$session~~=~~command sup *~bold done$
+.sp
+			$command~~=~~ALT prefixid~[ identifier ]~==~expression
+  OR bold display~expression ENDALT$
+.sp
+			$expression~~=~~ALT [ expression~infix ]~application
+  OR superscription ENDALT$
+.sp
+			$application~~=~~ALT [ application ]~primary
+  OR bold iter~' [ '~primary~->~primary~' ] ' ENDALT$
+.sp
+			$superscription~~=~~expression~bold "sup"~ALT application
+    OR + OR * ENDALT$
+.sp
+			$primary~~=~~ALT literal
+  OR prefixid
+  OR ' [ '~ALT infix
+    OR infix~primary
+    OR primary~infix 
+    OR primary~->~primary~;~primary ENDALT~' ] '
+  OR fat (~expression~[ ..~expression ]~fat )
+  OR fat "{"~expression~[ ..~expression ]~fat "}"
+  OR <~primary~,~...~>
+  OR bold file~string ENDALT$
+.sp
+			$infix~~=~~infixop~[ bold "bar" ]$
+.sp
+			$identifier~~=~~letter~OPT letter OR digit ENDOPT sup *~"prime" sup *$
+.sp
+			$"prime"~~=~~prime$
+.sp
+			$literal~~=~~ALT digit sup +~[ fat .~digit sup + ]~[ bold E~[~+~|~-~]~digit sup + ]
+  OR string OR bold true OR bold false ENDALT$
+.sp
+			$string~~=~~$``$~char sup *~$''
+.bp
+		
+		$infixop~~=~~$ 
+		  sel | , : cup member nomem !subset subset = -> <- restr ; cl cr cap \e
+		  @hat ! cat @ . | | $dollar$ red + - times divide != < > <= >=
+		  andsign orsign cart
+.sp
+		$prefixid~~=~~ALT identifier OR prefixop ENDALT$
+.sp
+		$prefixop~~=~~$
+		  - un cur unc theta size str DELTA inv dom rng mem Lm Rm Mm run lun bun
+		  init term alpha omega ALPHA OMEGA min max mu index select join as sa sa0
+		  rp rpi rsort sort unimg all ssm img curry uncurry PHI Id while upsilon
+		  phi delta PI extend restrict wig not

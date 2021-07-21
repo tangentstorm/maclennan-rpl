@@ -1,0 +1,775 @@
+.TH EQNCHAR 7 "1 February 1983"
+.UC
+.EQ
+.nr 99 \n(.s
+.nr 98 \n(.f
+.ps 10
+.ft 2
+.ps \n(99
+.ft \n(98
+.EN
+.EQ
+.nr 99 \n(.s
+.nr 98 \n(.f
+.ps 10
+.ft 2
+.ps \n(99
+.ft \n(98
+.EN
+.PH ""
+.PF "''-\\\\nP-''"
+.SK
+.ls 1
+.DS 2
+INITIAL DISTRIBUTION LIST
+.DE
+.EQ
+.nr 99 \n(.s
+.nr 98 \n(.f
+.ps 10
+.ft 2
+.ps \n(99
+.ft \n(98
+.EN
+.sp 2
+.TS
+.if \n+(b.=1 .nr d. \n(.c-\n(c.-1
+.de 35
+.ps \n(.s
+.vs \n(.vu
+.in \n(.iu
+.if \n(.u .fi
+.if \n(.j .ad
+.if \n(.j=0 .na
+..
+.nf
+.nr #~ 0
+.if \n(.T .if n .nr #~ 0.6n
+.ds #d .d
+.if \(ts\n(.z\(ts\(ts .ds #d nl
+.fc
+.nr 33 \n(.s
+.rm 4u 4v
+.nr 4u 0
+.nr 38 \wDefense Technical Information Center
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wCameron Station
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wAlexandria, VA 22314
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wDudley Knox Library
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wCode 0142
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wNaval Postgraduate School
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wMonterey, CA 93943
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wOffice of Research Administration
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wCode 012A
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wNaval Postgraduate School
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wMonterey, CA 93943
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wChairman, Code 52
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wDepartment of Computer Science
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wNaval Postgraduate School
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wMonterey, CA 93943
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wBruce J. MacLennan
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wCode 52ML
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wDepartment of Computer Science
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wNaval Postgraduate School
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wMonterey, CA 93943
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wRalph Wachter
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wCode 433
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wOffice of Naval Research
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \w800 N. Quincy
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wArlington, VA 22217-5000
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wS. Kamal Abdali
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wTektronix Laboratories
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wComputer Research Laboratory
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wM/S 50-662
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wP. O. Box 500
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wBeaverton, OR 97077
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wDrew D. Adams
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wCentre de Recherches de la C.G.E.
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wLaboratories de Marcoussis
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wDivision Informatique
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wRoute de Nozay
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \w91460 Marcoussis
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wFrance
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wVinay Apsingikar
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wCMC Limited
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wR & D Division
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \w115 Sarojini Devi Road
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wSecunderabad 500003
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wIndia
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wJohn Backus
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wIBM Almaden Research Center
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \w650 Harry Road
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wSan Jose, CA 95120-6099
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wJospeh H. Fasel
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wLos Alamos National Laboratory
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wC-10, MS B296
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wLos Alamos, NM 87545
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wRobert Floyd
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wComputer Science Department
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wStanford University
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wStanford, CA 94305
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wJoseph A. Goguen
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wSRI International
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wComputer Science Laboratory
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \w333 Ravenswood Avenue
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wMenlo Park, CA 94025
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wPeter Henderson
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wDepartment of Computer Science
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wSUNY at Stony Brook
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wLong Island, NY 11794
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wPaul Hudak
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wYale University
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wDepartment of Computer Science
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wBox 2158, Yale Station
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wNew Haven, CT 06520
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wBharat Jayaraman
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wUniversity of North Carolina
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wDepartment of Computer Science
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wNew West Hall 035 A
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wChapel Hill, NC 27514
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wA. Dain Samples
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wComputer Science Division - EECS
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wUniversity of California
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wBerkeley, CA 94720
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wMayer Schwartz
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wComputer Research Laboratory
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wMS 50-662
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wTektronix, Inc.
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wP. O. Box 500
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wBeaverton, OR 97077
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wGuy L. Steele
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wThinking Machines Corporation
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \w245 First Street
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wCambridge, MA 02142
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wRichard Taylor
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wINMOS Limited
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wWhitefriars
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wLewins Mead
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wBristol BS1 2NP
+.if \n(4u<\n(38 .nr 4u \n(38
+.nr 38 \wUK
+.if \n(4u<\n(38 .nr 4u \n(38
+.4u
+.rm 4u
+.nr 4v 0
+.nr 38 \w2
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w2
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w1
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w40
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w12
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w1
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w1
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w1
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w1
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w1
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w1
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w1
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w1
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w1
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w1
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w1
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w1
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w1
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w1
+.if \n(4v<\n(38 .nr 4v \n(38
+.nr 38 \w1
+.if \n(4v<\n(38 .nr 4v \n(38
+.4v
+.rm 4v
+.nr 38 0+\n(4u+\n(4v
+.nr 38 \n(.l-\n(38
+.nr 38 \n(38/3
+.if \n(38<0 .nr 38 0
+.nr 4t 0
+.nr 40 \n(4t+((0*\n(38)/2)
+.nr 4u +\n(40
+.nr 41 \n(4u+((6*\n(38)/2)
+.nr 4v +\n(41
+.nr TW \n(4v
+.if t .if (\n(TW+\n(.o)>7.65i .tm Table at line 130 file Input is too wide - \n(TW units
+.fc  
+.nr #T 0-1
+.nr #a 0-1
+.eo
+.de T#
+.nr 35 1m
+.ds #d .d
+.if \(ts\n(.z\(ts\(ts .ds #d nl
+.mk ##
+.nr ## -1v
+.ls 1
+.ls
+..
+.ec
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Defense Technical Information Center\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Cameron Station\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Alexandria, VA 22314\h'|\n(41u'2
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Dudley Knox Library\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Code 0142\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Naval Postgraduate School\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Monterey, CA 93943\h'|\n(41u'2
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Office of Research Administration\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Code 012A\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Naval Postgraduate School\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Monterey, CA 93943\h'|\n(41u'1
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Chairman, Code 52\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Department of Computer Science\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Naval Postgraduate School\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Monterey, CA 93943\h'|\n(41u'40
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Bruce J. MacLennan\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Code 52ML\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Department of Computer Science\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Naval Postgraduate School\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Monterey, CA 93943\h'|\n(41u'12
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Ralph Wachter\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Code 433\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Office of Naval Research\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'800 N. Quincy\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Arlington, VA 22217-5000\h'|\n(41u'1
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'S. Kamal Abdali\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Tektronix Laboratories\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Computer Research Laboratory\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'M/S 50-662\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'P. O. Box 500\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Beaverton, OR 97077\h'|\n(41u'1
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Drew D. Adams\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Centre de Recherches de la C.G.E.\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Laboratories de Marcoussis\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Division Informatique\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Route de Nozay\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'91460 Marcoussis\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'France\h'|\n(41u'1
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Vinay Apsingikar\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'CMC Limited\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'R & D Division\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'115 Sarojini Devi Road\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Secunderabad 500003\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'India\h'|\n(41u'1
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'John Backus\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'IBM Almaden Research Center\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'650 Harry Road\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'San Jose, CA 95120-6099\h'|\n(41u'1
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Jospeh H. Fasel\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Los Alamos National Laboratory\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'C-10, MS B296\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Los Alamos, NM 87545\h'|\n(41u'1
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Robert Floyd\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Computer Science Department\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Stanford University\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Stanford, CA 94305\h'|\n(41u'1
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Joseph A. Goguen\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'SRI International\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Computer Science Laboratory\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'333 Ravenswood Avenue\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Menlo Park, CA 94025\h'|\n(41u'1
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Peter Henderson\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Department of Computer Science\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'SUNY at Stony Brook\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Long Island, NY 11794\h'|\n(41u'1
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Paul Hudak\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Yale University\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Department of Computer Science\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Box 2158, Yale Station\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'New Haven, CT 06520\h'|\n(41u'1
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Bharat Jayaraman\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'University of North Carolina\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Department of Computer Science\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'New West Hall 035 A\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Chapel Hill, NC 27514\h'|\n(41u'1
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'A. Dain Samples\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Computer Science Division - EECS\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'University of California\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Berkeley, CA 94720\h'|\n(41u'1
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Mayer Schwartz\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Computer Research Laboratory\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'MS 50-662\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Tektronix, Inc.\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'P. O. Box 500\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Beaverton, OR 97077\h'|\n(41u'1
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Guy L. Steele\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Thinking Machines Corporation\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'245 First Street\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Cambridge, MA 02142\h'|\n(41u'1
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Richard Taylor\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'INMOS Limited\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Whitefriars\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Lewins Mead\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'Bristol BS1 2NP\h'|\n(41u'
+.ta \n(4uu \n(4vu 
+.nr 35 1m
+.nr 31 \n(.f
+\&\h'|\n(40u'UK\h'|\n(41u'1
+.fc
+.nr T. 1
+.T# 1
+.35
+
+.if \n-(b.=0 .nr c. \n(.c-\n(d.-117

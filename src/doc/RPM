@@ -1,0 +1,3582 @@
+.ls 2
+.EQ
+delim $$
+define Isa " member "
+define Of " ~ "
+define img ' roman "img" '
+define un ' roman "un" '
+define dom ' roman "dom" '
+define mem ' roman "mem" '
+define init ' roman "init" '
+define term ' roman "term" '
+define non ' wig '
+define cl ' roman "cl" '
+define cr ' roman "cr" '
+define Id ' roman "I" '
+define K ' bold "K" '
+define Un ' union '
+define cat ' roman "cat" '
+define unimg ' roman "unimg" '
+define inv ' roman "inv" '
+define Lm ' roman "Lm" '
+define Rm ' roman "Rm" '
+define Mm ' roman "Mm" '
+define run ' roman "run" '
+define lun ' roman "lun" '
+define bun ' roman "bun" '
+define exist " oppE "
+define all " oppA "
+define or " orsign "
+define and " andsign "
+define impl " \(sp "
+define cart " fat \(mu "
+define subset " \(ib "
+define resl " \(-> "
+define resr " \(<- "
+define restr " \(ua "
+define first " alpha "
+define last " omega "
+define initial " roman A "
+define final " OMEGA "
+define catn " ~ hat "
+define scan " \(dd "
+define str ' roman "size" '
+define cnv " cnv "
+define insert " \(sc "
+define arrow " \(-> "
+define equiv " <=> "
+define inters " \(ca "
+define union " \(cu "
+define dif " \e "
+define nullset " \(es "
+define allset " \(ci "
+define not " \(no "
+define comp " scirc "
+define compl " non "
+define parall " || "
+define construc " , bar "
+define meta % "\s-2\v'-.5m'\b'_@'\v'.5m'\s0" %
+define isom ' "$" '
+define pairm " pi "
+define Str ' roman "str" '
+define mosi " ! "
+define allof ' roman "all" '
+define overl " ; "
+define frec % "\s-2\z@\s0\v'-.3m'^\v'.3m'" %
+define rprod " | "
+define sect " \(sc "
+define NotIsa % " \o'\(mo\(sl' " %
+define red % "\(dd" %
+.EN
+.de EX
+.P
+.ul
+EXERCISES:
+..
+.SA 1
+.PH "''RELATIONAL PROGRAMMING MANUAL'"
+.PF "''-\\\\nP-'"
+.nr Pt 1
+.HM 1 1 1 1
+.nr Cl 3
+.de TX
+.S +5
+.ce 6
+.B "RELATIONAL PROGRAMMING MANUAL"
+.sp
+.S -3
+.ul
+Bruce J. MacLennan
+.S -2
+Computer Science Department
+Naval Postgraduate School
+Monterey, CA 93943
+.sp
+..
+.H 1 "Introduction"
+.P
+In this manual\*F we describe a system for
+.FS
+The work reported herein was supported by the Office of Naval Research
+under contract number N00014-85-WR-XXXXX.
+.FE
+.ul
+relational programming,
+i.e. a style of programming in which entire relations
+are manipulated rather than individual data\*F.
+.FS
+The reader can find a shorter introduction to
+relational programming  in [MacLennan83a].
+That report is a revision and extension of [MacLennan83b], [MacLennan81a]
+and [MacLennan81b].
+.FE
+.P
+Relational programming has a number of advantages over other
+programming styles.
+First, relational
+programming subsumes functional programming; hence,
+anything that can be done with functional programming
+can be done with relational programming.
+Furthermore, relational programming has many of the
+advantages of functional programming:  for instance,
+the ability to derive and manipulate programs by
+algebraic manipulation.
+A well developed algebra of relations dates back to
+Boole's original work and has been extensively studied
+since then.
+Although relations are more general than functions, their
+laws are often simpler.
+For instance, $(F rprod G) sup -1 ~=~ G sup -1 rprod F sup -1$
+is true for all relations, but true only for
+functions that are one-to-one.
+Also, relational programming
+more directly supports non-linear data
+structures, such as trees and graphs, than does functional
+programming.
+In relational programming the basic data values
+are themselves relations, whereas in functional
+programming there is a separate class of objects (lists)
+used for data structures.
+One final reason for investigating relational programming
+is that it provides a possible paradigm for utilizing
+associative and active memories.
+.P
+As a teaser for what is to come, we present the following
+example of a relational program.
+We will take a text $T$, represented as
+an array of words
+(i.e., $T sel i$ is the $i$-th word), and generate a frequency table $F$
+so that $F sel w$ is the number of occurences of word $w$ in $T$.
+Now we will see ($sect$4) that
+`$T~allof~w$' is the set of all indices of the word $w$.
+If we let `$str~S$' be the cardinality of a set $S$,
+then the number of indices (occurences) of $w$ is just $str~(T~allof~w)$.
+Therefore we can write $F~=~ str comp [T~allof ]$ ($sect$7).
+.H 1 "Finite Sets and Relations"
+.H 2 "basic concepts"
+.P
+Our relational calculus will deal with four sorts of things:
+individuals, finite sets, finite relations and computable functions.
+These can best be illustrated by example.
+A finite set can be described by listing its elements, for example:
+.DS 2
+$S$  =  {1, 3, 5, 7}
+.DE
+A relation is just a set of pairs,
+so a finite relation can be represented by explicitly listing its pairs:
+.DS 2
+$R$  =  {1:1, 2:4, 3:9, 4:16}
+.DE
+Here we have used $x:y$ to denote the basic pair-making
+operation.
+.P
+If `$x$' is the name of an individual and `$S$' is the name of a
+set, then `$x Isa S$' means that the individual denoted
+by `$x$' is a member of the class denoted by `$S$'.
+Thus
+.DS 2
+$3~Isa~"{"1,~2,~3"}"$
+.DE
+is true, but
+$3~Isa~"{"4,~5,~6"}"$
+is not.
+.P
+If `$x$' and `$y$' are names of individuals and `$R$' is the
+name of a relation, then `$x:y~Isa~R$' means that
+$x$ bears the relation $R$ to $y$.
+For example,
+.DS 1
+$2:4~Isa~"{"1:1,~2:4,~3:9,~4:16"}"$
+.DE
+is true.
+The notation that we have introduced above will be
+extended to sets of sets, sets of relations,
+relations among sets, relations among relations, etc.
+.H 2 "converse"
+.P
+The relation $R sup -1$ is called the
+.ul
+converse
+of $R$, i.e.
+$x:y~Isa~R sup -1~ equiv ~y:x~Isa~R$.
+We define `$cnv$'
+as the function that returns the converse of a relation:
+$cnv~r~~ == ~~r sup -1$.
+.EX
+Prove the following properties of the converse:
+.DS 1
+$(r sup -1 ) sup -1 ~=~r$
+$r~=~cnv~s~~ equiv ~~s~=~cnv~r$
+.DE
+.H 2 "arrow diagrams"
+.P
+Relations can be portrayed by 
+.ul
+arrow diagrams (Haase diagrams).
+In such a diagram there is a node for each individual
+related by the relation and an arrow from $x$ to $y$
+whenever $x:y~Isa~R$.
+For instance,
+.DS 1
+.sp 2
+$R$ =
+.sp 2
+.DE
+represents the relation $R$ such that
+$b:a,~c:b,~d:b,~e:d,~e:e,~b:e$ are in $R$.
+.DS 2
+$R$  =  { b:a, c:b, d:b, e:d, e:e, b:e }
+.DE
+The effect of the converse operator is to reverse
+all of the arrows.
+Hence, $R sup -1$ is diagrammed:
+.DS 1
+.sp 2
+$R sup -1$ =
+.sp 2
+.DE
+.H 2 "tables"
+.P
+Relations can often be viewed as tables.
+For instance, the relation $R$ of the previous section can be shown as
+the table in Figure 1.
+.DF 2
+$R$
+.TS
+allbox;
+c c.
+b	a
+c	b
+d	b
+e	d
+e	e
+b	e
+.TE
+.sp
+.FG "Relation Viewed as a Table"
+.DE
+Of course, it makes no difference in what order we write the
+rows of the table.
+.P
+The converse of a relation is obtained by simply exchanging
+the columns of the table (see Figure 2).
+.DF 2
+$R sup -1$
+.TS
+allbox;
+c c.
+a	b
+b	c
+b	d
+d	e
+e	e
+e	b
+.TE
+.sp
+.FG "Converse of a Relation"
+.DE
+Of course, classes are represented by one column tables.
+For instance the set $S$ of primes less than ten is
+shown in Figure 3.
+.DF 2
+$C$
+.TS
+allbox;
+c.
+1
+2
+3
+5
+7
+.TE
+.sp
+.FG "Set Viewed as a Table"
+.DE
+.H 1 "Domains"
+.P
+We often need to talk of the individuals that can
+occur on the right or left of a relation.
+We say that $x$ is a
+.ul
+left-member
+of $R$ whenever there is a $y$ such that $x:y~Isa~R$.
+.DS 2
+$x~Lm~R~~equiv~~exist y(x:y~Isa~R)$
+.DE
+For instance, if `$x:y ~roman parent$' means that $x$ is
+a parent of $y$, then `$roman Socrates ~Lm Of roman parent$' means
+that Socrates is a parent.
+.ul
+Right-member
+and
+.ul
+member
+are defined analogously:
+.DS 2
+$y~Rm~R~~equiv~~exist x(x:y~Isa~R)$
+$z~Mm~R~~equiv~~z~Lm~R~or~z~Rm~R$
+.DE
+.EX
+Prove that these satisfy the identities:
+.DS 1
+$x Lm R~equiv~x Rm R sup -1$
+$y Rm R~equiv~y Lm R sup -1$
+.DE
+EDIT
+.H 1 "Functions"
+.H 2 "basic concepts"
+.P
+Functions and relations are closely related.
+Consider the successor relation, `succ':
+$x ~roman succ Of y~~equiv~~x+1~=~y$.
+Thus, $x ~roman succ Of y$ says that $x$'s successor is $y$.
+The corresponding arrow diagram is:
+.DS 2
+1   2   3   4   5   ...
+.sp 2
+.DE
+and the corresponding table is shown in Figure 4.
+.DF 2
+.TS
+allbox;
+c c.
+1	2
+2	3
+3	4
+4	5
+$3dot$	$3dot$
+.TE
+.sp
+.FG "Function Viewed as a Table"
+.DE
+since $1 ~roman succ Of 2$, $2 ~roman succ Of 3$, etc.
+Notice that, in this case, for each left member $x$
+there is a unique right member $y$ such that $x ~roman succ Of y$.
+This $y$ can be written using Whitehead and Russell's [Whitehead70]
+.ul
+definite description:
+.DS 2
+$iota y(x ~roman succ Of y)$
+.DE
+This can be read:
+.ul
+the
+$y$ such that $x$'s successor is  $y$.
+A more convenient way to write this is
+$roman succ (x)$.
+In general, $R(x)$ means `the unique $y$ such that $x ~R Of y$', i.e.
+$R(x)~ = ~iota y(xRy)$.
+When no confusion will result we write $Rx$ instead of $R(x)$.
+This notation is left-associative, that is, $Fxy~=~(Fx)y$.
+When we need to make the application operation explicit we
+write $R @ x$ ($R$ at $x$ or $R$ applied to $x$)
+for $Rx$.
+.P
+The functional notation is meaningful only if there is a unique $y$ such
+that $xRy$, i.e.
+$xRy~and~xRz~impl~y=z$.
+That is, there is only one arrow leading from $x$.
+When this condition is satisfied for all $x$ we call $R$
+.ul
+right univalent,
+symbolized by `run':
+.DS 2
+$R Isa run~~ equiv ~~all xyz[~xRy~and~xRz~impl~y=z~]$
+.DE
+The right univalent relations are more commonly called
+.ul
+functions.
+In a
+.ul
+left
+univalent relation there is exactly one
+arrow leading
+.ul
+to
+each node.
+Consider the `absolute reciprocal' relation:
+$xRy~~equiv~~y~=~|1/x|$.
+This is diagrammed in Figure 5.
+.DF 2
+.TS
+allbox;
+c c.
+1	1
+-1	1
+2	1/2
+-2	1/2
+3	1/3
+-3	1/3
+$3dot$	$3dot$
+.TE
+.sp
+.FG "Right-Univalent Relation Viewed as Table"
+.DE
+Since $R Isa run$ it is meaningful to write $R(x)$, so
+we observe $R(-3)$ = 1/3.
+We can find $Rx$ by following the arrow pointing from $x$ or by looking
+down the left column for $x$ and taking the corresponding
+element from the right column.
+.P
+The concepts of left univalence and bi-univalence
+are defined analogously:
+.DS 1
+$R Isa lun~~ equiv ~~all xyz[~yRx~and~zRx~impl~y=z~]$
+$R Isa bun~~ equiv ~~R Isa lun~and~R Isa run$
+.DE
+Bi-univalent relations are also called bijections and
+one-one mappings.
+.H 2 "higher level functions"
+.P
+Of course, the converse of a function is not necessarily
+a function.
+The `sin' relation, defined so that $x ~sin Of y$ means
+that $y$ is the sine of $x$, is right univalent but not left
+univalent.
+Hence, we can write either $y= sin~x$ or $x ~sin Of y$,
+but can express the arcsine only by
+$y ~sin sup -1 Of x$.
+The notation $sin sup -1 ~y$ is meaningless.
+Since $f(x)$ is meaningful only when $f Isa run$ we 
+will be careful to write $f(x)$ only when we
+have previously shown (or it is obvious)
+that $f Isa run$ and $x ~Lm Of f$.
+.P
+The fact that $F(x)$ may be meaningless makes it convenient
+to use several other relations derived from $F$.
+One of these is the
+.ul
+image.
+If $F$ is any relation and $C$ is a class then $img~ F~C$
+is the set of all $y$ such that $xFy$ for
+some $x$ in $C$, i.e.,
+.DS 2
+$img~F ~~=~~"{"C:z |~
+z~=~"{"y |~ exist x ( xFy~and~x Isa C)"}}"$
+.DE
+The tabular interpretation of $img F C$ is shown in Figure 6.
+.DF 2
+.EQ
+pile { F above left [ pile {
+3dot~|~3dot above x sub 1 | y sub 1 above 3dot~|~3dot above x sub n | y sub n above 3dot~|~3dot }
+right ] }~~~~
+pile { C above 
+left [ pile { x sub 1 above x sub 2 above 3dot above x sub n }
+right ] }~~~~
+pile { img F C above 
+left [ pile { y sub 1 above y sub 2 above 3dot above y sub n }
+right ] }
+.EN
+.sp
+.FG "Image Operation Applied to Tables"
+.DE
+We see that, if $F$ is any function, then $img F S$ is the
+image of the class $S$ under that function.
+Notice that the operation $img F S$ is defined
+for all relations $F$ and classes $S$, regardless of
+whether $F Isa run$ or the members of $S$ are left
+members of $F$.
+For these reasons, it is generally safer to write $img F C$
+than $Fx$.
+.P
+The image operation is also useful for working with relations.
+For example, $img . inv (<) S$ is the set of all numbers that are
+.ul
+less 
+than some element of $S$.
+The reversal of the sense of the ordering occurs because $img (>) S$
+is the set of all $y$ such that for some $x Isa S$, $x > y$.
+Thus $img . inv (<) S$ is the set of all $x$ such that for
+some $y Isa S,~x<y$.
+.P
+Related ideas are the image and converse image of
+an individual.
+If $R$ is a relation, then $c ~=~unimg R x$ means
+that $c$ is the class of individuals related to $x$.
+This class is called the
+.ul
+unit image
+of $x$, and is defined
+$unimg~R ~x~~=~~"{"y |~xRy"}"$.
+Alternately we can define
+$unimg R x~~=~~img R "{"x"}"$.
+.P
+The converse idea is that of the
+.ul
+inverse unit image
+of $y$:
+.DS 2
+$unimg . inv~R ~y~~=~~"{"x |~xRy"}"$
+.DE
+Like the image, $unimg R$ and $unimg . inv R$
+are defined for all $R$ and all arguments.
+.P
+We can also apply the unit image operations to general relations.
+Therefore $unimg . inv (<) x$ is the set of all numbers less than $x$.
+This is sufficiently common that we define $allof = unimg . inv$.
+Then $allof < x$ is the set of all numbers less than x.
+.P
+Next consider the function $allof (=)$:
+.DS 2
+$allof (= )x~~=~~"{"y |y=x"}"$
+.DE
+Hence, $allof = x$ is just the
+.ul
+unit class
+containing $x$,
+which we will abbreviate this $un~x$.
+Conversely, if $C$ is a single element class,
+then $un sup -1 C$ selects the unique
+member of that class:
+$un sup -1 C~~=~~iota x(x Isa C)$.
+It is thus a uniqueness filter.
+We will write this as $theta C$
+where
+$theta~~=~~un sup -1$.
+The expression $theta C$ can be read 
+.ul
+`the 
+$C$.'
+.P
+.EX
+Show the following:
+.DS 1
+$unimg~R sup -1 ~~=~~unimg . inv~R $
+$unimg . inv~R sup -1 ~~=~~unimg~R$
+$unimg~R ~y~~=~~img~R ( un~y)$
+.DE
+.P
+It is often convenient to have names for domain
+extracting functions, e.g., $dom~R$ is the class
+of left members of $R$.
+These are simply defined using images:
+.DS 2
+$~~~~dom mark~~=~~allof~Lm$
+$dom . inv lineup~~=~~allof~Rm$
+$mem lineup~~=~~allof~Mm$
+.DE
+Of course the left members (domain) and right members
+(domain-inverse) of a relation can be obtained
+by taking its left and right columns, respectively,
+and deleting duplicates (Figure 7).
+.DF 2
+$R$
+.sp 10
+$dom~R$                               $dom . inv~R$
+.sp
+.FG "Domain Extracting Operators"
+.DE
+.H 1 "Boolean Operations"
+.H 2 "logical connectives"
+.P
+We will next investigate ways of
+.ul
+combining
+relations and classes.
+The simplest methods are just abstractions of
+the logical connectives used between propositions:
+Therefore, we define the intersection, union, negation
+and difference of classes and relations:
+.DS 1
+$x Isa (S~inters~T)~~ equiv ~~x Isa S~and~x Isa T$
+$x Isa (S~union~T)~~ equiv ~~x Isa S~or~x Isa T$
+$x Isa ( compl S)~~ equiv ~~not (x Isa S)$
+$x Isa (S dif T)~~ equiv ~~x Isa S~and~not (x Isa T)$
+$x Isa (S impl T)~~ equiv ~~x Isa S~impl~x Isa T$
+.DE
+As an example of the use of these operations, consider
+our previous definition of Mm:
+.DS 2
+$z ~Mm Of R~~ equiv ~~z ~Lm Of R~or~z ~Rm Of R$
+.DE
+Using the union operation this can be written
+Mm  =  Lm $union$ Rm.
+Similarly,
+bun  =  lun $inters$ run.
+The logical connectives satisfy the usual properties
+of a Boolean algebra (e.g., DeMorgan's theorem).
+.P
+As an example of the use of these operations, we will
+define the
+.ul
+closed interval
+function, $[m..n]$, which is the set of integers $m,~m+1 ,...,~n$.
+It is just:
+.DS 2
+$[m..n]~~=~~ allof >= m~inters~ allof <= n$
+.DE
+where $<=$ and $>=$ are the relations on integers.
+In general we will allow $[m..n]$ for any types on which a
+strict order is defined.
+.EX
+Define the analogous notations $(m..n)$, $[m..n)$, and $(m..n]$.
+.H 2 "empty class"
+.P
+It is useful to have a name for the empty class:
+$nullset~~=~~S dif S$, for any set $S$.
+Hence, $x Isa nullset$ is always false.
+This is most often used for stating properties
+of relations and classes.
+For instance,
+$S~inters~T~~=~~nullset$
+means that classes $S$ and $T$ have no members in common.
+.P
+The universal class is also
+useful:
+$allset~~=~~compl nullset$.
+For instance, 
+$S~union~T~~=~~allset$
+means that every individual is either a member of $S$ or of $T$.
+Notice that the class of the right members of a relation is just
+the image of the universe under that relation, i.e.,
+.DS 1
+$dom . inv~R~~=~~img R allset$
+$dom~R~~=~~img R sup -1 allset$
+$mem~R~~=~~img (R~union~R sup -1 ) allset$
+.DE
+.EX
+Prove these properties of the domain functions.
+.H 2 "Cartesian product"
+.P
+It is often useful to have the maximum relation
+that can hold between two classes, i.e., 
+the
+.ul
+Cartesian product
+of those classes.
+This is defined:
+.DS 2
+$S cart T~~=~~"{"x:y ~|~x Isa S~and~y Isa T"}"$
+.DE
+.EX
+Show the Cartesian product satisfies the following properties:
+.DS 1
+$(s cart t) sup -1 ~~=~~ t cart s$
+$dom (s cart t)~~=~~s$
+$dom . inv (s cart t)~~=~~t$
+$mem (s cart t)~~=~~s~union~t$
+.sp
+$s cart (t~inters~u)~~=~~(s cart t)~inters~(s cart u)$
+$s cart (t~union~u)~~=~~(s cart t)~union~(s cart u)$
+$s cart (t~dif~u)~~=~~(s cart t)~dif~(s~cart ~compl u)$
+$s cart (t~impl~u)~~=~~(s~cart~compl t)~union~(s cart u)$
+.sp
+$s cart nullset~~=~~nullset cart s~~=~~nullset cart nullset~~=~~nullset$
+$s cart t~~=~~(s cart allset )~inters~( allset cart t)$
+.DE
+.H 2 "subset relation"
+.P
+Finally, we define the subclass operation:
+.DS 1
+$S subset T~~ equiv ~~all x (x Isa S~impl~x Isa T)$
+.DE
+.EX
+Show the following are true:
+.DS 1
+$s subset t~~impl~~(s cart u) subset (t cart u)$
+$s subset t~~impl~~(r cart s) subset (r cart t)$
+$s subset t~and~u subset v~~impl~~(s cart u) subset (t cart v)$
+.DE
+.H 1 "Limiting and Restriction"
+.P
+It is often useful to limit the left or right domain
+of a relation.
+Consider the relation $y ~sin sup -1 Of x$,
+which means that $x$ is an arcsine of $y$.
+We cannot write $x~=~sin sup -1 y$ because $sin sup -1$
+is not right univalent (i.e. it is not a function).
+If we restrict $y$, the argument of sin, to the range
+$- pi /4$ to $pi /4$, then there is a unique $x$ such 
+that $y ~sin sup -1 Of x$.
+Let $S$ be the class of reals in the range $- pi /4$ to $pi /4$:
+.DS 2
+$S~~=~~( - pi /4.. pi /4]~~=~~allof > (- pi /4 )~inters~allof <= ( pi /4)$
+.DE
+then we will write
+$S resl sin $
+for the sine function with its arguments restricted to $S$.
+This function is bi-univalent, so it is invertible.
+If we call the inverse of this restricted sine Arcsin:
+.DS 2
+Arcsin  =  $(S resl sin ) sup -1$
+.DE
+then it is perfectly meaningful to write Arcsin $x$
+(if $x~Rm~sin$).
+The left-restriction operation is defined:
+.DS 2
+$x(S resl R)y~~ equiv ~~x Isa S~and~xRy$
+.DE
+In other words,
+.DS 2
+$y~=~(S resl R)x~~equiv~~y~=~Rx~and~x Isa S$
+.DE
+The right-restriction is defined analogously:
+.DS 2
+$x(R resr S)y~~ equiv ~~xRy~and~y Isa S$
+.DE
+These notations can be combined to restrict both domains:
+.DS 2
+$x ~(S resl R resr T) Of y~~ equiv ~~x Isa S~and~xRy~and~y Isa T$
+.DE
+The combination $s resl R resr s$ is so common that a
+special notation is provided for it:
+$R restr s~~=~~s resl R resr s$.
+For instance, $< restr P$, where $x Isa P~equiv~ x>0$, is the
+less-than relation restricted to positive numbers.
+Notice that $x~roman succ~y$ if and only if $y$ is the successor of $x$.
+Therefore we can define the sequence of integers $(m,m+1 ,..., n)$
+by restricting the $roman succ$ relation:
+.DS 2
+$[m..n]~~=~~allof >= m ~resl~roman succ~resr~allof <= n$
+.DE
+See Figure 8 for a tabular representation of the domain
+restricting operations.
+.DF 1
+.EQ
+pile { C above
+left [ pile { x sub 1 above x sub 2 above 3dot above x sub n }
+right ] }~~~~
+pile { R above
+left [ pile { 3dot~|~3dot above x sub 1 | y sub 1 above 3dot~|~3dot
+  above x sub 2 | y sub 2 above 3dot~|~3dot above x sub n | y sub n
+  above 3dot~|~3dot }
+right ] }~~~~
+pile { C resl R above
+left [ pile { x sub 1 | y sub 1 above x sub 2 | y sub 2
+  above 3dot~|~3dot above x sub n | y sub n }
+right ] }
+.EN
+.sp
+.FG "Domain Restricting Operations"
+.DE
+.EX
+Show that the restriction operations can be defined in terms
+of intersection and Cartesian product:
+.DS 1
+$s resl r resr t~~=~~r~inters~(s cart t)$
+$r restr s~~=~~r~inters~(s cart s)$
+$s resl r~~=~~r~inters~(s cart allset )$
+$r resr s~~=~~r~inters~( allset cart s)$
+.DE
+.EX
+Show that other properties satisfied by these operations are:
+.DS 1
+$s cart t~~=~~s resl~allset cart allset~resr t$
+$dom (s resl r)~~=~~s~inters~dom (r)$
+$dom . inv (r resr s)~~=~~s~inters~dom . inv (r)$
+$dom (r resr s)~~=~~img (r sup -1 )s$
+$dom . inv (s resl r)~~=~~img~r~s$
+.sp
+$(s resl r) sup -1 ~~=~~(r sup -1 ) resr s$
+$(s resl r resr t) sup -1 ~~=~~ t resl (r sup -1 ) resr s$
+$(r restr s) sup -1 ~~=~~ (r sup -1 ) restr s$
+.sp
+$r resr s~inters~r resr t ~~=~~ r resr (s~inters~t)$
+$r resr s~union~r resr t ~~=~~ r resr (s~union~t)$
+$(r cart allset ) resr s ~~=~~ r cart s$
+.DE
+.H 1 "Relative Product and Composition"
+.P
+If $x roman son y$ is the relation `$x$ is a son of $y$' and
+$x roman brother y$ is the relation `$x$ is a brother of $y$',
+then the 
+.ul
+relative product,
+`$roman son rprod roman brother$', is the relation `a son of a brother of'.
+More formally,
+.DS 2
+$R|S~~=~~"{"x:z~|~ exist y (xRy~and~ySz)"}"$
+.DE
+We will also write $S.R$ and $S comp R$ for $R|S$.
+The reason for this is that
+if $F$ and $G$ are functions it is easy to see that $F.G$ is
+the composition of these functions:
+.DS 1
+$z~=~F.G~x~~mark equiv~~x~F.G Of z$
+$lineup equiv~~x G rprod F z$
+$lineup equiv~~exist y (x G y~and~y F z)$
+$lineup equiv~~exist y [z=Fy~and~y=Gx]$
+$lineup equiv~~ z = F(Gx)$
+.DE
+Hence, $F.G~x~~ =~~F(Gx)$.
+.P
+It is convenient to have a notation for relative products
+of a relation with itself.
+For instance, the `grandparent' relation can be
+written `$roman parent rprod roman parent$', 
+which we abbreviate $roman parent sup 2$.
+In general,
+.DS 1
+$R sup 0 ~~=~~(=) restr ( mem~R)$
+$R sup 1 ~~=~~R$
+$R sup {n+1} ~~=~~(R sup n ) rprod R~~=~~R rprod (R sup n )$
+$R sup {-n} ~~=~~(R sup n ) sup -1$
+.DE
+.EX
+Show these obvious properties of the relative product:
+.DS 1
+$(r.s).t~~=~~r.(s.t)$
+$r.(s~union~t)~~=~~r.s~union~r.t$
+$(r~union~s).t~~=~~r.t~union~s.t$
+$r.(s~inters~t)~~subset~~r.s~inters~r.t$
+$(r~inters~s).t~~subset~~r.t~inters~s.t$
+$exist (r.s)~~ equiv ~~ exist ( dom . inv~r~inters~dom~s)$
+  where $exist~r$ means $exist x [x Isa r]$
+.DE
+.DS 1
+$(r sup -1 ) sup -1 ~~=~~r$
+$(r.s) sup -1 ~~=~~(s sup -1 ).(r sup -1 )$
+$r sup m .r sup n ~~=~~ r sup {m+n} ~~~(m, n >= 0)$
+$(r sup m ) sup n ~~=~~ r sup mn ~~~(m,n >= 0,~"or"~r Isa bun )$
+$r sup m .r sup n ~~subset~~r sup {m+n} ~~~(r Isa bun )$
+$r.r sup -1 ~~=~~ r sup -1 .r ~~=~~ r sup 0 ~~~(r Isa bun )$
+.DE
+.DS 1
+$dom (r.s)~~subset~~dom~r$
+$dom . inv (r.s)~~subset~~dom . inv~s$
+$Lm~ = ~Rm rprod cnv$
+$Rm~ = ~Lm rprod cnv$
+$r.( nullset cart nullset )~~=~~( nullset cart nullset ).r ~~=~~ nullset cart nullset$
+$r. Id ~~=~~Id .r ~~=~~ r ~~~roman where~Id~=~(=)$  (the identity function)
+.DE
+.H 1 "Structures"
+.P
+We have previously seen the use of arrow diagrams to
+represent a relation.
+For instance, the diagram in Figure 9
+represents the relation $R$ shown in Figure 10.
+.DF 2
+.sp 8
+.FG "Arrow Diagram for a Relation"
+.DE
+.DF 2
+$R$
+.TS
+allbox;
+c c.
+a	g
+b	f
+c	e
+d	d
+d	e
+e	i
+f	f
+f	i
+g	f
+g	h
+.TE
+.sp
+.FG "Tabular Representation of a Structure"
+.DE
+.H 2 "initial and terminal members"
+.P
+Now, notice that the domain (left) and codomain (right) members of $R$ are:
+.DS 1
+$dom~R$      =  { a, b, c, d, e, f, g }
+$dom . inv~R$  =  { g, f, e, d, i, h }
+.DE
+We define the
+.ul
+initial
+members of $R$ to be those members which are not pointed at
+by an arrow.
+Therefore, the initial members of $R$ are the left members
+that are not right members, that is, the domain members that
+are not codomain members.
+.DS 2
+$init~R~~=~~dom (R)~dif~dom . inv (R)~~=~~roman{"{"a,~b,~c"}"}$
+.DE
+The 
+.ul
+terminal
+members of a relation are defined analogously:
+.DS 2
+$term~R~~=~~dom . inv (R)~dif~dom (R)~~=~~roman {"{"h,~i"}"}$
+.DE
+When a relation is used to represent a data structure,
+the above functions become important.
+.P
+For instance, a sequence is represented by a relation
+with the structure:
+.DS 2
+$S~~=~~a sub 1 ~~~~ a sub 2 ~~~~ a sub 3 ~~~~~~~~~~a sub n-1 ~~~~ a sub n$
+.sp 2
+.DE
+In this case init $S$ is the unit class containing the
+head (first element) of the relation (i.e., $a sub 1$) and term $S$ is
+the unit class containing the last element of the sequence
+(i.e., $a sub n$).
+Similarly, $( compl . init~S) resl S$ is the sequence with its
+first element deleted:
+.DS 2
+$a sub 2 ~~~~ a sub 3 ~~~~~~~~~~ a sub n-1 ~~~~a sub n$
+.sp 2
+.DE
+Hence, the following common sequence manipulation
+functions can be defined: 
+.DS 1
+.TS
+center;
+r2l l.
+$first ~S$	$=~~ theta . init~S$	first
+$last ~S$	$=~~ theta . term~S$	last
+$final ~S$	$=~~ ( compl . init~S) resl S$	final
+$initial ~S$	$=~~S resr ( compl . term~S)$	initial
+.TE
+.DE
+.EX
+Prove the following properties of these relations:
+.DS 2
+$first~~=~~last . cnv$
+$last~~=~~first . cnv$
+$initial . cnv~~=~~cnv . final$
+$final . cnv~~=~~cnv . initial$
+.DE
+More operations on sequences are discussed in the next section.
+.P
+As another example of the use of `init' and `term',
+consider the relation, representing a tree, shown in Figure 11.
+.DF 1
+.sp 3
+$T$  =  
+.sp 3
+.FG "Relation Representing a Tree"
+.DE
+Then, $first T$ is `a', the root of the tree,
+and $term~T$ is {d, h, i, f, j, k}, the leaves of the tree.
+The result is analogous for forests.
+.DF 1
+.sp 3
+$F$  =  
+.sp 3
+.FG "Relation Representing a Forest"
+.DE
+Given the relation in Figure 12,
+the set of roots is $init~F$ and the set of leaves is $term~F$:
+.DS 1
+$init~F$  =  {a,i,g}
+$term~F$  =  {c,e,f,g,h,j,k,l,m,n,t,u,v,w}
+.DE
+.H 2 "higher level operations"
+.P
+The set of nodes whose parent is $n$ is just $img F n$.
+For instance, the set of nodes directly descended from
+a root is
+.DS 2
+$( img~F). init~F~~=~~roman {"{"b,h,j,o,p,r"}"}$
+.DE
+The set of nodes that point to leaves is
+.DS 2
+$( img~F sup -1 ). term~F~~=~~roman {"{"b,d,a,i,o,p,s,r"}"}$
+.DE
+.P
+These operations can be used for obtaining the maximum
+and minimum of sets.
+Suppose `<' is the less-than relation on integers
+and $S$ is some set of integers, say {3,5,9}.
+Then
+.DS 1
+$< restr S~~=~~$
+$~~~~~~~~~~~~~~~~~~~~~~~~~~~~3~~~~5~~~~9$
+.DE
+Now note that
+$init (< restr S)~~=~~"{3}"$
+and
+$term (< restr S)~~=~~"{9}"$.
+Hence, if $S$ is any set of numbers, then the minimum
+and maximum of this set are:
+.DS 2
+$min~S~~=~~first (< restr S)$
+$max~S~~=~~last (< restr S)$
+.DE
+Notice that we can select the maximum and minimum based
+on any relation that is a
+.ul
+series
+(i.e., transitive, irreflexive and connected).
+If $R$ is any series then $first (R restr S)$ is the
+minimum (relative to $R$) and $last (R restr S)$ is the maximum.
+.EX
+Show that the following are properties of these operations:
+.DS 1
+$init~r~~=~~term (r sup -1 )$
+$term~r~~=~~init (r sup -1 )$
+$init~~subset~~dom$
+$term~~subset~~dom . inv$
+$init (r restr s)~~=~~term (r sup -1 restr s)$
+.DE
+.DS 1
+$init (r~union~s)~~subset~~init~r~union~init~s$
+$init~r~inters~init~s~~subset~~init (r~inters~s)$
+$term (r~union~s)~~subset~~term~r~union~term~s$
+$term~r~inters~term~s~~subset~~term (r~inters~s)$
+$init (s cart t)~~=~~s dif t$
+$term (s cart t)~~=~~init (s cart t) sup -1 ~~=~~init (t cart s)~~=~~t dif s$
+.DE
+.H 1 "Sequences"
+.H 2 "ordinal couples"
+.P
+In this section we will continue the discussion of sequences
+begun in the last section.
+We saw that it was easy to define the following operations
+on sequences:
+.DS 1
+$first ~S~~=~~theta . init~S$
+$last ~S~~=~~theta . term~S$
+$initial ~S~~=~~S resr ( compl . term~S) $
+$final ~S~~=~~( compl . init~S) resl S$
+.DE
+This provides us with functions for taking sequences apart.
+We will define the
+.ul
+ordinal couple
+or
+.ul
+pair,
+which puts them together.
+If $x$ and $y$ are two objects, then `$(x,y)$' is the relation
+that relates $x$ and $y$ but no other objects.
+.DS 1
+$x,y$  =
+                      $x$      $y$
+.DE
+That is, $u (x,y)  v$ if and only if $u=x$ and $y=v$.
+This is formally defined by:
+.DS 2
+$x,y~~=~~"{"u:v ~|~u=x~and~v=y"}"~~=~~un (x)~cart~un (y)~~=~~un (x:y)$
+.DE
+Notice that $x:y~=~theta (x,y)$.
+Observe also that
+$first (x,y)~~=~~x$ and
+$last (x,y)~~=~~y$.
+Finally, $xRy~equiv~(x,y) subset R$.
+.P
+Explicit relations can be described by a combination of the
+pair and union operations.
+For example, we have the identity:
+.DS 2
+$"{"~x sub 1 :y sub 1 ,~x sub 2 :y sub 2 ,..., ~x sub n :y sub n ~"}"
+~~=~~( x sub 1 , y sub 1 )~Un~( x sub 2 , y sub 2 )~Un~...~Un~(x sub n , y sub n )$
+.DE
+.P
+We will define a convenient notation for sequences of two or
+more elements:
+.DS 2
+$(~x sub 1 ,~x sub 2 ,...,~x sub n ) ~~=~~
+"{"x sub 1 :x sub 2 ,~x sub 2 :x sub 3 ,...,
+x sub {n-1} :x sub n "}"$
+.DE
+Therefore the sequence (a,b,c,d,e) is just
+.DS 2
+.sp 2
+a   b   c   d   e
+.DE
+.H 2 "catenation and consing"
+If $s$ and $t$ are sequences then we can define an operation `$s catn t$',
+which is the catenation of $s$ and $t$.
+To form this catenation we must hook the last element of $s$
+to the first element of $t$:
+.DS 2
+$s sub 1 ~~~~~~~~~s sub m ~~catn~~t sub 1 ~~~~~~~~~t sub n ~~=~~
+s sub 1 ~~~~~~~~~s sub m ~~t sub 1 ~~~~~~~~~t sub n$
+.DE
+Therefore $x [s catn t] y$ if and only if $x ~s Of y$,
+or $x ~t Of y$, or $x= last ~s$ and $y= first ~t$.
+Hence,
+.DS 2
+$s catn t~~=~~s~Un~( last ~s,~ first ~t)~Un~t$
+.DE
+The catenation operation is only defined for sequences,
+which are required to have at least two elements
+(since an irreflexive relation with less than two
+elements is the empty relation).
+This issue is discussed in the following section.
+.P
+How then do we add a single element to the left or right
+of a sequence?
+The `cons left' and `cons right' operations are easy to define:
+.DS 2
+.sp 2
+$x~~cl~~s sub 1 ~~~~~~~~~ s sub n ~~~=>~~~x~~s sub 1 ~~~~~~~~~s sub n$
+.DE
+.DS 2
+$x~cl~s~~=~~(x,~ first ~s)~Un~s$
+$s~cr~y~~=~~s~Un~( last ~s,~y)$
+.DE
+.P
+If $S$ is a sequence and $x Mm S$, then $Sx$ is the successor of $x$
+in $S$ and $S sup -1 x$ is the predecessor of $x$ in $S$ (if these
+exist).
+.DS 1
+$Sx$    =  successor of $x$ in $S$
+$S sup -1 x$  =  predecessor of $x$ in $S$
+.DE
+These are convenient ways of moving around within a sequence.
+Also, note that if $s$ is a subsequence of $t$ then $s subset t$.
+Some additional identities are:
+.DS 1
+$(x,y) rprod (y,z)~~=~~(x,z)$
+.sp 1
+$ img~first ~ (S cart T)~~=~~S$
+$ img~last ~ (S cart T)~~=~~T$
+.DE
+.EX
+Show that if $s$ is a sequence, then:
+.DS 1
+$first (x~cl~s)~~=~~x$
+$final (x~cl~s)~~=~~s$
+.sp 1
+$last (s~cr~y)~~=~~y$
+$initial (s~cr~y)~~=~~s$
+.sp 1
+$( first ~s)~cl~( final ~s)~~=~~s$,  if $str~s~>~2$
+$( initial ~s)~cr~( last ~s)~~=~~s$,  if $str~s~>~2$
+.DE
+Also, if $s$ is a sequence, show that $s~Un~( last ~s,~ first ~s)$
+is a ring formed by joining the last element of $s$ to the
+first element.
+.sp
+If $s$ is a sequence, then $s sup -1$ is the reverse of $s$.
+Hence,
+$roman rev~s~~=~~s sup -1$.
+Show the following:
+.DS 1
+$first ~s~~=~~ last ~s sup -1$
+$last ~s~~=~~ first ~s sup -1$
+.sp 1
+$initial ~s~~=~~ ( final ~s sup -1 ) sup -1$
+$final ~s~~=~~ ( initial ~s sup -1 ) sup -1$
+.sp 1
+$(s catn t) sup -1 ~~=~~ t sup -1 ~catn~s sup -1$
+$(x~cl~s) sup -1 ~~=~~ s sup -1 ~cr~x$
+$(s~cr~x) sup -1 ~~=~~ x~cl~ s sup -1$
+.sp 1
+$(x,y) sup -1 ~~=~~(y,x)$
+$(~x sub 1 ,~x sub 2 ,...,~ x sub n ) sup -1 ~~=~~
+(~x sub n ,...,~x sub 2 ,~x sub 1 )$
+.sp
+$"{" x sub 1 : y sub 1 ,~x sub 2 :y sub 2 ,..., ~x sub n :y sub n "}" sup -1 ~~=~~
+"{" y sub 1 : x sub 1 ,~y sub 2 :x sub 2 ,..., ~y sub n :x sub n "}"$
+.DE
+.H 2 "alternative definitions of sequences"
+.P
+We will state the formal definition of a sequence:
+a relation is a sequence if it is a connected irreflexive bijection.
+That is,
+.DS 1
+$roman sequence~~=~~ roman connex~inters~ roman irrefl~inters~bun$
+.sp 1
+$s Isa roman irrefl~~ equiv ~~s sup 0 ~subset~s sup -1$
+$s Isa roman connex~~ equiv ~~ dom~s~=~ init~s~Un~dom~s sup -1 ~~and~~  dom~s sup -1 ~=~ term~s~Un~dom~s$
+.DE
+Although the preceding definition of sequences is very convenient,
+it has a number of limitations.
+For example, the operations discussed above are only defined for
+sequences with two or more
+elements, since an irreflexive relation cannot relate less than two
+elements.
+In particular, $(2)~=~nullset$.
+One solution to this problem is to use a standard ``end marker''
+for all sequences, say `EOF'.
+For example, the sequence 1, 3, 5 would be represented
+by the relation (1,3,5,EOF).
+A one element sequence containing 3 would be represented
+by (3,EOF) and an empty sequence by (EOF) = () = $nullset$.
+This definition has some curious properties of its own.
+For example, the relation $(3,3, roman EOF )~=~"{"3:3,~3: roman EOF "}"$ 
+has no initial 
+members and in fact is not a sequence (since it's
+not irreflexive).
+Of course this objection also applies to our original
+definition of sequences.
+.P
+A different solution is to extend the definition of sequences
+so as to allow length one sequences by making the relation 
+reflexive.
+.DS 2
+$s ~Un~ (=~restr~mem~s)$
+.sp 2
+$s sub 1~~~~~s sub 2~~~~~s sub 3~~~~~~~~~~s sub n$
+.DE
+The one element sequence is then:
+.DS 2
+.sp 
+$s sub 0 ~~~~=~~(s sub 0 ,~s sub 0 )$
+.DE
+This still does not solve the problem with repeating elements in sequences,
+however.
+.P
+An alternative definition of sequences is based directly on the
+pair-making operation.
+Define <> to be some distinguished value `nil'.
+Then define 
+.DS 2
+$<x sub 1 ,~x sub 2 ,~...,~x sub n >~~=~~x sub 1 :<x sub 2 ,~...,~x sub n >$
+.DE
+We can see that
+.DS 2
+$<x sub 1 ,~x sub 2 ,~...,~x sub n >~~=~~x sub 1 :x sub 2 :...:x sub n : roman nil$
+.DE
+(We have assumed `:' is right-associative in the above equation.)
+This is essentially the way lists are represented in LISP.
+A more comprehensive solution to these problems is discussed
+in Chapter 16, Data Structures.
+.H 1 "Binary Operations"
+.H 2 "basic concepts"
+.P
+In this section we will discuss our approach to binary operations \(em
+that is, to functions with two arguments and one result.
+We have already seen how unary functions are connected to relations.
+For instance, we can write the fact that $y$ is the sine of $x$
+by either
+$x sin y$
+or
+$y~=~sin~x$.
+Since we only deal with binary relations, we will have to have a new
+convention for handling binary functions.
+This convention is:  we will combine the two arguments of an
+operation into a pair.
+For instance, we can define a relation `sum' such that
+$(x,y)~roman "sum" ~z$
+if and only if $z$ is the sum of $x$ and $y$.
+More formally:
+.DS 2
+$roman "sum"~~=~~"{" a:z~|~exist x,y[a=(x,y)~and~z=x+y]"}"$
+.DE
+We can use our function application convention as usual, e.g.,
+.DS 2
+$z~=~roman "sum"(x,y)~~equiv~~(x,y)~roman "sum"~z$
+.DE
+Now, it would be inconvenient to have to invent names, such as `sum',
+for each operation, such as `+'.
+Hence, we will adopt a systematic convention for making such names:
+placing the conventional infix symbol for the operation in parentheses
+or other brackets.
+For instance,
+.DS 2
+$(x,y)[+]z$  $equiv$  $z~=~[+](x,y)$  $equiv$  $z~=~x+y$
+.DE
+In fact, if $pi$ is any infix operation symbol, we will explicitly
+define its meaning by
+.DS 2
+$x pi y ~~=~~[ pi ](x,y)$
+.DE
+This notation will permit us to manipulate in a more regular
+fashion the usual arithmetic operations (+, -, \(mu, /)
+as well as the relational operations (e.g. $inters$, $Un$, 
+$resl$, $resr$, $restr$, $cart$).
+We omit the brackets when the meaning is clear without them.
+For instance, if S is a class of classes, then
+.DS 2
+$img ~ inters ~ (S cart S)$
+.DE
+is the class of all pairwise intersections of members of $S$.
+.H 2 "operations on binary operations"
+.P
+It is often convenient to be able to generate simple relations
+from a binary operation.
+Following Russell and Whitehead [Whitehead70], let $pi$ represent any
+binary operation.
+We define:
+.DS 2
+$( pi y )~~=~~"{"x:z~|~x pi y~=~z"}"$
+$( x pi )~~=~~"{"y:z~|~x pi y~=~z"}"$
+.DE
+Hence,
+$x(-1)y~~equiv~~y~=~x-1$,
+therefore $(-1)$ is the predecessor function.
+Similarly,
+$x(1+)y~~equiv~~y~=~1+x$,
+therefore (1+) and (+1) are both the successor function.
+These can be used as functions:
+$(-1)x~~=~~x-1$ and
+$(+1)x~~=~~x+1$.
+.P
+This convention makes it very easy to form more complex functions.
+For instance, if we want
+$f(x)~~=~~sin (1/x)$
+then we can define
+$f~=~sin .(1/)$.
+To see that this works:
+.DS 1
+$f(x)~~mark =~~[ sin .(1/)]x$
+      $lineup =~~sin [ (1/)x ]$
+      $lineup =~~sin [ 1/x ]$
+.DE
+Again, we omit the brackets when the meaning is clear from context
+or can be made clear by spacing.
+Furthermore, we adopt the convention that if two binary operators
+occur together, then the first is taken in its unary sense and
+the second in its binary sense.
+For example, $s cart union t$ means $[s cart ] union t$,
+not $s cart [ union t]$.
+When a binary operator is used in its unary sense, it will be taken
+to be very binding; that is, $f . x union$ means $f . [x union ]$,
+not $(f . x) union$.
+.P
+Now observe the action of the $(x,)$ and $(,y)$ functions:
+.DS 2
+$(x,)y~~=~~(x,y)$
+$(,y)x~~=~~(x,y)$
+.DE
+Therefore, for any binary operation $pi$
+(except `,') we can define
+.DS 2
+$pi y ~~=~~[ pi ].(,y)$
+$x pi ~~=~~[ pi ].(x,)$
+.DE
+Let's see why this works:
+.DS 1
+$(x pi )y~~mark =~~[( pi ).(x,)]y$
+       $lineup =~~( pi )[(x,)y]$
+       $lineup =~~( pi )[x,y]$
+       $lineup =~~x pi y$
+.DE
+The form $( pi y)x$ is analogous.
+In general, if $f$ is a binary function, then $f.(x,)$ and $f.(,y)$
+are the ``partially instantiated'' unary functions.
+This is the effect of Curry and Feys `B' combinator [Curry58].
+.P
+Since $S sup -1$ is the reverse of a  sequence, $pi . cnv$
+is the reverse form of an operation.
+For instance, $ - . cnv$ is the reverse subtract operation:
+.DS 1
+$-. cnv (x,y)~~mark =~~-( cnv (x,y))$
+            $lineup =~~-(y,x)$
+            $lineup =~~y-x$
+.DE
+Thus $-. cnv$ can be read  `subtract from' and $/. cnv$
+can be read `divide into'.
+This is Curry and Feys `C' combinator (see the next section).
+.H 1 "Combinators"
+.H 2 "paralleling of relations"
+.P
+In this section we will discuss several powerful operations
+for manipulating relations.
+These are called 
+.ul
+combinators
+because of their similarity to the combinators of
+Curry and Feys [Curry58].
+.P
+The first combinator we will discuss is the
+.ul
+paralleling 
+of relations, $R parall S$, which is defined:
+.DS 2
+$(u,v)R parall S(x,y)$  $equiv$  $uRx ~and~ vSy$
+.DE
+So, if $f$ and $g$ are functions,
+$[f parall g](x,y)~~=~~[f(x),~g(y)]$.
+Hence, $f parall g$ is the element-wise combination of $f$ and $g$.
+For example, if we want $f(x,y)~=~sin~x~+~cos~y$, we can write
+$f~ = ~+.( sin parall cos )$
+since
+.DS 1
+$f(x,y)~~mark =~~[+.( sin parall cos )](x,y)$
+        $lineup =~~+[( sin parall cos )(x,y)]$
+        $lineup =~~+[ sin~x,~cos~y]$
+        $lineup =~~sin~x~+~cos~y$
+.DE
+.H 2 "conditional union"
+.P
+The restriction operations allow us to define the very useful
+.ul
+conditional union
+or
+.ul
+overlay
+operation [MacLennan75], 
+$R overl S~=~R~Un~compl . dom R ~resl~S$.
+In other words, the value of $(R overl S)x$ is $Rx$ if $x Isa dom R$,
+and $Sx$ otherwise.
+This has many uses.
+For example, if $f$ is a partial function, then $f overl Id$
+is the extension of $f$ to the identity function.
+That is, $(f overl Id )x$ is $fx$ if that is defined and $x$ otherwise.
+.P
+The conditional union is useful for defining conditional-like
+structures.
+For example $p resl f overl g$ is a function that applies $f$
+if $p$ of its argument is true, and applies $g$ otherwise:
+.DS 2
+$[p resl f overl g]x~=~
+left {
+lpile { fx~~if~px above gx~~if~not px }$
+.DE
+(This assumes $p subset dom f$.  Why?)
+Therefore we have the equivalent of Backus' conditional
+combining form $p -> f;g$.
+.P
+The overlay operation is also useful for updating functions
+representing tables.
+For example $(i,x) overl T$ is a table just like $T$
+except that $Ti$ is now $x$, regardless of whether $Ti$
+was defined or not.
+Similarly, $S overl T$ is a table in which all the entries
+of $S$ have been added to $T$, possibly replacing corresponding
+elements already there.
+.H 2 "combinatory logic"
+.P
+One of the simplest combinators described by Curry and Feys
+is the
+.ul
+elementary cancellator, 
+$K$, defined so that $K x$ is a function such that
+$( K x)y = x$ for all $y$.
+That is,
+$K$ generates constant functions.
+Since
+$K x$
+is a relation that relates $x$ to everything, we can define it:
+$K ~=~( allset cart ). un$,
+where un = $theta sup -1$ is the unit class generator.
+To see that this works, note that
+.DS 2
+$K x~~=~~ allset cart~.~un~x~~=~~allset cart ( un~x)$
+.DE
+and therefore that
+.DS 1
+$u( K x)v~~mark equiv~~u[ allset cart ( un~x)]v$
+        $lineup equiv~~u Isa allset~and~v Isa un (x)~~equiv~~v=x$
+.DE
+Therefore, for arbitrary $u$, $( K x)u~=~x$.
+.P
+Another combinator is the
+.ul
+elementary duplicator,
+W, defined so that
+$( roman W f)x~ = ~f(x,x)$.
+If we define $DELTA ~x~=~(x,x)$
+then it is easy to see that $roman W f$ is just $f. DELTA$.
+For instance, $\(mu. DELTA$ is the squaring function:
+.DS 2
+$\(mu. DELTA ~n ~~=~~ \(mu( DELTA n )~~=~~ \(mu(n,n) ~~=~~ n\(mun ~~=~~ n sup 2$
+.DE
+It should be clear that Backus' $[f,g]$ combining form is just
+our $(f parall g). DELTA$, since
+.DS 2
+$(f parall g). DELTA ~x ~~=~~ f parall g ~ (x,x)
+~~=~~ (fx,~gx)$
+.DE
+Since this combination is so common we will adopt a
+special notation for it:
+$f construc g ~~~=~~ (f parall g). DELTA$.
+Hence,  $(f construc g)~x ~~=~~ (fx,~gx)$
+.EX
+Show that some of the properties satisfied by these combinators are:
+.DS 1
+$(R parall S).(T parall U)~~=~~(R.T) parall (S.U)$
+$(R parall S) sup n ~~=~~(R sup n ) parall (S sup n )$
+$(R construc S).T~~=~~(R.T) construc (S.T)$
+$(R parall S).(T construc U)~~=~~(R.T) construc (S.U)$
+$DELTA .R~~=~~R construc R$
+$(R parall S). inv~~=~~(S parall R)~~=~~inv .(R parall S)$
+$inv .(R construc S)~~=~~S construc R$
+$first . (R construc S)~~=~~( dom~S) resl R$
+$last . (R construc S)~~=~~( dom~R) resl S$
+$R parall S~~=~~(R . first ) construc (S . last )$
+cl  =  $( first  construc  final ) sup -1$
+cr  =  $( initial  construc  last ) sup -1$
+.DE
+.EX
+Show that
+$f ~~=~~ +.(\(mu. DELTA ~ construc ~2\(mu)$
+is the function $f(t)~=~t sup 2 +2t$.
+.P
+The
+.ul
+formalizing combinator,
+$PHI$, is defined so that
+$[ PHI f(a,b)]x$  =  $f[a(x),b(x)]$.
+It is easy to see that
+$PHI f(a,b)~~=~~f.(a construc b)$.
+For instance,
+.DS 2
+$f~~=~~PHI +[ times . DELTA ,~2 times ]$
+.DE
+is just the function $f(t)~=~t sup 2 +2t$.
+This can be written directly using the notation
+of our relational calculus:
+.DS 2
+$f~~=~~+.( times . DELTA ~ construc ~2 times )$
+.DE
+The combination $PHI  pi [f,g]$ occurs very frequently.
+Therefore, we define $pi bar ~=~PHI pi$ to be the formalization
+of the operator $pi$.
+Notice that $[f pi bar g]x~=~(fx) pi (gx)$.
+In particular, the function $ft~=~t sup 2 +2t$ can be written
+.DS 2
+$f~~=~~times . DELTA ~ + bar ~2 times$
+.DE
+In general, $pi .(f construc g)~=~f pi bar g$.
+.P
+Another combinator is the meta-application operator, $meta$,
+which corresponds to Curry and Feys' S combinator:
+$(f meta g)x$  =  $(fx)@(gx)$.
+For instance, $img meta init$ is the operation
+that gives the set of descendents of roots of a forest $F$, since
+.DS 2
+$( img meta init )F~=~( img~F)@( init~F)~=~( img~F). init ~F$.
+.DE
+.P
+Another combinator defined by Curry and Feys is the $PSI$
+combinator:
+.DS 2
+$[ PSI (f,g)](x,y)~~=~~f[g(x),g(y)]$
+.DE
+This is simply defined by
+$PSI (f,g)~~=~~f.(g parall g)$.
+Therefore, if
+$f$  =  $PSI [+,~ times . DELTA ]$
+then $f(x,y)~=~x sup 2 +y sup 2$.
+This can also be written $f~=~times . DELTA . first~ + bar ~times . DELTA . last$.
+.H 2 "Curried functions"
+.P
+A function $f$ is called a
+.ul
+Curried
+derivative of $g$ if $fxy~=~g(x,y)$.
+We define operators `curry' and `uncurry' such that
+$f~=~roman curry~g$ and
+$g~=~roman uncurry~f$.
+First consider uncurry:
+.DS 1
+$( roman uncurry f) (x,y)~~mark =~~g(x,y)$
+$lineup =~~fxy$
+$lineup =~~(fx) @ y$
+$lineup =~~ @ [ (fx), y]$
+$lineup =~~ @ .[ f parall Id ](x,y)$
+.DE
+By canceling $(x,y)$ from both sides we see that
+$roman uncurry f ~=~ @ .[ f parall Id ]$.
+If we wish, we can factor $f$ out of this expression in this manner:
+.DS 1
+$roman uncurry f~~mark =~~ @ .[ f parall Id ]$
+$lineup =~~[ @ .][f parall Id ]$
+$lineup =~~[ @ .].[ parall Id ] f$
+.DE
+Hence, uncurry = $[  @ .].[ parall Id ]$.
+.P
+Next consider Currying.
+One solution is to simply define $roman curry ~=~roman uncurry sup -1$;
+we can learn more however by defining curry directly.
+Suppose we are given a Curried pair-making function `$pairm$':
+$pairm x y ~=~(x,y)$.
+Then,
+.DS 2
+$fxy~~=~~( roman curry~g)xy~~=~~g(x,y)~~=~~g( pairm xy)~~=~~g([ pairm x]y)~~=~~g.[ pairm x]y$
+.DE
+Therefore, canceling $y$ from each side we get:
+.DS 2
+$roman curry~g~x~~=~~g.( pairm x)~~=~~[g.]( pairm x)~~=~~[g.]. pairm x$
+.DE
+Hence, $roman curry~g~=~[g.] . pairm$.
+.P
+As a final example we derive Curry and Feys' C combinator:
+$roman C fxy~=~fyx$.
+Observe:
+.DS 2
+$roman C fxy~=~fyx~=~(fy) @ x~=~[ @ x](fy)~=~[ @ x].fy$
+.DE
+Therefore, by canceling $y$ we get:
+.DS 2
+$roman C fx~=~[ @ x].f~=~[.f][ @ x]~=~[.f].[@]x$
+.DE
+Hence, $roman C f~=~[.f]. @ $.
+.EX
+Show the following properties satisfied by these combinators:
+.DS 1
+$( K x).f~~=~~dom f resl K x$
+$f.( K x)~~=~~K  (fx)$
+$roman C~~=~~roman curry . [. inv ] . roman uncurry$
+.DE
+.H 1 "Records"
+.H 2 "basic operations"
+By a
+.ul
+record
+we mean a finite function whose domain is other than a contiguous
+subset of the integers.
+For example, the following relation might represent a personnel record:
+.DS 1
+R  =  { name : "Don Smith", age: 40,
+        hire-date: {mo:"Aug", dy:31, yr:1980}, salary: 40000 }
+.DE
+The
+.ul
+selectors
+.DS 2
+name, age, hire-date, mo, dy, yr, salary
+.DE
+might be the strings "name", "age", etc. or the integers 1, 2, etc..
+We are not concerned with their exact nature so long as they
+are distinct.
+A field is selected by applying the record to the field's selector:
+$R( roman age )~=~R @ roman age ~=~40$.
+Thus `$R @ roman age$' is analogous to Pascal or Ada's `$R . roman age$'.
+Next we will consider how records can be manipulated using the
+relational operators.
+.P
+Notice that if $D$ is a record of default values 
+(say, for a personnel record) and $R$ is a record
+providing values for only some of the fields of a personnel record,
+then $R overl D$ is a complete personnel record with defaults
+from $D$ provided for the unspecified fields of $R$.
+If $R$ and $S$ are records with disjoint selectors (or with overlapping
+selectors whose values agree) then $R Un S$ is a join or combination
+of these two records.
+Finally, if $S$ is a set of selectors, then $S resl R$ is a subrecord
+of $R$ containing only the fields whose selectors are in $S$.
+For example,
+.DS 2
+{age, salary}$resl R$  =  { age: 40, salary: 40000 }
+.DE
+.H 2 "functional records"
+.P
+A common situation is to apply the same function $f$ to
+every field of a record $R$.
+For example, we might want to negate the coordinates of a
+two-dimensional point $P~=~"{" roman X :10, roman Y:30"}"$.
+This is easily accomplished by $[0-].P$.
+Therefore $P$'s Y coordinate is:
+.DS 2
+$[0-].P~@~roman Y~=~[0-](P roman Y )~=~[0-](30)~=~0-30~=~-30$
+.DE
+In general, we can see that the $phi$ field of $f.R$
+is $f(R phi )$:  $f.R @ phi~=~f(R phi )$.
+.P
+Now suppose that we have a record $F$ whose fields are functions
+$f sub 1 ,~f sub 2 ,..., ~f sub n$:
+.DS 2
+$F~~=~~"{" phi sub 1 :f sub 1 ,~ phi sub 2 :f sub 2 ,...,~phi sub n :f sub n "}"$
+.DE
+We want to compute a record $R$ that has the same shape as $F$,
+but with fields whose values are $f sub i x$, for a given $x$:
+.DS 2
+$R~~=~~"{" phi sub 1 :f sub 1 x ,~ phi sub 2 :f sub 2 x ,...,~phi sub n :f sub n x "}"$
+.DE
+Therefore, for any selector $phi$,
+.DS 2
+$R phi ~=~F phi x~=~(F phi ) @ x~=~[ @ x](F phi )~=~[ @ x].F~phi$
+.DE
+Hence, $R~=~[ @ x].F$.
+We define $frec$ to be the application of a functional record to
+an argument, $F frec x~=~ @ x . F$.
+Notice that $F frec $ is the function derived from the functional
+record $F$.
+Further applications are discussed in $sect$14, on arrays.
+.P
+We have seen how $f.R$ applies a function to a record argument to
+yield a record result and $F frec x$ applies a functional record
+to an argument to yield a record result.
+Next we will investigate the application of a functional record
+to a record argument to yield a record result.
+In the simplest case $F$ and $R$ are the same shape and we
+want to apply corresponding elements of $F$ to corresponding
+elements of $R$ to yield corresponding elements of the result.
+Thus, if we let $S$ be the result record, then for any field $phi$:
+.DS 2
+$S phi ~=~ (F phi )@(R phi )~=~(F meta R) phi$
+.DE
+using the meta-application operator $meta$.
+Hence, $S~=~F meta R$.
+Therefore, we can apply corresponding elements of $F$ to
+corresponding elements of $R$ by $F meta R$.
+.P
+For an example of this operation, suppose that we have the personnel
+record $R$ defined in $sect$12.1 and that we want to compute
+a new record $S$ in which the age field of $R$ has been incremented
+and in which the salary field has been increased by 10%.
+We can accomplish this by $S~=~F meta R$, where
+.DS 2
+$F~=~ roman { "{"name:~Id,~~age:~1+,~~salary:~1.1\(mu,~~hire-date:~Id"}"}$
+.DE
+A common situation is to update one field and leave the rest
+unchanged.
+The $R$ record with its age field incremented is just
+$[ roman age ,1+ overl~K~Id ] meta R$.
+.P
+We next consider a generalization of meta-application:  the 
+.ul
+outer product 
+of a functional record and its argument record.
+Suppose we have a record $F$ of functions and a record $R$
+of arguments; the records $F$ and $R$ are not assumed to have
+the same shape (i.e., the same domain members).
+We define $S~=~roman outer F R$, the outer product of $F$ and $R$
+to be a record with the same shape as $F$, each of whose fields
+has the same shape as $R$.
+That is, if $phi$ is a field selector of $F$ and $psi$ is a field selector of $R$,
+then $S phi$ is a record in which $S phi psi$ is the result of
+applying $F phi$ to $R psi$.
+That is, $S phi~=~(F phi ).R$, since $(F phi ).R$ applies $F phi$
+to each field of $R$ and forms a record of the results.
+Therefore, $S phi~=~(.R)(F phi )~=~.R.F phi$.
+This yields the definition of the outer product:
+$.R.F~=~roman outer FR$.
+Further applications of this operator will be discussed in $sect$14,
+on arrays.
+.EX
+Define an outer product that yields the transpose of this result.
+That is, $S phi psi~=~(F psi )(R phi )$.
+.H 2 "relational databases"
+.P
+Next we consider
+.ul
+databases
+composed of record-sets and define functions that are analogous to
+the relational operations of Codd [Codd70].
+Let $D$ be a record set whose elements have the selectors
+{name, age, hire-date, salary};
+$D$ might represent part of an employee database.
+Observe that if $f$ is any operation applicable to a record
+then $img f$ is a corresponding function applicable to the
+entire record set.
+.P
+For example, to form a
+.ul
+projection
+composed of just the `age' and `salary' fields of $D$
+we write
+$img [ roman { "{" age, salary"}" } resl ] D$.
+To compute $D prime$ in which every employee in $D$ has
+been given a 10% raise, we can write
+.DS 2
+$D prime ~=~img ~[("{" roman salary :~1.1 times "}" overl~ K~Id ) meta ] D$
+.DE
+In other words, we are applying a function to each record in $D$; 
+this function multiplies the `salary' field by 1.1 and leaves the
+other fields intact.
+.P
+Often we want to choose some selector $phi$ of the records in $D$
+to be a
+.ul
+key
+and generate a function $F$ from $D$ such that $Fk$ is the
+record in $D$ whose $phi$ field is $k$.
+We write this $F~=~roman index phi D$.
+Observe:
+.DS 1
+$r~=~Fk~~mark equiv~~r phi~=~k~and~r Isa D$
+$lineup equiv~~r @ phi~=~k~and~r Isa D$
+$lineup equiv~~[ @ phi ]r~=~k~and~r Isa D$
+$lineup equiv~~r~=~[ @ phi ] sup -1 k~and~r Isa D$
+$lineup equiv~~r~=~([ @ phi ] sup -1 resr D)k$
+.DE
+Hence, $F~=~[@ phi ] sup -1 resr D$, so we define
+$roman index phi D~=~[@ phi ] sup -1 resr D$.
+.P
+Another common operation is
+.ul
+selection.
+For example, suppose we want $P$ to be the set of all
+records in $D$ whose `age' field is greater than or equal to 65.
+The first step is to index the set on the age field:
+$A~=~roman {index~age}~D$.
+Notice that $xAr$ if and only if record $r$ from $D$ has an
+age field equal to $x$.
+We can think of $A$ as a multiple-valued function that takes ages
+into the records having those ages.
+Thus, if we apply $img A$ to a set of ages then we will get
+a set of all the records that have ages in the given set.
+Clearly, then
+.DS 2
+$P~=~img A ( allof >= 65)~=~img [ roman { index~age }~D]( allof >= 65)$
+.DE
+This leads to a general definition of the selection function:
+.DS 2
+$roman select phi D~=~img [ roman index phi D]$
+.DE
+Hence, $roman select phi~=~img .( roman index phi )$,
+so $roman select ~=~( img .). roman index$.
+With this definition of select we can write
+.DS 2
+$roman { select~age } ~D~( allof >= 65)$
+.DE
+to select all those records whose age is greater or equal to 65.
+.P
+Finally, we consider the
+.ul
+join
+of two record sets $D$ and $E$, $roman join phi (D,E)$.
+This is composed of of records formed by combining all those
+records from $D$ and $E$ whose $phi$ fields are equal.
+To accomplish this, first index $D$ and $E$ on their $phi$ fields:
+$F~=~roman index phi D$, $G~=~roman index phi E$.
+Let $k$ be any value of the field $phi$; observe that $(F parall G)k$
+is a pair $(d,e)$ where $d Isa D$, $e Isa E$ and $d$ and $e$
+both have their $phi$ fields equal to $k$.
+Therefore, we want $d union e$ to be in the join.
+The set of
+.ul
+all
+such pairs $(d,e)$ is just the range ($dom . inv$) of the relation
+$F parall G$.
+Therefore, to get the join $J$ we must apply the union operation
+to every record pair in the range of $F parall G$:
+.DS 2
+$J~=~img  union  ( dom . inv [ F parall G ] )$
+.DE
+This is the definition of the join operation.
+We can factor $D$ and $E$ out of the definition thus:
+.DS 1
+$roman join phi (D,E)~~mark =~~[ img  union ]. dom . inv ~F parall G$
+$lineup =~~[ img union ]. dom . inv [ roman index phi D parall roman index phi E]$
+$lineup =~~[ img union ]. dom . inv .  parall  . ( roman index phi D , roman index phi E)$
+$lineup =~~[ img union ]. dom . inv . parall . [ roman index phi~ parall ~roman index phi ](D,E)$
+.DE
+Therefore,
+.DS 2
+$roman join phi~=~[ img union ]. dom . inv .  parall .[ roman index phi~ parall ~roman index phi ]$
+.DE
+.EX
+Factor $phi$ out of the definition of join.
+.H 1 "Ancestral Relations"
+.H 2 "definition"
+Carnap [Carnap58] defines the relation of a property $p$ being
+hereditary with respect to a relation $r$:
+.DS 1
+$p~roman Her~r~~mark equiv~~all xy"{"x Isa p~and~x~r~y~impl~y Isa p"}"$
+         $lineup equiv~~img [r sup -1 ]p~subset~p$
+.DE
+This leads to the definition of the
+.ul
+ancestral of $R$ of the first kind
+as that relation which preserves all the hereditary properties of $R$.
+This is also called the
+.ul
+reflexive transitive closure
+of $R$:
+.DS 2
+$x R sup * y~~equiv~~x Mm r ~and~all p [p~roman Her~R~and~x Isa p~impl~y Isa p]$
+.DE
+For example, if $xPy$ means that $x$ is a parent of $y$, then $xP sup * y$
+means that $x$ is an ancestor (or the same as) $y$.
+The
+.ul
+ancestral of the second kind
+or
+.ul
+transitive closure
+is also useful:
+.DS 2
+$R sup + ~~=~~R sup * rprod R~~=~~R.R sup *$
+.DE
+Thus, $P sup +$ means `ancestor' in the colloquial sense.
+The easiest way to visualize the meanings of the ancestrals
+is by their expansion as infinite unions:
+.DS 2
+$R sup * ~~=~~R sup 0 ~Un~R sup 1 ~Un~R sup 2 ~Un~R sup 3 ~Un~...$
+$R sup + ~~=~~R sup 1 ~Un~R sup 2 ~Un~R sup 3 ~Un~R sup 4 ~Un~...$
+.DE
+.EX
+Here are some useful properties of the ancestrals.
+Prove them.
+.DS 1
+$R sup + ~~=~~R sup * dif (=)~~=~~R sup * dif R sup 0$
+$x R sup * y~~ equiv ~~exist n[n >= 0 ~and~x R sup n y]$
+$R sup 0 ~subset~R sup *$
+$R sup n ~subset~R sup *$, for $n >= 0$
+$R sup n ~subset~R sup +$, for $n>0$
+$R Un R sup + ~~=~~R sup +$
+$R sup + ~~subset~~R sup *$
+$R sup + ~~=~~R rprod R sup *$
+$R sup * ~~=~~R sup 0 ~Un~ R sup +$
+$(R sup * ) sup -1 ~~=~~(R sup -1 ) sup *$
+$(R sup + ) sup -1 ~~=~~(R sup -1 ) sup +$
+$(r restr s) sup * ~~subset~~r sup * restr s$
+.DE
+Ancestral relations are always transitive.
+Notice that $<=$ and < for integers can be defined:
+.DS 2
+$<=~~=~~(1+) sup *$
+$<~~=~~(1+) sup +$
+.DE
+That is, $x <= y$ means that $y$ can be reached from $x$ by zero
+or more applications of the successor function (1+).
+The ancestral ``fills out'' all of the paths in a structure.
+For instance, if
+.DS 2
+$R$  =  $a sub 1$    $a sub 2$    $a sub 3$    $a sub 4$
+.sp 2
+.DE
+then
+.DS 2
+.sp 3
+$R sup *$  =  $a sub 1$    $a sub 2$    $a sub 3$    $a sub 4$
+.sp 3
+.DE
+.H 2 "applications"
+.P
+Suppose that $S$ is a sequence and we wish to find the first
+member of $S$ which satisfies some property $P$.
+First form the closure $S sup +$,
+so that for any two members of $S sup +$ we can tell which is
+first.
+Next, eliminate from $S sup +$ any members that do not
+satisfy $P$:  $S sup + restr P$.
+Then, $first (S sup + restr P)$ is the first member of
+$S$ satisfying $P$.
+.P
+Next we will consider a simple character manipulation
+example:  stripping leading blanks from a string.
+Note that $x~(y~cl ) sup * ~z$ means that $z$ is a result
+of consing 0 or more $y$'s on the front of $x$.
+Hence,
+$z~ [(y~cl) sup * ] sup -1 ~x$
+means that $x$ is the result of stripping one or more $y$'s
+from the front of $z$.
+To get the desired result it is only necessary to
+restrict the left domain of this function to be
+sequences that don't begin with a $y$.
+Suppose $Y$ is the property of beginning with a $y$:
+.DS 2
+$x Isa Y~~ equiv ~~y =~first ~x~~ equiv ~~x~first~y~~ equiv ~~x~Isa~allof first y$
+.DE
+Therefore, the function to strip leading $y$'s from
+a sequence is:
+.DS 2
+$[(y~cl ) sup * ] sup -1 ~resr~compl .( allof first )y$
+.DE
+.H 2 "iteration"
+.P
+Before we leave the topic of ancestral relations, it will be
+useful to investigate their use as a means of iteration.
+Suppose that $F$ is a function (i.e., right univalent).
+Then, since
+.DS 2
+$F sup + ~~=~~F sup 1 ~Un~F sup 2 ~Un~F sup 3 ~Un~...$
+.DE
+we will have $x F sup + y$ if and only if for some $n>0$,
+$y~=~F sup n x$.
+In general there may be many such $n$, so $F sup +$
+may not be a function.
+If $F sup +$ is to be a function, it is necessary to pick a
+.ul
+termination condition
+(a class) that is only true for one of $F sup 1 x$,
+$F sup 2 x$, $F sup 3 x$, ....
+Therefore consider the relation $F sup + resr compl . dom F$.
+Let $D bar ~=~compl . dom F$ to see the effect of this function:
+.DS 1
+$F sup + resr D bar ~~=~~(F sup 1 Un F sup 2 Un F sup 3 Un ... ) resr D bar
+ ~~=~~(F resr D bar ~Un~F sup 2 resr D bar ~Un~F sup 3 resr D bar ~Un~... )$
+.DE
+Then $(F sup + resr D bar )x$ is $F sup n x$ where $n$ is the unique $n>0$
+such that $F sup n x$ is defined but $F sup n+1 x$ is not.
+This $n$ is unique because $F sup n+1 x$ undefined implies
+that for all $m>n$ $F sup m x$ is undefined.
+This leads to the definition of $roman iter ~F$:
+.DS 2
+$roman iter ~F~=~F sup + resr compl . dom ~F$
+.DE
+Notice that $roman iter [P resl F]$ will iterate the application
+of $F$ so long as its argument satisfies $P$ (and is in the domain
+of $F$).
+Since it always applies $F$ at least once it is not like a $bold while$
+loop; the equivalent of the $bold while$ loop
+.DS 2
+$bold while ~\(noP~bold do ~F$
+.DE
+is $roman iter [P resl F] overl Id$, since any input not in
+$P~inters~dom F$ will be passed through.
+Hence we define $roman while [P,F]~=~roman iter [P resl F] overl Id$.
+Analogously, $F rprod roman while [P,F]$ is equivalent to
+.DS 2
+$bold repeat ~F~bold until ~not P$
+.DE
+.H 1 "Arrays"
+.H 2 "definition and basic operations"
+.P
+An array is just a function from a contiguous subset of the
+integers to some set of values.
+If $A$ is an array and $i~Isa~dom~A$ then $A(i)$ is the $i$-th element of $A$.
+Similarly, if $I~subset~ dom~A$ is a set of index values
+then $img AI$ is the corresponding set of array values
+and $I resl A$ is the subarray of $A$ selected by those indices.
+.P
+It is easy to define multi-dimensional arrays:  they are
+just arrays whose elements are selected by sequences
+of integers, e.g. $M(i,j)$.
+If $M$ is a two-dimensional array, then $M.(i,)$ is the $i$-th row
+of $M$ and $M.(,j)$ is the $j$-th column of $M$.
+Also, if $I$ is a set of row indices and $J$ is a set of column
+indices then $I cart J~resl~M$ is the submatrix of $M$
+selected by these sets.
+It is easy to see that $M. cnv$ is the transpose
+of $M$, since
+.DS 2
+$M. cnv (i,j)~~=~~M[ cnv (i,j)]~~=~~M(j,i)$
+.DE
+More generally, if $P$ is a permutation function (i.e. a bijection
+from an index set into itself) then $A.P$ is the result
+of permuting $A$ by $P$.
+.P
+APL-like array and matrix operations are easy to express with
+the relational operators.
+For example, if $A$ is an array, then $f.A$ is the array resulting
+from applying $f$ to every element of $A$.
+This follows from the definition of composition,
+$(f.A)i~=~f(Ai)$.
+Hence, $sin . A$ applies sin to every element of $A$.
+Conversely, if $F$ is an array of functions, then $F frec x$ is
+an array of results obtained by applying each element of $F$ to $x$.
+That is, $(F frec x)i~=~(Fi)x$.
+Also, if $F$ is an array of functions and $A$ is an array
+of arguments, then $F meta A$ is an array of results obtained
+by corresponding elements of $F$ to corresponding elements of $A$.
+This follows from $(F meta A)i~~=~~Fi~@~Ai$.
+.P
+Note that if $A$ and $B$ are two arrays with the same domain,
+then $A + bar B$ is the element-wise sum of these two arrays.
+To see this, suppose that $C~=~A + bar B$ and consider an arbitrary
+element of $C$:
+.DS 2
+$C~i~~=~~(A + bar B)i~~=~~Ai~+~Bi$
+.DE
+In general, if $pi$ is an infix binary operation, then $pi bar$
+is the element-wise extension of that operation to arrays.
+If $f$ is any binary function, then $f.(A construc B)$ is the
+element-wise application of it to arrays $A$ and $B$.
+.P
+The same approach works for matrices and arrays of higher dimensionality.
+Suppose that $M$ and $N$ are two-dimensional matrices with the same
+domains.
+Then,
+$f.M~(i,j)~~=~~f[M(i,j)]$
+and
+.DS 2
+$(M + bar N)(i,j)~~=~~M(i,j)~+~N(i,j)$
+.DE
+As for one-dimensional arrays,
+a matrix of functions can be applied to a single argument by $M frec x$,
+and a matrix of functions can be applied to a matrix of
+arguments by $M @ N$.
+.P
+If $A$ and $B$ are arrays, then $C~=~f.(A parall B)$ is an
+.ul
+outer product by f
+of $A$ and $B$, since $C(i,j)~=~f(Ai,Bj)$.
+For example,
+.DS 2
+$times . ([1..12]~parall~[1..12])$
+.DE
+is a 12 by 12 multiplication table.
+We can also form an outer product between an array of
+functions and an array of arguments.
+If $F$ is an array of functions and $A$ is an array of arguments,
+then $P~=~@ .(F parall A)$ is a matrix in which $P(i,j)~=~(Fi)(Aj)$.
+.EX
+Prove that $@ .(F parall A)~=~roman uncurry . roman outer~F~A$.
+.P
+Suppose $x$ is an element of the array $A$ (i.e., for some $i$,
+$x=Ai$).
+Then $ allof A~x$ is the set of all indices for which $x=Ai$.
+Therefore we can find the index of the first occurence
+of $x$ in $A$ (i.e. APL's iota operator) by $min ( allof A~x)$.
+In general, if $P$ is some property (i.e. class), then $img A sup -1 ~P$
+is the set of indices of all elements of $A$ that satisfy $P$.
+A sorted reflexive sequence of these indices is just
+$<=~ restr ~img A sup -1 P$
+.H 2 "relation to sequences"
+.P
+It is easy to convert arrays to sequences and 
+.ul
+vice versa.
+Suppose all the elements of $A$ are distinct, then $A sup -1$
+is a function that returns the index of an element of $A$.
+We want to define a sequence $S$ such that $xSy$ if and only
+if $x$ preceeds $y$ in $A$, i.e. the index of $x$ is one less
+than the index of $y$.
+To put this functionally, we want to define $S$ so that $y=Sx$
+means that $y$ is the successor of $x$ in $A$, i.e., that the
+index of $y$ is one greater than the index of $x$.
+.DS 1
+$y~=~Sx~~mark equiv~~A sup -1 y~=~A sup -1 x~+~1$
+        $lineup equiv~~A sup -1 y~=~(1+).A sup -1 x$
+        $lineup equiv~~y~=~A.(1+).A sup -1 x$
+.DE
+Hence, $S~=~A.(1+).A sup -1$.
+Notice that this is just the image of the (1+) structure under
+the function $A sup -1$:  $S~=~A sup -1 isom (1+)$
+(the $isom$ operation is discussed in the next chapter).
+.P
+Next, we will consider the opposite process:  converting a
+sequence to an array.
+Suppose we have a sequence:
+.DS 2
+$S$  =  $a sub 0$    $a sub 1$    $a sub 2$    $a sub 3$
+.sp 2
+.DE
+We wish to convert this to an array:
+.DS 1
+.TS
+l | l | l |.
+	0	$a sub 0$
+$A$  =	1	$a sub 1$
+	2	$a sub 2$
+	3	$a sub 3$
+.TE
+.DE
+Thus, for each element $a sub i$ in the sequence, we must find
+its index $i$ in the resulting array.
+If we can define a relation $R$ such that $R(a sub i )= i$ then
+$R sup -1$ will be the array we seek.
+Now $R(a sub i )$ is just the number of predecessors of $a sub i$
+in $S$.
+That is, $a sub 0$ has no predecessors, so $R(a sub 0 )$ = 0;
+$a sub 2$ has two predecessors, so $R(a sub 2 )$  =  2, and so on.
+Since $S$ defined an immediate predecessor relation, $S sup +$
+defines an ancestral predecessor relation:
+.DS 2
+.sp 3
+$S sup +$  =  $a sub 0$    $a sub 1$    $a sub 2$    $a sub 3$
+.sp 3
+.DE
+Since $xSy$ means $x$ is a predecessor of $y$, $y=Sx$ means $y$ is a successor of $x$.
+Thus the set of successors of any element $a$ is then $unimg S sup + a$, 
+and the set of predecessors of $a$ is $unimg . inv S sup + a$, e.g.
+.DS 2
+$unimg . inv S sup + a sub 2~~=~~"{"a sub 0 ,~a sub 1"}"$
+.DE
+Alternately, $unimg . inv S sup + a~=~allof S sup + a$ is the set of
+all elements that bear the $S sup +$ relation to $a$.
+The size of this class is then the desired index:
+.DS 2
+$str ( allof S sup + a sub 2 )~~=~~2$
+.DE
+Hence, $R(a)~=~str ( allof S sup + a)$, so $R~=~str .( allof S sup + )$.
+Now, we know that $A$ is $R sup -1$, so we can define the
+function sa0 which converts a sequence into a 0-origin array:
+.DS 2
+sa0 $S$  =  $[ str .( allof S sup + )] sup -1$
+.DE
+To produce a 1-origin array, the only alteration is:
+.DS 2
+sa $S$  =  $[ str .( allof S sup * )] sup -1$
+.DE
+.H 2 "other array operations"
+.P
+Next we will consider the concatenation of arrays.
+If $A$ is an array such that $Ai$ = $a sub i$, then
+we can write $A$:
+.DS 2
+$A~~=~~"{"1:a sub 1 ,~2:a sub 2 ,...,~m:a sub m "}"$
+.DE
+where $m$ is the length of the array.
+Similarly, suppose that $B$ is an $n$ element array, then the
+concatenation of these arrays is
+.DS 2
+$A~roman cat~B~~=~~"{"1:a sub 1 ,...,~m:a sub m "}"~Un~ 
+"{"m+1:b sub 1 ,...,~ m+n:b sub n "}"$
+.DE
+We can see that $A~roman cat~B~=~A Un B prime$ where $B prime$ results from
+$B$ by shift its indices by $m$:
+.DS 2
+$B prime ~~=~~"{"m+1:b sub 1 ,...,~m+n:b sub n "}"$
+.DE
+How do we compute $B prime$?
+Observe:
+.DS 2
+$B prime i ~~=~~B(i-m)~~=~~B[(-m)i]~~=~~B.(-m)i$
+.DE
+Hence, $B prime~=~B.(-m)$ and $A~roman cat~B~=~A~Un~B.(-m)$, where $m$
+is the length of $A$.
+The length of $A$ is just $str . dom~A$, so
+.DS 2
+$A~roman cat~B~~=~~A~Un~B.(- str . dom~A)$
+.DE
+.P
+We will finish our discussion of arrays by investigating
+the generation of sorted arrays.
+Let $S$ be a set of integers to be sorted, then 
+$[ <= restr S]$
+is a structure which relates lesser elements to greater
+elements.
+Now if $x$ is any element of the set, $allof [ <= restr S] x$
+is the set of all elements less or equal to than $x$.
+Thus
+$str ( allof [ <= restr S] x)$
+= $str . ( allof ~ <= restr S) x$
+is the 
+.ul
+number 
+of elements of $S$ less than or equal to $x$.
+This is just the index of $x$ in the sorted array we seek.
+Hence if $A$ is the sorted array, $iAx$ if and only if
+$x[ str . ( allof~ <= restr S)]i$,
+so
+$A$ = $[ str . ( allof~ <= restr S)] sup -1$.
+Of course this can be generalized to any ordering relation.
+.H 1 "Isomorphic and Homomorphic Images"
+.H 2 "images"
+.P
+Consider any relation $R$ and any biunivalent function $f$.
+If we take each node $n$ of $R$ and replace it by $fn$
+we get a relation closely related to $R$ called the
+.ul
+image
+of $R$ under $f$, symbolized $f isom R$.
+.DF 2
+.sp 4
+$R$                                      $f isom R$
+.sp
+.FG "Image of a Relation"
+.DE
+It is easy to define $f isom R$.
+Observe that if $S~=~f isom R$ then $(fx)S(fy)$ just when $xRy$.
+Conversely $uSv$ whenever there are $x$ and $y$ such that
+$xRy$, $u=fx$ and $v=fy$.
+Hence,
+.DS 1
+$uSv~~mark equiv~~exist xy[ xRy~and~u=fx~and~v=fy]$
+$lineup equiv~~exist xy[ xfu~and~xRy~and~yfv]$
+$lineup equiv~~exist xy[ u f sup -1 x ~and~xRy~and~yfv]$
+$lineup equiv~~u[ f sup -1 rprod R rprod f]v$
+.DE
+Hence, $f isom R~=~f sup -1 rprod R rprod f~=~f.R.f sup -1$.
+.P
+The image operation is also useful when $f$ is not biunivalent.
+For example, if $fb=fd$ then $f isom R$ (with the $R$ in Figure 13)
+is:
+.DS 2
+$fa$                      $fc$
+.sp
+$fe$         $fb=fd$
+.DE
+I.e., we merge the nodes corresponding to $b$ and $d$.
+.P
+The $isom$ operation is clearly related to the $img$ operation \(em
+they both compute the image of a structure.
+Since $theta .[f parall f]. un~x:y~=~(fx):(fy)$,
+we have this relationship between the images of
+relations and sets:
+.DS 2
+$f isom R~~=~~img ( theta .[f parall f]. un ) R$
+.DE
+That is, $f isom ~=~img ( theta .[f parall f]. un )$.
+.P
+The image operations have many uses.
+For example, since $[1 .. n]$ = $(1,2 ,..., n)$, we can see that
+.DS 2
+$(m+) isom [1..n]~~=~~(m+1, m+2 ,..., m+n)$
+.DE
+Hence the identity $[m+1..m+n]~=~(m+) isom [1..n]$.
+To compute a list of the powers of two from $2 sup 0$ to $2 sup 16$
+we write $(2 fat \(ua ) isom [0..16]$, where $x fat \(ua y~=~x sup y$.
+Finally, to compute a list of the sines of the angles from
+$0 degree =0~roman rad.$ to $90 degree = pi /2~roman rad.$
+we write
+.DS 2
+$sin . ( times pi /180) ~isom~[0..90]$
+.DE
+To see that this works:
+.DS 1
+$sin .( times pi /180)~isom~(0,1 ,..., 90)$
+$~~=~~(~ sin . ( times pi /180)0,~ sin .( times pi /180)1 ,...,
+~ sin .( times pi /180)90~)$
+$~~=~~(~ sin (0 times pi /180),~ sin (1 times pi /180) ,...,
+~ sin (90 times pi /180)~)$
+$~~=~~(~sin~0 degree ,~ sin~1 degree ,...,~sin~90 degree~)$
+.DE
+.EX
+Show that $inv ~=~[ theta . inv . un ] isom$.
+.H 2 "images of functional structures"
+We have seen how, given a function $f$ and a relation of values $V$
+we can form a relation $f isom V$ in which the shape of $V$ is the same
+as the shape of $f isom V$
+and each member $v Isa mem V$ corresponds to $fv$ in $f isom V$.
+Now we will address the converse problem:  given a relation of
+functions $F$ and a value $v$, how can we construct a relation
+$F mosi v$ such that the shape of $F$ is the same as
+the shape of $F mosi v$ and each member $f Isa mem F$
+corresponds to $fv$ in $F mosi v$.
+This is clearly the image of F under some unknown function $phi$:
+$F mosi v~=~phi isom F$.
+We will solve for $phi$.
+Observe $phi f~=~fv~=~f @ v~=~( @ v)f$.
+Hence $phi~=~( @ v)$ and $F mosi v~=~( @ v) isom F$.
+That is, $F mosi v$ is the image of $F$ under the operation `apply to $v$'.
+We can eliminate $v$ from this definition:
+.DS 2
+$(F mosi )v~=~F mosi v~=~( @ v) isom F~=~( isom F)( @ v)~=~( isom F).@ ~v$
+.DE
+Therefore $F mosi ~=~( isom F).@$.
+Notice that the $F mosi $ is a function derived from a functional
+structure just as $F frec $ is a function derived from a
+functional record.
+.P
+We now consider some applications of this operation.
+To form a sequence by applying each of a sequence of operations
+to the same argument we write, for example:
+.DS 2
+$( sin , cos , tan ) mosi theta~=~( sin~theta ,~cos~theta ,~tan~theta )$
+.DE
+In particular, $(f,g) mosi $ is just $f  construc  g$ and Backus'
+constructor $[f,g ,..., h]$ is just our $[f,g ,..., h] mosi $.
+.P
+Recall our previous example in which we computed the sines of the angles
+from $0 degree$ to $89 degree$ by
+.DS 2
+$sin . ( times pi /180) ~isom~[0..89]$
+.DE
+We can extend this to compute a table of the sines, cosines and
+tangents of the angles from $0 degree$ to $89 degree$
+by using both of the image operations:
+.DS 2
+$( sin , cos , tan ) mosi .( times pi /180)~isom~[0..89]$
+.DE
+This produces a sequence of sequences of the form
+.DS 2
+$(( sin~0 degree ,~cos~0 degree ,~tan~0 degree ),~
+( sin~1 degree ,~cos~1 degree ,~tan~1 degree ) ,...,~
+( sin~89 degree ,~cos~89 degree ,~tan~89 degree ))$
+.DE
+In general $F mosi  isom R$ has an outer structure the same as $R$'s,
+each of the elements of which has a structure the same as $F$'s.
+Thus it is sort of an ``outer product'' between $F$ and $R$
+in which the members are $fr$ for $f~Mm~F$ and $r~Mm~R$.
+.P
+To convert a sequence of sequences such as this into a matrix
+requires an application of the sa operator at each level of
+structure.
+Let $S$ be the sequence of sequences.
+First convert each of its elements to an array by $roman sa isom S$.
+Next, convert the resulting sequence to an array by
+$roman sa [ roman sa isom S]$.
+The result of the latter operation is an array of arrays that can be
+converted to a two dimensional matrix by uncurrying.
+Thus the sequence to matrix conversion is
+.DS 2
+$roman ssm~S~~=~~roman uncurry . roman sa [ roman sa isom S ]$
+.DE
+Therefore,
+.DS 2
+$roman ssm~=~ roman sa isom ~rprod~roman sa ~rprod~roman uncurry$
+.DE
+This can be read:  To convert a sequence of sequences to a matrix,
+convert each of its elements to an array,
+convert the result to an array,
+and uncurry that result.
+.EX
+Define an outer product operation $roman P FR$ which has the outer structure of
+$F$ but the inner structure of $R$.
+Thus, the matrix corresponding to $roman P FR$ is the transpose of
+the matrix corresponding to $F mosi  isom R$:
+.DS 2
+$( roman ssm~roman P FR ). inv~=~roman ssm ( F mosi  isom R)$
+.DE
+.H 2 "isomorphism and the structure function"
+.P
+Carnap [Carnap58] defines two relations to be isomorphic when
+there is a biunivalent relation between their members that
+preserves their structure.
+That is, $R$ is isomorphic to $S$:
+.DS 2
+$R -wig S~~equiv~~exist f Isa bun [R~=~f isom S]$
+.DE
+Thus, two relations are isomorphic if one is a biunivalent
+image of the other.
+Equivalently, two relations are isomorphic if their arrow
+diagrams are equivalent when their node labels are removed.
+The isomorphism of sets is defined in the same way:
+.DS 2
+$S -wig T~~equiv~~exist f Isa bun [S~=~img f T]$
+.DE
+.P
+The
+.ul
+structure
+of a relation is arrow diagram for the relation with its node
+labels removed.
+For example, the structure of $R$ in Figure 13 is:
+.DS 2
+.sp 4
+$Str~R$
+.DE
+Thus two relations are isomorphic if they have the same structure.
+Mathematically the structure of a relation is just the set of
+all relations isomorphic to the given relation:
+$Str~R~=~"{"S | S -wig R"}"~=~allof -wig R$.
+Thus $Str~R$ is an equivalence class under $-wig$.
+Alternately,
+.DS 1
+$Str~R~~mark =~~"{" S | S -wig R"}"$
+$lineup =~~"{"S | ~exist f Isa bun [S = f isom R]"}"$
+$lineup =~~img [ isom R] bun$
+.DE
+That is, $Str R$ is the class of all biunivalent images of $R$.
+Note that $R -wig S~equiv~Str R = Str S$.
+.P
+The structure of a set is defined in exactly the same way.
+Since $roman C img S F~=~img FS$, we have
+.DS 2
+$Str~S~~=~~"{"T | T -wig S"}"~~=~~allof -wig S~~=~~img [ roman C img S] bun$
+.DE
+Observe that if, following Russell and Whitehead [Whitehead70],
+we define a number as the class of all classes isomorphic to a
+given class, then the size of a class is just the set of all
+classes isomorphic to that class:
+$str~S~~=~~"{"T |T -wig S"}"$.
+But this is just the definition of the structure of a class.
+Hence for all sets $S$, $str~S~=~Str~S$.
+In other words, the structure of a set is its cardinality.
+When the identity of its elements is ignored, the only structural
+characteristic still possessed by a set is its size:
+.DS 2
+str{1,8,2}  =  str{cat,dog,cow}  =  {$cdot , cdot , cdot$}  =  3
+.DE
+.H 1 "Data Structures"
+.H 2 "definition"
+.P
+Simple relations are not adequate for modeling all structures.
+For example, suppose we write this sequence: (1,2,3,2,4,5).
+This is defined to be the relation
+.DS 2
+{ 1:2, 2:3, 3:2, 2:4, 4:5 }
+.DE
+To make its structure more apparent, we will draw this as
+an arrow diagram:
+.DS 2
+.sp 2
+$R$  =  1    2    3    4    5
+.sp 2
+.DE
+This is certainly not what we expected, and it will not give
+the results we expect.
+For example, we cannot scan through this ``sequence''
+because $R(2)$ is multiple valued.
+.P
+To avoid this problem it is often better to use
+.ul
+data structures
+(or interpreted structures).
+A data structure $S$ is a pair $(D,R)$, where $R$ is a relation
+(a simple structure) that defines the
+.ul
+form part
+of the data structure, and $D$ is a function that associates
+data values with the members of $R$; it is called the
+.ul
+data part
+of the data structure.
+Usually $dom D~=~mem R$, but this does not have to be the case;
+we will see examples later.
+.P
+The structure that we intended by writing (1,2,3,2,4,5)
+can be correctly represented by a data structure $(D,R)$
+in which $R~=~roman { (a,b,c,d,e,f) }$ and
+.DS 2
+$D$ = {a:1, b:2, c:3, d:2, e:4, f:5}.
+.DE
+It doesn't matter what a, b, c, d, e, f are, so long as they
+are distinct.
+We will write data structure sequences with angle brackets:
+<1,2,3,2,4,5>.
+.H 2 "operations on data structures"
+.P
+We need functions for both interrogating and updating
+data structures.
+The data and form parts of data structures
+can be extracted by $first$ and $last$, respectively.
+In particular, if $n$ is a node in S, $n Isa mem ( last S)$,
+then $first S n$ is the value associated with that node.
+A common situation is to inquire the value of a node
+selected by applying a function $f$ to the form
+of a data structure; we write this $upsilon f S$.
+For example, $upsilon first S$ is the value of
+the first element of S and $upsilon ( last S)S$ is the
+value of the second element of $S$.
+In general, 
+.DS 2
+$upsilon f (D,R)~=~D(fR)~=~D~@~fR~=~@(D,fR)~=~@.[ Id parall f](D,R)$
+.DE
+Therefore, $upsilon f~=~@.[ Id parall f]$
+and $upsilon~=~( @.).( Id parall )$.
+.P
+Next we define operators $phi$ and $delta$ that alter their
+argument function so that it operates on either the
+form or the data part of a data structure, but leaves the other part
+unchanged.
+That is, $phi f (D,R)~=~(D,fR)$
+and $delta f (D,R)~=~(fD,R)$.
+Therefore $phi f~=~ Id parall f$ and $delta f ~=~f parall Id$,
+so $phi~=~Id parall$ and $delta~=~parall Id$.
+.P
+We will define an operation $PI$ such that $PI fS$ is the
+image of the structure $S$ under the function $f$,
+that is, $PI fS$ is a structure with the same form as $S$
+but with values derived by applying $f$ to the data of $S$.
+Thus $PI fR$ is the analog for data structures of $f isom R$  for
+relations and $f.R$ for records and arrays.
+Suppose $S~=~(D,R)$ and $PI fR~=~(D prime ,R)$.
+For any $n Isa mem R$ we must have $D prime n~=~f(Dn)$,
+so $D prime~=~f.D~=~[f.]D$.
+Hence, we get $PI fS$ from $S$ by applying $[f.]$ to the
+data part of $S$, so $PI fS~=~delta [f.]S$,
+and $PI f~=~delta [f.]$.
+For example, if $S$ is any data structure whose values are numbers,
+then $PI [1+]S$ adds one to each element of the data structure.
+.P
+The $PI$ operator leaves the form of the data structure unchanged;
+next we consider operators that 
+.ul
+reform 
+data structures.
+First we define operators that
+.ul
+filter
+a data structure by removing some of its nodes.
+In the simplest case we just throw away the nodes we don't
+want, only retaining those that satisfy a given property $P$.
+Hence,
+.DS 2
+$(D,R prime )~=~(D, R restr P )~=~(D,[ restr P]R)~=~phi [ restr P](D,R)$
+.DE
+Hence $phi [ restr P]$ filters a data structure by eliminating
+all those nodes that do not satisfy $P$.
+Suppose that we want to eliminate the negative nodes
+of a data structure.
+Thus we want $x Isa P ~~equiv~~first Sn >= 0~~equiv~~n~( first S) rprod >=~0$,
+so $P~=~allof ( first S rprod >= )0$.
+.P
+This simple form of filtering will often lead to nodes becoming
+isolated.
+That is, if we filter the sequence
+.DS 2
+< 3, 4, -2, 6, 7, -1, 2, -4 >
+.DE
+by the set $P~=~allof ( first S rprod >= )0$ then we will get
+.DS 2
+3    4         6    7         2
+.DE
+Note that the node whose value is 2 (a positive number!) is not
+even in the relation anymore since it has no neighbors
+(it is still in the data mapping, however).
+Usually we would prefer to connect up the remaining elements
+of the sequence, yielding <3,4,6,7,2>.
+How can this be accomplished?
+.P
+We will define an operator $PHI$ such that $PHI PS$ is the
+data structure resulting from filtering the data structure $S$
+by the predicate $P$.
+Suppose $S~=~(D,R)$ and $PHI PS~=~(D,R prime )$.
+$R prime$ will be derived from $R$ by adding some new
+pairs to $R restr P$.
+In particular, we want to add just enough pairs to directly
+connect those nodes that were indirectly connected in $R$
+but are not indirectly connected in $R restr P$.
+We will call this operation $xi$, so $R prime~=~xi R$.
+.P
+Observe that $xR sup + y$ if and only if $y$ is reachable from
+$x$ in one or more steps.
+Similarly $x(R rprod R sup + )y$ if and only if $y$ is reachable
+from $x$ in
+.ul
+two
+or more steps.
+Therefore, first take our original relation $R$ and compute $R sup +$:
+.DS 2
+.sp 3
+3    4   -2    6    7   -1    2   -4
+.sp 3
+.DE
+Then eliminate the undesirable members by restriction, $S~=~R restr P$:
+.DS 2
+.sp 2
+3    4         6    7         2
+.sp 2
+.DE
+There are clearly many redundant edges here.
+We want to eliminate any edges that can be generated from
+the others; that is, we want a 
+.ul
+minimal 
+set of edges.
+Since $S rprod S sup +$ are all the edges of length two or greater,
+these are the redundant edges:
+.DS 2
+.sp 2
+3    4         6    7         2
+.sp 2
+.DE
+If we delete these edges from $S$ we will have only the nonredundant
+edges left, so $S dif ( S rprod S sup + )$ is
+.DS 2
+.sp 2
+3    4         6    7         2
+.DE
+.P
+We can now define $xi$.
+First we define a useful operation $mu$ that minimizes a relation
+by eliminating all of its redundant edges:
+$mu R~=~R~dif~R rprod R sup +$.
+To see that this works just expand the transitive closure:
+.DS 1
+$mu R~~mark =~~R~dif~R rprod R sup +$
+$lineup =~~R~dif~R rprod (R sup 1 Un R sup 2 Un R sup 3 Un ... )$
+$lineup =~~R~dif~(R sup 2 Un R sup 3 Un R sup 4 ... )$
+$lineup =~~R~dif~R sup 2 ~dif~R sup 3 ~dif~R sup 4 ~dif~...$
+.DE
+Hence, to filter a relation $R$ by a predicate $P$ we use
+$mu [ R sup + restr P]$.
+Therefore,
+.DS 1
+$xi PR ~~mark =~~R prime ~~=~~mu [ R sup + restr P]$
+$lineup =~~mu . [ restr P][ roman trac R]$
+$lineup =~~mu . [ restr P]. roman trac ~R$
+.DE
+where we have used $roman trac ~R~=~R sup +$.
+Hence we have that 
+.DS 2
+$xi P~=~mu .[ restr P] . roman trac $
+.DE
+Notice that this definition is really quite readable.
+It says, ``To filter a relation, 
+compute the transitive closure (trac),
+eliminate undesirable nodes $[ restr P]$,
+and eliminate redundant edges ($mu$).''
+.P
+We now want to extend $xi$ into the operation $PHI$ on data structures.
+Recall that $PHI PS$ means that a node is to be included
+in the result only if its value satisfies $P$.
+Hence, if $S~=~(D,R)$ then we want to filter $R$ by $F$
+where $n Isa F$ if and only if $Dn Isa P$.
+Now, the set of all nodes whose value is in $P$ is just the
+inverse image of $P$ under $D$, $F~=~img . inv D P$.
+Therefore, we want to filter $R$ by $img . inv DP$,
+which we do by $xi ( img . inv DP)R$.
+Hence, $PHI P(D,R)~=~(D,~ xi [ img . inv DP]R)$.
+We can factor $(D,R)$ out of this equation:
+.DS 1
+$PHI PS~~mark =~~PHI P(D,R)$
+$lineup =~~(D,~xi [ img . inv DP]R)$
+$lineup =~~(D,~xi [ ( @ P) . img . inv D ] R)$
+$lineup =~~(D,~xi . ( @ P) . img . inv~D~R)$
+$lineup =~~(D,~roman uncurry [ xi . ( @ P) . img . inv ](D,R))$
+$lineup =~~( first S,~roman uncurry [ xi .( @ P). img . inv ]S)$
+$lineup =~~( first~  construc  ~roman uncurry [ xi .( @ P). img . inv ])S$
+.DE
+Therefore,
+.DS 2
+$PHI P~~=~~first~  construc  ~roman uncurry [ xi .( @ P). img . inv ]$
+.DE
+.H 1 "Reducing Structures"
+.H 2 "basic concepts"
+.P
+In this section we will discuss several methods for
+.ul
+reducing structures,
+that is, for applying a function to each element of a
+structure and accumulating the results.
+Since no one method has yet been selected, this section
+should be taken as a report of work in progress.
+.P
+A general paradigm for processing a structure, such as a file,
+is the following:
+.AL 1
+.LI
+Perform some initialization.
+.LI
+Read the next (or first) element of the file.
+.LI
+Take this value and the results of processing the previous values.
+.LI
+Process these to yield new cumulative values and continue
+from step (2).
+.LI
+When the end of the file is reached, return the accumulated
+result of processing all of its elements.
+.LE
+.sp
+A simple form of this appears in APL's reduction operation:
+.DS 2
+$+/V~~=~~V sub 1 +( ... (V sub n-1 + V sub n ) ... )$
+.DE
+A more general form is Backus' insert:
+.DS 2
+$/f:<x sub 1 ,...,x sub n >~~=~~f:<x sub 1 ,...~f:<x sub n-1 ,x sub n >...>$
+.DE
+Our first example of scanning structures will be to express
+this operation in the relational calculus.
+.H 2 "reduction of arrays"
+.P
+We are given an n element array $A$ and wish to compute:
+.DS 2
+$t~~=~~A(n) + A(n-1) + ... + A(2) + A(1)$
+.DE
+where we have assumed that the domain of $A$ is $[1..n]$.
+We saw in the section on ancestrals ($sect$13) that $roman iter [ compl T~resl~F]$
+will iterate the application of $F$ with $T$ used as the
+termination condition.
+Consider how the analogous loop would be written in Pascal:
+.DS 1
+S := 0;  i := 0;
+$bold while ~roman i != roman n +1~bold do $
+  $bold begin $  S := S+A[i];  i := i+1  $bold end $
+.DE
+On each iteration two functions are performed:  S is increased
+by A[i] and i is incremented by 1.
+Let's represent the state of the computation by a pair $(s,i)$,
+where $s$ is the cumulative sum so far and $i$ is the index of
+the next element to process.
+We will use $F$ to represent one processing step, so that, if
+$(s prime ,i prime )$ is the new state, we can solve for $F$ as follows:
+.DS 1
+$F(s,i)~~mark =~~(s prime , i prime )$
+$lineup =~~(s+Ai,~i+1)$
+$lineup =~~(+[s,Ai],~[1+]i)$
+$lineup =~~(+.[ Id parall A](s,i),~[1+] . last (s,i))$
+$lineup =~~(+.[ Id parall A]~ construc ~1+ . last )(s,i)$
+.DE
+Hence, $F~~=~~(+.[ Id parall A]~ construc ~1+ . last )$.
+.P
+It remains to determine the termination condition, $T$.
+If $x$ is a state, i.e., a pair $(s,i)$, then $x Isa T$ when $i=n+1$.
+Hence, $x Isa T$ when $last x~=~n+1$, so
+$T$ is the set of all states mapped by $last$ into $n+1$.
+Hence, $T~=~allof~last~n+1$.
+The final state, $x sub f$, containing the sum is
+$roman iter [ compl T~resl~F]x sub i$, where $x sub i =(0,1)$ is the
+initial state:
+.DS 2
+$x sub f ~~=~~roman iter [ compl T~resl~F](0,1)$
+.DE
+Now, the total $t$ is just $first x sub f$, so
+.DS 2
+$t$  =  $first . roman iter [ compl T~resl~F](0,1)$
+.DE
+We can generalize this to any function $f$ with initial value $i$:
+.DS 2
+$t~~=~~mark first . roman iter [ compl T~resl~F](i,1)~~$
+      $lineup roman where~F~=~(f.[ Id parall A]~ construc ~1+ . last )$
+      $lineup roman "and"~T~=~allof~last~(1+ str A)$
+.DE
+.P
+This result can be improved by directly extracting the result
+from the final state.
+That is, we want to define a filter $phi$ such that
+$t~=~phi .F sup * (i,1)$.
+Hence we want $x sub f phi t$, so
+$x sub f phi t ~~ equiv ~~(t,n+1)~phi~t$.
+Now, note that $[,n+1]t~=~(t,n+1)$, so
+$t[,n+1](t,n+1)$
+by the definition of application.
+Therefore $phi~=~[,n+1] sup -1$ and we have the simplified formula
+$t~=~[,n+1] sup -1 .F sup * (i,1)$.
+This leads us to the following definition of the array reduction
+operation:
+.DS 1
+$(f red i)A~~=~~[,n+1] sup -1 .F sup * (i,m)$
+  where $F~~=~~(f,[ Id parall A] construc 1+. last )$
+  and   $m~~=~~min ( dom~A)$
+  and   $n~~=~~max ( dom~A)$
+.DE
+Therefore, if $A$ is an array indexed $m$ to $n$, then
+$(+ red 0)A$ is the summation of $A$,
+.DS 2
+$sum from i=m to n Ai$
+.DE
+Using this operation, the inner product of arrays $A$ and $B$
+can be written simply as $+ red 0 (A times bar B)$.
+.EX
+Show that $+ red 0 (A times bar B)$ is the inner product of $A$ and $B$.
+.H 2 "reduction of sequences"
+.P
+Next we will consider the scanning of sequences.
+Suppose $S$ is a sequence:
+.DS 2
+$S$  =  $(s sub 1 ,s sub 2 ,..., s sub n , roman EOF )$
+.DE
+where EOF is an ``end marker''; it can be any value.
+Now, we wish to find the result
+.DS 2
+$i~f~s sub 1~f~s sub 2~f~...~f~s sub n$
+.DE
+that is
+.DS 2
+$f(~f( ...~f(~i,~s sub 1 ~)~... ),~s sub n )$
+.DE
+for some function $f$ and starting value $i$.
+The state can be represented by a pair $(t,s)$, where $t$
+is the result so far computed and $s$ is the rest of the
+sequence to be processed.
+Hence, $(t prime ,s prime )~=~F(t,s)$ where $t prime~=~f(t, first s)$
+and $s prime~=~final s$.
+Therefore,
+.DS 1
+$F(t,s)~mark =~(t prime , s prime )~=~(f[t, first s],~ final s)$
+$lineup =~(f.[ Id parall first ](t,s),~final . last (t,s))~=~(f.[ Id parall first ]~ construc ~final . last )(t,s)$.
+.DE
+Hence,
+$F~~=~~f.[ Id parall first ]~ construc ~ final . last$.
+.P
+What is a terminal state?
+Notice that $final (s sub n , roman EOF )~=~nullset$,
+so a
+terminal state will have the form $(r, nullset )$.
+Thus the set of terminal states is the set of all those
+states mapped into $nullset$ by $last$:  $allof last nullset$.
+Hence,
+.DS 2
+$r~~=~~roman while [ non~allof last nullset ,~F](i,S)$
+.DE
+To put  this in a more useful form, we will define
+a function $f insert i$ such that $r~=~(f insert i)S$.
+This is simply
+.DS 2
+$f insert i ~~=~~roman while [ non~allof last nullset , ~f.( Id parall first ) construc ~ final . last ]~.~(i,)$
+.DE
+Then, the sum of the elements of a sequence $S$ is just
+$(+ insert 0 )S$.
+.H 1 "Examples"
+.P
+In this section we will give several examples of
+relational programs.
+.H 2 "payroll"
+.P
+Suppose we have a file $PHI$ of employee records, where
+$r~=~PHI n$
+is the record for the employee with the employee
+number $n$.
+We will suppose that employee records are functions
+defined so that:
+.DS 1
+$r roman N$  =  employee name
+$r roman H$  =  hours worked so far this week
+$r roman R$  =  pay rate
+.DE
+We are given an update file $U$ such that $U n$ is the number
+of hours worked by employee $n$ today.
+We wish to generate a new payroll file $PHI prime$.
+.P
+SOLUTION:
+Let $r~=~PHI n$ and $r prime~=~PHI prime n$ be the old and new
+employee records.
+It is clear that $r prime$ is the same as $r$ except for
+its H field.
+In order to modify part of a relation, we will use
+the conditional union (or overlaying operation)
+defined by:
+.DS 2
+$R overl S ~~=~~ R ~Un~ compl . dom R~resl~S$
+.DE
+Then, if $h prime$ represents the new value of the H field,
+the new employee record is
+$r prime~=~( roman H ,h prime ) overl~r$,
+where $h prime$ is just the cumulative hours worked,
+$h prime~=~ PHI n roman H ~+~ U n$.
+Therefore, by the definition of $PHI prime$:
+.DS 1
+$PHI prime n ~~=~~ r prime ~~=~~( roman H ,h prime ) overl~ PHI n$
+.DE
+To find $PHI prime$ we must factor out the employee number $n$.
+To do this, note that $PHI n roman H$ =
+$[ @ roman H ]( PHI n)$ = $[ @ roman H ]. PHI n$.
+That is, $[ @ roman H ]. PHI~=~PHI frec roman H$ is a slice of the payroll file:
+the hours worked for each employee.
+Therefore,
+.DS 1
+$h prime ~~mark =~~ PHI n roman H~+~U n ~~=~~ [@ roman H ]. PHI n~+~U n$
+$lineup =~~ ( PHI frec roman H  ~ + bar~U) n$
+.DE
+Now, define the updating function $u$ by
+.DS 1
+$u(n)~~mark =~~[ roman H ,~( PHI frec roman H ~ + bar~U) n]$
+     $lineup =~~ [ roman H ,].( PHI frec roman H ~ + bar~U) n$
+.DE
+Then,
+$PHI prime n ~=~ u(n) overl~PHI n~=~ [ PHI  overl bar u]n$.
+Therfore, the solution to our problem, the new payroll file, is
+.DS 2
+$PHI prime ~=~ u  overl bar PHI$, where $u~=~[ roman H ,].( PHI frec roman H ~+ bar~U)$
+.DE
+.H 2 "check issuing"
+.P
+Suppose we wish to take the payroll file from the previous
+example and generate checks for the employees.
+We will assume that a function $C$ is available such that
+$C(m,p)$ returns a check in the amount $p$ made out to 
+the name $m$.
+.P
+SOLUTION:
+We will ignore overtime computations.
+Hence, if $n$ is an employee number then $PHI n roman N$ is his
+name and
+.DS 2
+$p(n)~~=~~ PHI n roman H~times~ PHI n roman R$
+.DE
+is his pay.
+Therefore $p~=~ PHI frec roman H ~ times bar~ PHI frec roman R $.
+Now observe that his check $c(n)$ is $c(n)~=~C(m,pn)$
+= $C( PHI n roman N ,pn)$
+= $C( PHI frec roman N ~n,pn)$
+= $C.( PHI frec roman N ~ construc ~p)n$.
+Combining these we have the file $F$ mapping employee numbers
+into checks:
+.DS 2
+$F~~=~~ C.[ PHI frec roman N ~ construc ~( PHI frec roman H ~ times bar~
+ PHI frec roman R )]$
+.DE
+from which we can factor out  the old payroll file:
+.DS 2
+$F~~=~~ C. [ frec roman N ~ construc ~( frec roman H ~ times bar ~ frec roman R )]. PHI$
+.DE
+If we just want a set of checks, this is $dom . inv F$.
+.H 2 "pseudo-natural notation"
+.P
+Relational programs can be made less intimidating by using the
+pseudo-natural notation described in [MacLennan82].
+This notation uses words in place of symbols and uses a comma
+convention to suppress many parentheses.
+The frequency table program from $sect$1, $F~=~ str .( allof~T)$,
+can be written:
+.DS 2
+`Freq-table' means all text then size.
+.DE
+Here, `Freq-table' = $F$ and `text' = $T$.
+.P
+The payroll example looks like this in the pseudo-natural notation:
+.DS 1
+`Updates' means:  
+  Old-Master slice Hours, each add Hours-Worked,
+  then pair-with Hours.
+`New-Master' means Updates each replace Old-Master.
+.DE
+Here, `Updates' = $u$, `Old-Master' = $PHI$, `slice' = $frec$,
+`Hours' = H, `each add' = $+ bar$, `Hours-Worked' = $U$,
+`then' = $rprod$, `pair-with' = $pairm$, `New-Master' = $PHI prime$,
+and `each replace' = $overl bar$.
+.P
+The check issuing example is also easily put into this notation:
+.DS 1
+`Checks' means
+  Old-Master then:
+  something slice Name 
+    also something slice Hours each times something slice Rate,
+  then Write-check.
+.DE
+Here, `Checks' = $F$, `something' represents an omitted argument,
+`Name' = N, `also' = $construc$, `each times' = $times bar$,
+`Rate' = R, and `Write-check' = $C$.
+.H 1 "Implementation"
+.H 2 "introduction"
+.P
+The primary goal of our investigation has been to determine
+if relational programming is significantly better than
+conventional methods.
+It would be premature to devote much effort to implementation
+studies before it is even determined if relational
+programming is an effective programming methodology.
+However, a brief discussion of implementation
+possibilities is probably not out of line.
+.P
+The most obvious representation of a relation is the
+.ul
+extensional
+representation, in which all the elements of a relation or
+class are explicitly represented in memory.
+There are many kinds of extensional representations,
+such as hash tables, binary trees and simple sorted tables.
+Of course, performance can be improved through the use
+of associative memories and active memories (in which
+each memory cell has a limited processing capability).
+.P
+Some relations and classes will be so large that it is
+uneconomical to represent them explicitly in memory.
+In these cases an
+.ul
+intensional
+representation [MacLennan73] should be used.
+Here a class or relation is represented by a formula
+or expression for computing that relation or class.
+Operations on the class or relation are implemented
+as
+.ul
+formal
+operations on the expression.
+This is feasible because of the simple algebraic properties
+satisfied by relations.
+It can be seen that an intensional representation is really
+just a variant of a
+.ul
+lazy evaluation
+mechanism [Henderson76, Henderson80].
+Sometimes an intensional representation is necessary;
+for instance, relations of infinite cardinality,
+such as the numerical operators and relations,
+require an intensional representation.
+.H 2 "computability"
+.P
+It can be shown on theoretical grounds that some of the operators
+we have described are not implementable in their full generality.
+For example, if $unimg$ were applicable to all computable functions,
+it would be possible to solve the halting problem, since
+.DS 2
+$roman Halts (f,x)~~equiv~~unimg f x~!=~nullset$
+.DE
+Since the halting problem is not solvable, we cannot implement $unimg$
+and the other operators used in the definition of Halts
+so that they works on all computable functions.
+Similar arguments set bounds on the implementability of many of
+the other operators.
+.P
+These limitations do not prevent the use of the relational operators
+as a specification language.
+For this purpose it is only necessary that relational programs
+precisely specify the relationships between inputs and outputs,
+not that the programs be implementable.
+However, if we wish to use the relational operators for executable
+specifications or for a full-fledged programming language,
+then the issue of implementability becomes important.
+.H 2 "extensional representation"
+.P
+It should be clear that all the operators are implementable on
+.ul
+extensionally represented
+sets and relations, that is, on sets and relations whose elements
+are explicitly listed in some form in the computer's memory.
+Obviously, only finite sets and relations can be represented
+extensionally.
+Suha Futaci [Futaci82] has analyzed the complexity of the
+algorithms associated with several different extensional
+representations.
+.H 2 "intensional representations"
+.P
+Infinite sets and relations must be represented
+.ul
+intensionally,
+that is, without explicitly listing their elements.
+There are several ways of accomplishing this.
+For example, infinite sets can be represented by their
+.ul
+characteristic functions:
+total, computable, Boolean-valued functions that determine whether
+or not a given element is in the set.
+Since we require these functions to be computable they can be expressed
+in a finite algorithm and so are finitely reresentable in the
+computer's memory\*F.
+.FS
+Of course,
+.ul
+computable
+characteristic functions only allow (by definition) the
+representation of
+.ul
+recursive
+sets.
+There is little to be lost in restricting our attention to
+recursive sets, however.
+.FE
+.P
+Another intensional representation of infinite sets makes use of computable
+.ul
+enumeration functions.
+If $f$ is an enumeration function for a set then $f(1)$, $f(2)$, ...
+are distinct elements of the set.
+If $n$ is greater than the cardinality of the set, then $f(n)$
+might not halt.
+.P
+One of the most common intensional representations of infinite relations
+makes use of the corresponding computable function.
+That is, the computable function $f$ can be used to represent
+the relation $R$ when $y=f(x)~equiv~(x:y) Isa R$.
+Clearly, this representation can be used only when $R$ is right univalent.
+Also, if $x NotIsa dom f$ then the computation of $f(x)$
+might not halt.
+.DF
+.TB "Sets Represented by their Characteristic Functions"
+.sp
+.TS
+center;
+| c | l |.
+_
+Set Operation	Operation on Characteristic Function
+=
+$x Isa S$	$S(x)$
+$x NotIsa S$	$not S(x)$
+$compl S$	$not . S$
+$S inters T$	$S and bar T$
+$S union T$	$S or bar T$
+$S dif T$	$S and bar not . T$
+$S impl T$	$not . S or bar T$
+$S cart T$	$and . (S parall T)$
+.sp
+$xRy$	$R(x,y)$
+$unimg R x$	$R.(,x)$
+$allof Rx$	$R.(x,)$
+$inv R$	$R . inv$
+$S resl R$	$S . first~and bar ~R$
+$R resr S$	$R~and bar~S . last$
+$R restr S$	$R~and bar~and . (S parall S)$
+$R parall S$	$R. first isom ~and bar~S. last isom$
+$R construc S$	$R.( Id parall first )~and bar~S.( Id parall last )$
+_
+.TE
+.DE
+.H 2 "eliminating polymorphism"
+.P
+When we investigate each of the various extensional and intensional
+representations of sets and relations, we find that different
+combinations of the operators are implementable on each representation.
+This could lead to a very confusing situation for the relational
+programmer.
+Without consulting a table of some kind the programmer would never
+be sure whether or not a particular combination was implementable.
+Therefore, relational programming will be simplified if we can divide
+the operators into disjoint classes in such a way that each operator
+is applicable and implementable on exactly one representation.
+Fortunately, when we investigate the
+.ul
+use
+of the relational operators we find that certain operators are
+mostly used on finite sets and relations and others are mostly
+used on computable functions.
+Thus we have a basis for a division of the operators.
+.P
+To accomplish this goal it is necessary to eliminate any
+.ul
+polymorphism,
+that is, any operators that are both implementable and useful
+on more than one representation.
+For example, the set operations ($inters$, $Un$, $dif$, etc.)
+are useful and implementable on both finite sets and infinite sets
+represented by characteristic functions.
+However, the set operations on infinite sets are easily expressed
+as abstractions and compositions of the Boolean operations
+applied to the corresponding characteristic functions;
+see Table 1.
+The simplicity and directness of this representation of infinite
+sets and their operators permits us to eliminate them as basic
+objects in relational programming.
+Thus, the set operations ($inters$, $Un$, $dif$, etc.)
+will only be allowed on finite sets and relations.
+.P
+Since we have eliminated characteristic functions as built-in representations
+of infinite sets and relations, we are left with only two others:  
+enumeration functions and computable functions (for right univalent relations).
+We have chosen to eliminate enumeration functions because they have few
+uses and these can be easily expressed using the functional operations.
+.P
+This leaves us with two classes of objects in relational programming:
+.BL
+.LI
+Finite sets (and hence relations)
+.LI
+Computable functions
+.LE
+.sp
+There are only a few operations that are both useful and implementable
+on both of these classes.
+For example, the application operation can be used both for applying
+a computable function to its argument and for looking up an item
+in a table (a finite relation).
+Therefore we define two versions of this operation:  $f @ x$,
+which applies the computable function $f$ to $x$, and
+$t \(da x$ (suggesting subscripting), which applies the finite
+relation (table) $t$ to $x$.
+We allow $f @ x$ to be abbreviated $fx$ and $t \(da x$ to be
+abbreviated $t sub x$.
+.P
+For some of the polymorphic operations either the intensional version
+or the extensional version can be easily expressed in terms of
+other operations.
+In these cases the easily expressible version can be dropped
+with little loss of convenience.
+An example of this is $img . inv f p$, where $f$ is a total function
+and $p$ is a characteristic function.
+This can be written $p.f$ since $p.f$ is the characteristic
+function of $img . inv fp$.
+.DF
+.TB "Primitive Extensional Operations"
+.sp
+.TS
+center;
+| c | l |.
+_
+Operator	Meaning
+=
+$t\(dax$	application
+$t rprod u$	relative product
+$t construc u$	construction
+$x : y$	pair formation
+$s union t$	union
+$un ~x$	unit-set formation
+$roman cur ~t$	Currying
+$roman unc ~t$	un-Currying
+$theta x$	unique element selection
+$str x$	cardinality
+$Str t$	structure of relation
+$t sup +$	transitive closure
+_
+.TE
+.sp
+.TB "Non-primitive Extensional Operations (Part 1)"
+.sp
+.TS
+center;
+| c | l |.
+_
+Operator	Definition
+=
+$(x,y)$	$un (x:y)$
+$(x,)$	$un .(x:)$
+$(,y)$	$un .(:y)$
+$DELTA x$	$(x,x)$
+$x Isa t$	$roman "or" . img [x=] t$
+$s subset t$	$roman "and" .( img [ Isa t])s$
+$s=t$	$s subset t ~and~t subset s$
+$inv~t$	$img [ : . ( roman Tl , roman Hd ) mosi ]t$
+$dom ~t$	$img~roman Hd~t$
+$roman rng ~t$	$dom . inv ~t$
+$mem ~t$	$dom t~union~roman rng t$
+$Lm (x,t)$	$x Isa dom t$
+$Rm (x,t)$	$x Isa roman rng t$
+$Mm (x,t)$	$x Isa mem t$
+$run ~t$	$roman "and"~.~ img (1= . str .[ unimg t])~.~dom t$
+$lun ~t$	$run .  inv~t$
+$bun ~t$	$run t~and~lun t$
+$init~t$	$dom t~dif~roman rng t$
+$term~t$	$roman rng t~dif~dom t$
+$t sup *$	$t sup + ~union~( img~: . DELTA ). mem~t$
+$p resl t$	$roman filter (p . roman Hd )t$
+$t resr p$	$roman filter (p . roman Tl )t$
+$t restr p$	$p resl t resr p$
+_
+.TE
+.DE
+.H 2 "extensional operators"
+.P
+The results of the separation process are displayed in Tables 2-5.
+Table 2 lists the primitive operations on finite, extensionally represented
+sets and relations.
+These operations are considered primitive because they are not
+simply defined in terms of other operations.
+Tables 3 and 4 show the non-primitive operations on extensionally
+represented sets and relations, that is, those that can be simply defined
+in terms of other operations.
+Although these operations are non-primitive, we would expect that
+they would be built-in in a relational programming system.
+These definitions make use of several new primitive
+operations, which are defined in Table 5.
+They also make use of the operations on elementary pairs:
+$roman Hd~=~first . un$ and $roman Tl~=~last . un$.
+.DF
+.TB "Non-primitive Extensional Operations (Part 2)"
+.sp
+.TS
+center;
+| c | l |.
+_
+Operator	Definition
+=
+$first$	$theta . init$
+$last$	$theta . term$
+$initial~t$	$t~resl~ NotIsa term t$
+$final~t$	$NotIsa init t~resl~t$
+$t overl u$	$t~union~NotIsa dom t ~ resl~u$
+$x~cl~t$	$(x, first t) union t$
+$t~cr~x$	$t union ( last t,x)$
+$min~s$	$first . ( img <)~s cart s$
+$max~s$	$last . ( img <)~s cart s$
+$s inters t$	$dom [s~resl~t cart un 0]$
+$s dif t$	$dom [ NotIsa t~resl~s cart un 0]$
+$"{"0..m"}"$	$f sup m (0, un 0 )$  where $f(n,s) = (n+1,s union un n)$
+$"{"m..n"}"$	$img [m+] "{"0..n-m"}"$
+$[m..n]$	$img [ : . DELTA ]"{"m..n"}"$
+$t frec x$	$img ( roman Hd~: bar~@x. roman Tl )t$
+$t mosi x$	$@ x isom t$
+$mu t$	$t~dif~t rprod t sup +$
+$roman index phi t$	$img [ \(da phi~: bar~Id ]t$
+$roman select phi$	$img .( roman index phi )$
+$roman join phi$	$img union~.~dom~.~inv~.~||~.~[ roman index phi || roman index phi ]$
+$roman as~t$	$img [ A\(da~: bar~A\(da.1+ ]( dom t~dif~un . max . dom~t)$
+$roman sa~t$	$f insert (1, nullset )$
+	  where $f[x,(i,a)]~=~(i+1,~a union [i,x])$
+$roman sa0~t$	$f insert (0, nullset )$  ($f$ defined above)
+$roman rp ft$	$img [ roman Hd~: bar~f . roman Tl ]t$
+$roman rpi ft$	$img [f. roman Hd~: bar~roman Tl ]t$
+$t~roman cat~u$	$t~union~roman rpi [+ str . dom~t]u$
+$roman rsort~s$	$img~<=~s cart s$
+$roman sort~s$	$str . inv . allof . roman rsort~s$
+$unimg t x$	$roman rng [ un x~resl~t]$
+$unimg t$	$img f( dom t)$  where $fx~=~x:( unimg tx)$
+$roman ssm$	$roman unc . roman sa . roman sa isom$
+_
+.TE
+.DE
+.DF 0
+.TB "New Primitive Extensional Operations"
+.TS
+center,box;
+l.
+and{true}  =  true
+and{false}  =  false
+and{true,false}  =  false
+.sp
+or{true}  =  true
+or{false}  =  false
+or{true,false}  =  true
+.sp
+$roman "union" "{"S sub 1 ,S sub 2 ,..., S sub n "}"~~=~~S sub 1 Un S sub 2 Un ... Un S sub n$
+.sp
+$roman filter p S~~=~~"{"x | x Isa S~and~p(x) "}"$  (a finite set)
+.TE
+.sp
+.TB "Primitive Intensional Operations"
+.sp
+.TS
+center;
+| c | l |.
+_
+Operator	Definition
+=
+$f@x$	$fx$
+$img f s$	$"{"fx | x Isa s"}"$
+$(f . g)x$	$f(gx)$
+$x pi$	$pi . (x,)$
+$pi x$	$pi . (,x)$
+$(f || g)x$	$(fx,gx)$
+$f isom t$	$img [f || f]t$
+$(f meta g)x$	$(fx)(gx)$
+$(p resl f overl g)$	$bold "if"~px~bold then~fx~bold else~gx$
+$roman curry f$	$[f.]. pairm$
+$roman uncurry f$	$f. first~meta~last$
+$PHI p (d,r)$	$(d,~mu [ r~restr~p.d\(da])$
+$roman iter [p resl f]$	$(p~resl~roman iter [p resl f] overl~Id ).f$
+_
+.TE
+.sp
+.TB "Non-primitive Intensional Operations"
+.sp
+.TS
+center;
+| c | l |.
+_
+Operator	Definition
+=
+$roman while [p,f]$	$p~resl~roman iter [p resl f] overl~Id$
+$f insert i$	$roman while [ nullset != . last ,~(f.[ Id || first ]~||~final . last ). DELTA ].(i,)$
+$f sup n$	$roman while [ n != . first ,~1+ || f].(0,)$
+$upsilon f$	$@ . [ Id || f]$
+$phi$	$Id ||$
+$delta$	$|| Id$
+$PI f$	$delta [f,]$
+$roman extend (t,f)$	$Isa dom t~resl~t\(da overl~f$
+$roman restrict (s,f)$	$img [ theta~.~Id || f~.~DELTA ]s$
+$compl p$	$not . p$
+_
+.TE
+.DE
+.H 2 "intensional operators"
+.P
+All the intensional operators can be expressed using recursive definitions
+and lambda expressions.
+Nevertheless, it is useful to divide these operators into two
+classes, primitive and non-primitive, on the basis of whether they
+can be easily defined in terms of the other operators.
+The intensional operators are shown in Tables 6 and 7.
+.H 1 "Conclusions"
+.P
+Of course, we are not the first to propose introducing
+aspects of a relational calculus into programming.
+Codd [Codd70] has used a relational calculus as the basis
+for data base systems.
+Although he defines several operations on relations
+.ul
+(viz.,
+permutation, join, tie, composition, and restriction),
+this small set of operations is insufficient for general
+purpose programming.
+These remarks also apply to Childs' reconstituted
+definition of relations [Childs69], which is also
+oriented towards data bases.
+Feldman and Rovner [Feldman69] augmented Algol with several
+relational operators for associative access to a data base.
+Their operations, which are our plural description
+and image, are quite limited, being based on a traditional
+von Neumann language.
+.P
+One general purpose language that does make extensive use
+of sets and relations is SETL [Kennedy75]. 
+It provides most of the familiar operations on sets (e.g., union,
+intersection, difference, powerset, image).
+SETL differs from relational programming in three
+significant respects:  (1) it can only handle
+.ul
+finite
+sets, (2) many operations must still be performed
+in a word-at-a-time fashion using the
+.ul
+set former,
+and (3) it resorts to conventional control structures.
+.P
+Finally, we must mention logic programming systems,
+such as PROLOG [Kowalski79, vanEmden76], which use predicate logic
+to describe computational processes.
+These systems also differ from relational programming
+in two significant respects:
+(1) they have a word-at-a-time programming style due
+to the use of variables representing individuals
+in the clauses of the program,
+and (2) they are implemented using a resolution
+theorem prover, whereas a more conventional procedural
+implementation suffices for relational programming.
+Essentially the same remarks apply to Popplestone's
+relational programming [Popplestone79], which is like logic
+programming except that it uses ``forward inference''
+rather than ``backward inference.''
+.P
+In summary, no other programming style that we are aware
+of combines the universal use of relations with a rich
+set of operations on those relations that can be
+implemented in a deterministic, procedural way.
+It is hoped that the preceeding discussion has made
+plausible some of the advantages claimed for relational
+programming in the Introduction.
+Considerable work remains to be done in evaluating
+the effectiveness of a relational calculus as a programming
+tool.
+For instance, the optimum set of combinators and relational
+operators must be selected.
+Another non-trivial problem is the selection of a good
+notation for the relational calculus.
+More from convenience than conviction we have based our
+notation on [Whitehead70] and [Carnap58].
+Making relational programming an effective tool will
+require designing a notation that combines readability
+with the manipulative advantages of a two-dimensional
+algebraic notation.
+This is all preliminary to any serious considerations
+of software or hardware implementation techniques.
+.H 1 "References"
+.RL
+.LI [Backus78]
+Backus, J.
+Can programming be liberated from the von Neumann style?
+A functional style and its algebra of programs,
+.ul
+CACM 21,
+8 (August 1978), 613-641.
+.LI [Carnap58]
+Carnap, R.
+.ul
+Introduction to Symbolic Logic and its Applications,
+Dover, 1958.
+.LI [Childs69]
+Childs, D.L.
+Feasibility of a set-theoretic data structure based on a
+reconstituted definition of relation.
+.ul
+IFIP 68 Proceedings,
+420-430, North-Holland, 1969.
+.LI [Codd70]
+Codd, E.F.
+A relational model for large shared data banks,
+.ul
+CACM 13,
+6 (June 1970), 377-387.
+.LI [Curry58]
+Curry, H.B., Feys, R. and Craig, W.
+.ul
+Combinatory Logic, I,
+North-Holland, Amsterdam, 1958.
+.LI [Feldman69]
+Feldman, J.A. and Rovner, P.D.
+An Algol-based associative language,
+.ul
+CACM 12,
+8 (August 1969), 439-449.
+.LI [Futaci82]
+Futaci, Suha.
+.ul 2
+Representation Techniques for Relational Languages and the Worst Case
+Asymptotical Time Complexity Behaviour of the Related Algorithms,
+MS Thesis, Computer Science Department,
+Naval Postgraduate School, June 1982. 
+.LI [Kennedy75]
+Kennedy, K. and Schwartz, J.
+An introduction to the set theoretical language SETL,
+.ul
+J. Comptr. and Math. with Applications 1
+(1975), 97-119.
+.LI [Kowalski79]
+Kowalski, R.
+Algorithm = logic + control,
+.ul
+CACM 22,
+7 (July 1979), 424-436.
+.LI [Henderson76]
+Henderson, P. and Morris, J.H., Jr.
+A lazy evaluator,
+.ul
+Record 3rd ACM Symp. on Principles of Programming Languages,
+1976, 95-103.
+.LI [Henderson80]
+Henderson, P.
+.ul
+Functional Programming Application and Implementation,
+Prentice-Hall, 1980, 223-231.
+.LI [MacLennan73]
+MacLennan, B.J.
+Fen - an axiomatic basis for program semantics,
+.ul
+CACM 16,
+8 (August 1973), 468-474.
+.LI [MacLennan75]
+MacLennan, B.J.
+.ul
+Semantic and Syntactic Specification and Extension of Languages,
+PhD Dissertation, Purdue University, December 1975.
+.LI [MacLennan81a]
+MacLennan, B.J.
+Introduction to Relational Programming,
+.ul
+Proceedings of the 1981 Conference on Functional Programming Languages
+and Computer Architecture,
+ACM, October 18-22, 1981, 213-220.
+.LI [MacLennan81b]
+MacLennan, B.J.
+Programming with a Relational Calculus,
+Naval Postgraduate School Computer Science Department Technical Report
+NPS52-81-013, September 1981.
+.LI [MacLennan82]
+MacLennan, B.J.
+A Simple, Natural Notation for Applicative Languages,
+.ul
+SIGPLAN Notices 17,
+10 (October 1982), 43-49.
+.LI [MacLennan83]
+MacLennan, B.J.
+Overview of Relational Programming,
+.ul
+SIGPLAN Notices 18,
+3 (March 1983), 36-45.
+.LI [Popplestone79]
+Popplestone, R.J.
+Relational programming,
+in Hayes, J.E. et al. (eds.),
+.ul
+Machine Intelligence 9,
+Halsted Press, 1979, 3-26.
+.LI [Schwartz75]
+Schwartz, J.
+Automatic data structure choice in a language of very
+high level,
+.ul
+CACM 18,
+12 (December 1975), 722-728.
+.LI [vanEmden76]
+van Emden, M.H. and Kowalski, R.A.
+The semantics of predicate logic as a programming language,
+.ul
+JACM 23,
+4 (October 1976), 733-742.
+.LI [Whitehead70]
+Whitehead, A.N. and Russell, B.
+.ul
+Principia Mathematica to *56,
+Cambridge, 1970.
+.LE
+.TC

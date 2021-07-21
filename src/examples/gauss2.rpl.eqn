@@ -1,0 +1,14 @@
+         $con~k~~mark ==~~ func~x~k $
+$transmap~f~~lineup ==~~  [ rp~f ] ~o~ [ # ]  $
+$vecdif~~lineup ==~~ transmap~ [ - ]  $
+$scaprod~ ( k~v ) ~~lineup ==~~ v~rp~ [ k~times ]  $
+$outerprod~ ( u~v ) ~~lineup ==~~ u~rp~ ( scaprod~o~ [ ,~v ]  )  $
+$matdif~~lineup ==~~ transmap~vecdif $
+$column~ ( M~k ) ~~lineup ==~~ M~rp~ [ sel~k ]  $
+$unit~ ( M~k ) ~~lineup ==~~  < 1~to~  card~M  > ~rp~ [  [ =~k ] ~->~ con~1 ~;~ con~0 ]  $
+$diag~ ( M~k ) ~~lineup ==~~  M~sel~k ~sel~k $
+$f~for~S~~lineup ==~~  [ @~S ] ~o~ [ f~red ]  $
+$V~~lineup ==~~ scaprod~o~ (  (  [ 1.0~divide ] ~o~diag ) ~ , bar ~ ( vecdif~o~ ( column~ , bar ~unit )  )  )  $
+$elim~~lineup ==~~ matdif~o~ (  [ sel~1 ] ~ , bar ~ ( outerprod~o~ ( V~ , bar ~ [ sel ] ~ )  )  )  $
+$Gauss~M~~lineup ==~~  ( elim~for~ <1~to~ card~M >  ) ~M $
+$M~~lineup ==~~ <  < 3,~9,~33 >, ~ < 2,~-1,~1 > >  $

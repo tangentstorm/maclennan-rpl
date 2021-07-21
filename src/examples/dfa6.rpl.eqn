@@ -1,0 +1,22 @@
+.nf
+$1st~==~ ( rsec~sel~1 ) $
+$2nd~==~ ( rsec~sel~2 ) $
+$r~ppd~s~==~ ( r~|~ ( s~|~ ( cnv~r )  )  ) $
+$sigma~f~==~ (  ( f~o~ ( 1st~ , bar ~ ( epsilon~o~2nd )  )  ) ~ , bar ~ (  ( op~setdif ) ~o~ (  ( I~ , bar ~ ( un~o~epsilon )  ) ~o~2nd )  )  ) $
+$f~rho~i~==~ ( 1st~o~ (  (  ( sigma~f ) ~while~ (  ( rsec~!=~empty ) ~o~2nd )  ) ~o~ ( lsec~i~, )  )  ) $
+$union~==~ (  ( op~cup ) ~rho~empty ) $
+$SIGMA~==~ ( set~1~2 ) $
+$T~==~ ( rel~ ( 1~:~ ( rel~ ( 10~:~10 ) ~ ( 20~:~20 )  )  ) ~ ( 2~:~ ( rel~ ( 10~:~30 ) ~ ( 20~:~30 )  )  )  ) $
+$Q~==~ ( set~10~20~30 ) $
+$F~==~ ( set~30 ) $
+$Q sup 2~==~ ( Q~cart~Q ) $
+$n~==~ ( card~Q sup 2 ) $
+$R sub 0~==~ ( F~cart~ ( Q~setdif~F )  ) $
+$psi~R~==~ ( R~cup~ ( union~ ( rng~ ( T~rp~ ( rsec~ppd~R )  )  )  )  ) $
+$R sub inf~==~ (  ( psi sup n ) ~R sub 0 ) $
+$R sub =~==~ (  ( Q sup 2~setdif~R sub inf ) ~cap~ ( Q sup 2~setdif~ ( cnv~R sub inf )  )  ) $
+$rom eclass~==~ ( lsec~R sub =~unimg ) $
+$rom equiv~==~ (  ( lsec~rom eclass~img ) ~o~mem ) $
+$Q sub =~==~ ( rom equiv~R sub = ) $
+$T sub =~==~ ( T~rp~ ( lsec~rom eclass~isom )  ) $
+EOF

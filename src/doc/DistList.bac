@@ -1,0 +1,43 @@
+.SK
+.ls 1
+.DS 2
+INITIAL DISTRIBUTION LIST
+.DE
+.EQ
+define ue ' roman u dotdot '
+define ae ' roman a dotdot '
+.EN
+.TS
+expand;
+l r.
+Defense Technical Information Center
+Cameron Station
+Alexandria, VA 22314	2
+
+Dudley Knox Library
+Code 0142
+Naval Postgraduate School
+Monterey, CA 93943	2
+
+Office of Research Administration
+Code 012A
+Naval Postgraduate School
+Monterey, CA 93943	1
+
+Chairman, Code 52
+Department of Computer Science
+Naval Postgraduate School
+Monterey, CA 93943	40
+
+Associate Professor Bruce J. MacLennan
+Code 52ML
+Department of Computer Science
+Naval Postgraduate School
+Monterey, CA 93943	12
+
+Dr. Ralph Wachter
+Code 433
+Office of Naval Research
+800 N. Quincy
+Arlington, VA 22217-5000	1
+

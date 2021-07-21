@@ -1,0 +1,129 @@
+.PH ""
+.PF "''-\\\\nP-''"
+.SK
+.ls 1
+.DS 2
+INITIAL DISTRIBUTION LIST
+.DE
+.EQ
+define ue ' roman u dotdot '
+define ae ' roman a dotdot '
+.EN
+.sp 2
+.TS
+expand;
+l r.
+Defense Technical Information Center
+Cameron Station
+Alexandria, VA 22314	2
+
+Dudley Knox Library
+Code 0142
+Naval Postgraduate School
+Monterey, CA 93943	2
+
+Office of Research Administration
+Code 012A
+Naval Postgraduate School
+Monterey, CA 93943	1
+
+Chairman, Code 52
+Department of Computer Science
+Naval Postgraduate School
+Monterey, CA 93943	40
+
+Bruce J. MacLennan
+Code 52ML
+Department of Computer Science
+Naval Postgraduate School
+Monterey, CA 93943	12
+
+Ralph Wachter
+Code 433
+Office of Naval Research
+800 N. Quincy
+Arlington, VA 22217-5000	1
+
+S. Kamal Abdali
+Tektronix Laboratories
+Computer Research Laboratory
+M/S 50-662
+P. O. Box 500
+Beaverton, OR 97077	1
+
+Drew D. Adams
+Centre de Recherches de la C.G.E.
+Laboratories de Marcoussis
+Division Informatique
+Route de Nozay
+91460 Marcoussis
+France	1
+
+Vinay Apsingikar
+CMC Limited
+R & D Division
+115 Sarojini Devi Road
+Secunderabad 500003
+India	1
+
+John Backus
+IBM Almaden Research Center
+650 Harry Road
+San Jose, CA 95120-6099	1
+
+Jospeh H. Fasel
+Los Alamos National Laboratory
+C-10, MS B296
+Los Alamos, NM 87545	1
+
+Robert Floyd
+Computer Science Department
+Stanford University
+Stanford, CA 94305	1
+
+Joseph A. Goguen
+SRI International
+Computer Science Laboratory
+333 Ravenswood Avenue
+Menlo Park, CA 94025	1
+
+Peter Henderson
+Department of Computer Science
+SUNY at Stony Brook
+Long Island, NY 11794	1
+
+Paul Hudak
+Yale University
+Department of Computer Science
+Box 2158, Yale Station
+New Haven, CT 06520	1
+
+Bharat Jayaraman
+University of North Carolina
+Department of Computer Science
+New West Hall 035 A
+Chapel Hill, NC 27514	1
+
+A. Dain Samples
+Computer Science Division - EECS
+University of California
+Berkeley, CA 94720	1
+
+Mayer Schwartz
+Computer Research Laboratory
+MS 50-662
+Tektronix, Inc.
+P. O. Box 500
+Beaverton, OR 97077	1
+
+Guy L. Steele
+Thinking Machines Corporation
+245 First Street
+Cambridge, MA 02142	1
+
+Richard Taylor
+INMOS Limited
+Whitefriars
+Lewins Mead
+Bristol BS1 2NP
+UK	1

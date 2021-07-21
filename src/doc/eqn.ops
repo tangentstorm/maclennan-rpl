@@ -1,0 +1,327 @@
+.EQ
+define dollar ' roman "$" '
+delim $$
+define rom ' roman '
+define BB ' bold '
+define func ' lambda '
+define sel ' \(da '
+define restr ' \(ua '
+define ALPHA ' rom A '
+define o % "\v'+.3m'\h'-.1m'" degree "\v'-.3m'" %
+define red ' \(sc '
+define times ' \(mu '
+define divide ' \(di '
+define / ' \(di '
+define not ' \(no '
+define cart ' size +2 {fat times} '
+define @bar % "\s-2\v'-.5m'\b'_@'\v'.5m'\s0" %
+define |bar % "\s-3|\s0" bar %
+define @hat % "\s-2\z@\s0\v'-.3m'^\v'.3m'" %
+define isom ' dollar '
+define setdif ' "\e" '
+define PHIaux ' PHI prime '
+define lsec ' BB "lsec" '
+define rsec ' BB "rsec" '
+define op ' BB "op" '
+define to ' ".." '
+define list ' BB "list" '
+define listrange ' BB "list" '
+define seq ' BB "seq" '
+define seqrange ' BB "seq" '
+define set ' BB "set" '
+define setrange ' BB "set" '
+define rel ' BB "rel" '
+define done ' BB "done" '
+define dis ' BB "display" '
+define display ' BB "display" '
+define val ' BB "val" '
+define env ' BB "env" '
+define iter ' BB "iter" '
+define if ' BB "if" '
+define unimg ' BB "unimg" '
+define hd ' BB "hd" '
+define tl ' BB "tl" '
+define filter ' BB "filter" '
+define run ' BB "run" '
+define card ' BB "size" '
+define rpi ' | '
+define rp ' | '
+define img ' BB "img" '
+define true ' BB "true" '
+define false ' BB "false" '
+define or ' orsign '
+define and ' andsign '
+define un ' BB "un" '
+define <> ' != '
+define file ' BB "file" '
+define dom ' BB "dom" '
+define rng ' BB "rng" '
+define inv ' BB "cnv" '
+define cnv ' BB "cnv" '
+define rev ' BB "rev" '
+define ** ' "*" '
+define as ' BB "as" '
+define sa ' BB "sa" '
+define max ' BB "max" '
+define min ' BB "min" '
+define cat ' BB "cat" '
+define cur ' BB "cur" '
+define unc ' BB "unc" '
+define rsort ' BB "rsort" '
+define sort ' BB "sort" '
+define lun ' BB "lun" '
+define bun ' BB "bun" '
+define Rm ' BB "Rm" '
+define Lm ' BB "Lm" '
+define mem ' BB "mem" '
+define term ' BB "term" '
+define Mm ' BB "Mm" '
+define init ' BB "init" '
+define cl ' BB "cl" '
+define cr ' BB "cr" '
+define I ' BB "I" '
+define while ' BB "while" '
+define extend ' BB "extend" '
+define restrict ' BB "restrict" '
+define index ' BB "index" '
+define ssm ' BB "ssm" '
+define all ' BB "all" '
+define select ' BB "select" '
+define join ' BB "join" '
+define curry ' BB "curry" '
+define uncurry ' BB "uncurry" '
+define uset ' BB "uset" '
+.EN
+.SA 1
+.PH ""
+.PF "''\\\\ ''"
+.S +2
+.DS 2
+APPENDIX E - RPL INPUT FORM SUMMARY
+.DE
+.S
+.SP 2
+.DS  2
+.TB "Primitive Extensional Operations"
+.DE
+.DS
+.TS
+center,box;
+l|l|l|l.
+Name	Old Input Form	New Input Form	Publication Form
+_
+selection	t sel x	t sel x	$t~sel~x$
+relative product	t | u	t | u	$t~|~u$
+construction	t , bar u	t # u	$t~#~u$
+pair formation	x : y	x : y	$x~:~y$
+union	t cup u	t cup u	$t~cup~u$
+unit set	un x	un x	$rom un~x$
+currying	cur t	cur t	$rom cur~t$
+uncurrying	unc t	unc t	$rom unc~t$
+unique element selection	theta s	theta s	$theta~s$
+element selection	(added)	epsilon t	$epsilon~t$
+cardinality	size t	size t	$rom "size"~t$
+structure	str t	(deleted)	(deleted)
+transitive closure	t sup +	t sup +	$t sup +$
+empty set	empty	empty	$empty$
+.TE
+.DE
+.SP 1
+.DS  2
+.TB "Nonprimitive Extensional Operations:  Group 1"
+.DE
+.DS
+.TS
+center,box;
+l|l|l|l.
+Name	Old Input Form	New Input Form	Publication Form
+_
+pair list	(x, y)	(x , y)	$(x,~y)$
+left pair section	(x,)	(deleted)	(deleted)
+right pair section	(,y)	(deleted)	(deleted)
+duplication	DELTA x	DELTA x	$DELTA~x$
+membership	x member t	x member t	$x~member~t$
+nonmembership	x nomem t	x nomem t	$x~nomem~t$
+improper subset	s !subset t	s !subset t	$s~!subset~t$
+proper subset	s subset t	s subset t	$s~subset~t$
+equality	s = t	s = t	$s~=~t$
+converse	inv t, t sup -1	cnv t, t sup -1	$rom cnv~t,~t sup -1$
+domain	dom t	dom t	$rom dom~t$
+range	rng t	rng t	$rom rng~t$
+members	mem t	mem t	$rom mem~t$
+left member	Lm (x,t)	x Lm t	$x~rom Lm~t$
+right member	Rm (x,t)	x Rm t	$x~rom Rm~t$
+member	Mm (x,t)	x Mm t	$x~rom Mm~t$
+right univalent	run t	run t	$rom run~t$
+left univalent	lun t	lun t	$rom lun~t$
+bi-univalent	bun t	bun t	$rom bun~t$
+initial members	init t	init t	$rom init~t$
+terminal members	term t	term t	$rom term~t$
+reflexive transitive closure	t sup *	t sup **	$t sup *$
+domain restriction	p -> t	p -> t	$p~->~t$
+range restriction	t <- p	t <- p	$t~<-~p$
+restriction	t restr p	t restr p	$t~restr~p$
+sequence filtering	(added)	p xi t 	$p~xi~t$
+.TE
+.DE
+.SK
+.DS  2
+.TB "Nonprimitive Extensional Operations:  Group 2"
+.DE
+.DS
+.TS
+center,box;
+l|l|l|l.
+Name	Old Input Form	New Input Form	Publication Form
+_
+first member	alpha t	alpha t	$alpha~t$
+last member	omega t	omega t	$omega~t$
+initial sequence	ALPHA t	ALPHA t	$ALPHA~t$
+final sequence	OMEGA t	OMEGA t	$OMEGA~t$
+ordered union	t ; u	t ; u	$t~;~u$
+cons left	x cl t	x cl t	$x~rom cl~t$
+cons right	t cr x	t cr x	$t~rom cr~x$
+minimum	min s	min s	$rom min~s$
+maximum	max s	max s	$rom max~s$
+intersection	s cap t	s cap t	$s~cap~t$
+set difference	s \e t	s \e t	$s~"\e"~t$
+apply functional record	t @ hat x	t @hat x	$t~@hat~x$
+apply functional structure	t ! x	t ! x	$t~!~x$
+minimize	mu t	mu t	$mu~t$
+database index	index x d	x index d	$x~rom index~d$
+database select	select x	x select d	$x~rom select~d$
+database join	join x	x join dblist	$x~rom join~dblist$
+array to sequence	as t	as t	$rom as~t$
+sequence to array	sa t	t sa i	$t~rom sa~i$
+seq. to zero-origin array	sa0 t	(deleted)	(deleted)
+relative product	rp f t	t rp f 	$t~rom rp~f$
+relative product inverse	rpi f t	f rpi t	$f~rom rpi~t$
+array concatenation	t cat u	t cat u	$t~rom cat~u$
+relation sort	rsort s	rsort s	$rom rsort~s$
+sort	sort s	sort s	$rom sort~s$
+unit image	unimg t x	t unimg x	$t~rom unimg~x$
+all	all t	all t	$rom all~t$
+sequence to matrix	ssm t	ssm t	$rom ssm~t$
+.TE
+.DE
+.SP 1
+.DS  2
+.TB "Primitive Intensional Operations"
+.DE
+.DS
+.TS
+center,box;
+l|l|l|l.
+Name	Old Input Form	New Input Form	Publication Form
+_
+application	f @ x	f @ x	$f~@~x$
+image	img f s	f img s	$f~rom img~s$
+composition	f . g	f o g	$f~o~g$
+infix to prefix	(added)	(op +), (op times), ...	$[+],~[ times ],~...$
+left section	(x+), (x-), ...	(lsec x +), ...	$[x+],~[x-],~...$
+right section	(+y), (-y), ...	(rsec + y), ...	$[+y],~[-y],~...$
+paralleling	f | | g	f | | g	$f~||~g$
+isomorphism	f $dollar$ t	f $dollar$ t	$f~dollar~t$
+formal application	f @ bar g	(deleted)	(deleted)
+functional condition	(p -> f; g)	(if p -> f ; g)	$(p~->~f;~g)$
+curry	curry f	curry f	$rom curry~f$
+uncurry	uncurry f	uncurry f	$rom uncurry~f$
+filtering	PHI p (d, r)	p PHI S	$p~PHI~S$
+iteration	iter [p -> f]	(iter p -> f)	$rom iter~[p~->~f]$
+formalization	+ bar, times bar, ...	(+ bar), (times bar), ...	$+ bar ,~times bar$
+identity	Id	I	$rom I$
+.TE
+.DE
+.SK
+.DS  2
+.TB "Nonprimitive Intensional Operations"
+.DE
+.DS
+.TS
+center,box;
+l|l|l|l.
+Name	Old Input Form	New Input Form	Publication Form
+_
+while loop	while [p, f]	(f while p)	$f~rom while~p$
+array reduction	f red i	f red x	$f~red~x$
+repeated composition	f sup n	f sup n	$f sup n$
+value of node	upsilon f	upsilon f	$upsilon~f$
+operate on form	phi f	phi f	$phi~f$
+operate on data	delta f	delta f	$delta~f$
+image of structure	PI f	PI f	$PI~f$
+extension	extend (t, f)	t extend f	$t~rom extend~f$
+restriction	restrict (s, f)	s restrict f	$s~rom restrict~f$
+formal negation	wig p	wig p	$wig p$
+.TE
+.DE
+.SP 1
+.DS  2
+.TB "Miscellaneous Operations"
+.DE
+.DS
+.TS
+center,box;
+l|l|l|l.
+Name	Old Input Form	New Input Form	Publication Form
+_
+sum	x + y	x + y	$x~+~y$
+difference	x - y	x - y	$x~-~y$
+product	x times y	x times y	$x~times~y$
+quotient	x divide y	x divide y	$x~divide~y$
+inequality	x != y	x != y	$x~!=~y$
+less	x < y	x < y	$x~<~y$
+greater	x > y	x > y	$x~>~y$
+less or equal	x <= y	x <= y	$x~<=~y$
+greater or equal	x >= y	x >= y	$x~>=~y$
+conjunction	x andsign y	x andsign y	$x~andsign~y$
+disjunction	x orsign y	x orsign y	$x~orsign~y$
+negation	not x	not x	$not x$
+cartesian product	s cart t	s cart t	$s~cart~t$
+.TE
+.DE
+.SP 1
+.DS  2
+.TB "Data Input Operations and Syntax"
+.DE
+.DS
+.TS
+center,box;
+l|l|l.
+Name	Input Form	Publication Form
+_
+identifiers	a, b', total, etc.	$a,~b',~rom total ,~etc.$
+strings	``abcd''	``abcd''
+booleans	true, false	$true ,~false$
+relation	(rel (x : y), ... )	$((x~y),~...~)$
+set	(set x y ... )	$"{"x,~y,~...~"}"$
+sequence	(seq x y ... )	$(x,~y,~...~)$
+list	(list x y ... )	$<x,~y,~...~>$
+subrange set	(setrange m to n)	$"{"m ,..., n"}"$
+subrange sequence	(seqrange m to n)	$(m ,..., n)$
+subrange list	(listrange m to n)	$"<"m ,..., n">"$
+.TE
+.DE
+.SK
+.DS  2
+.TB "RPL Command Types"
+.DE
+.DS
+.TS
+center,box;
+l|l|l.
+Name	Input Form	Publication Form
+_
+data definition	x == y	$x~==~y$
+prefix function definition	f x == y	$f~x~==~y$
+infix function definition	x f y == z	$x~f~y~==~z$
+write data to a file	file ``name'' == x	$file~``name$''$~==~x$
+read data from a file	x == (file ``name'')	$x~==~file~``name$''
+output, form 1	display x	$display~x$
+output, form 2	dis x	$dis~x$
+output, form 3	d x	$BB d~x$
+output, form 4	x	$x$
+output value of definition	val x	$val~x$
+output function environment	env f	$env~f$
+output entire environment	env	$env$
+.TE
+.DE

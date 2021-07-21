@@ -1,0 +1,9 @@
+(transmap f == ((rsec rp f) o (op #)))
+(con k == (func x k))
+(vecdif == (transmap (op -)))
+(scaprod (k v) == (v rp (lsec k times)))
+(outerprod (u v) == (u rp (scaprod o (rsec , v))))
+(matdif == (transmap vecdif))
+(column (k M) == (M rp (rsec sel k)))
+(unit (k M) == ((seqrange 1 to (size M)) rp (if (rsec = k) -> (con 1) ; (con 0))))
+EOF

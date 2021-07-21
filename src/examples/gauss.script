@@ -1,0 +1,10 @@
+DO YOU WANT TO RESUME A PREVIOUS RPL SESSION? <y/n> y
+INPUT FILENAME 
+examples/gauss.rpl
+Loading--- Session loaded 
+?> (Gauss M]
+
+ ( rel  ( 1  ( rel  ( 1  1.0 )  ( 2  -2.38419E-07 )  ( 3  2.0 ) ) )  ( 2  ( rel 
+ ( 1  0.0 )  ( 2  1.0 )  ( 3  3.0 ) ) ) ) 
+
+?> done

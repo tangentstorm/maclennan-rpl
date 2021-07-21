@@ -1,0 +1,18 @@
+.nf
+-- Gaussian Elimination
+
+$con~k~==~ ( func~x~k ) $
+$transmap~f~==~ (  ( rsec~rp~f ) ~o~ ( op~# )  ) $
+$vecdif~==~ ( transmap~ ( op~- )  ) $
+$scaprod~ ( k~v ) ~==~ ( v~rp~ ( lsec~k~times )  ) $
+$outerprod~ ( u~v ) ~==~ ( u~rp~ ( scaprod~o~ ( rsec~,~v )  )  ) $
+$matdif~==~ ( transmap~vecdif ) $
+$column~ ( M~k ) ~==~ ( M~rp~ ( rsec~sel~k )  ) $
+$unit~ ( M~k ) ~==~ (  ( listrange~1~to~ ( size~M )  ) ~rp~ ( if~ ( rsec~=~k ) ~->~ ( con~1 ) ~;~ ( con~0 )  )  ) $
+$diag~ ( M~k ) ~==~ (  ( M~sel~k ) ~sel~k ) $
+$f~for~S~==~ (  ( rsec~@~S ) ~o~ ( lsec~f~red )  ) $
+$V~==~ ( scaprod~o~ (  (  ( lsec~1.0~divide ) ~o~diag ) ~ , bar ~ ( vecdif~o~ ( column~ , bar ~unit )  )  )  ) $
+$elim~==~ ( matdif~o~ (  ( rsec~sel~1 ) ~ , bar ~ ( outerprod~o~ ( V~ , bar ~ ( op~sel ) ~ )  )  )  ) $
+$Gauss~M~==~ (  ( elim~for~ ( listrange~1~to~ ( size~M )  )  ) ~M ) $
+$M~==~ ( list~ ( list~3~9~33 ) ~ ( list~2~-1~1 )  ) $
+EOF

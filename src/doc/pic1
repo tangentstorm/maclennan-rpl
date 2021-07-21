@@ -1,0 +1,13 @@
+.DS
+.PS
+cr = .125i
+X: circle rad cr "$x$"
+arrow right "$R$" above
+U: circle rad cr "$u$"
+arrow down from U.s "$S$" ljust
+V: circle rad cr "$v$"
+arrow <- left from V.w "$R$" below
+Y: circle rad cr "$y$"
+arrow "$R~ppd~S$" rjust dotted from X.s to Y.n
+.PE
+.DE

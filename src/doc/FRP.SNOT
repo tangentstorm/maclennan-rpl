@@ -1,0 +1,813 @@
+.fp 5 sr
+.PH "''''"
+.PF "''''"
+.EQ
+gsize +1
+define 1st ' rom "\f51st\f1" '
+define 2nd ' rom "\f52nd\f1" '
+define unimage ' rom "\f5unimage\f1" '
+define freq ' rom "\f5freq\f1" '
+define RR ' roman '
+.EN
+.S +1
+.DS 2
+.ul
+FOUR RELATIONAL PROGRAMS\u*\d
+.sp
+B. J. MacLennan
+Computer Science Department
+Naval Postgraduate School
+Monterey, CA 93943
+.DE
+.FS *
+The work reported herein was supported by Contract N00014-87-WR-24037
+from the Office of Naval Research.
+Author's address after October 1987:  Dept. Computer Science,
+Univ. of Tennessee, Knoxville, TN 37996-1301.
+.FE
+.S
+.B Abstract:
+.sp
+.br
+In this report we demonstrate the relational programming language
+RPL by using it to develop four programs.
+These programs are: (1) computing a table of word frequencies from a text;
+(2) a simple data processing example involving updating an employee file;
+(3) Gaussian elimination;
+and (4) minimizing deterministic finite state automata.
+We do not present the RPL language systematically; rather it is described
+incrementally through the examples.
+.S +1
+.H 1 "Computing Word Frequencies"
+The first example, which is adapted from [MacLennan83], it to compute a
+frequence table $F$ from a text (sequence of words) $S$.
+That is, given $S$ such that
+$S sel i$ is the $i sup th$ word, we compute $F$ such that
+$F sel w$ is the frequency (number of occurrences) of word $w$ in $S$.
+For an example, we take 
+$S$ = <``to'', ``be'', ``or'', ``not'', ``to'', ``be''>, which is just an
+abbreviation for the relation:
+.DS 2
+$S$  =  {1:``to'', 2:``be'', 3:``or'', 4:``not'', 5:``to'', 6:``be''}
+.DE
+Pictorially,
+.DS 
+.TS
+center,box;
+l|l.
+1	``to''
+2	``be''
+3	``or''
+4	``not''
+5	``to''
+6	``be''
+.TE
+.DE
+In this case, the desired frequency table $F$ is:
+.DS 2
+$F$  =  {``to'':2, ``be'':2, ``or'':1, ``not'':1}
+.DE
+Pictorially,
+.DS 
+.TS
+center,box;
+l|l.
+``to''	2
+``be''	2
+``or''	1
+``not''	1
+.TE
+.DE
+In other words, ``to'' occurs twice, ``be'' occurs twice, ``or'' occurs once,
+and ``not'' occurs once.
+Of course, since $F$ is a relation, the order in which the elements are listed
+is irrelevant.
+.P
+To develop the general word-counting program, we work through this
+particular example.
+Since the frequency table is a function 
+.ul
+from 
+the words 
+.ul
+to
+their frequencies, the first step is to reverse the columns of $S$:
+.DS 2
+$S sup -1$  =  {``to'':1, ``be'':2, ``or'':3, ``not'':4, ``to'':5, ``be'':6}
+.DE
+Pictorially,
+.DS 
+.TS
+center,box;
+l|l.
+``to''	1
+``be''	2
+``or''	3
+``not''	4
+``to''	5
+``be''	6
+.TE
+.DE
+Notice that this relation is not a function (i.e., it is not single valued).
+We can make it a function by
+forming the ``unit image'' of the table:
+.DS 2
+$rom unimage~S sup -1$  =  {``to'':{1, 5}, ``be'':{2, 6}, ``or'':{3}, ``not'':{4}}
+.DE
+The $unimage$ function is defined later.
+The relation $unimage~S sup -1$ can be pictured:
+.DS 
+.TS
+center,box;
+l|l.
+``to''	{1, 5}
+``be''	{2, 6}
+``or''	{3}
+``not''	{4}
+.TE
+.DE
+This tells us, for example, that the word ``be'' occurs in positions 2 and 6
+in the text.
+We do not need to know the places where a given word occurs, but only
+the number of such places.
+Therefore, we compose the preceding table
+with the $card$ (cardinality) function:
+.DS 2
+$rom unimage~S sup -1~rp~card$  =  {``to'':2, ``be'':2, ``or'':1, ``not'':1}
+.DE
+We have used the relative product operation to accomplish composition,
+$(f | g)x~=~g(fx)$.
+In effect this applies $card$ to the right members of the preceding table, yielding:
+.DS
+.TS
+center,box;
+l|l.
+``to''	2
+``be''	2
+``or''	1
+``not''	1
+.TE
+.DE
+This is the desired result.
+Notice that since $card$ is defined for all sets, it is in effect an
+infinite relation; operations on both finite and infinite relations are
+permitted in RPL.
+.P
+We have seen that we can compute the frequency table $F$ for $S$ by:
+$F~==~rom unimage~S sup -1~rp~card$.
+We can turn this into a function definition to compute
+the frequency table for any text $S$ by:
+.DS 2
+$rom freq~S~~==~~rom unimage~S sup -1 ~rp~card$
+.DE
+It remains to define $rom unimage$, which is not built into RPL.
+We use the builtin operator $unimg$, which is defined so
+that $T~unimg~x$ is the set of all $y$ such that the pair $x : y~member~T$.
+This can be used to define $rom unimage$.
+To see this, note that the
+.ul
+left section
+$[T~unimg ]$ is the function that takes any $x$ into its image under $T$.
+Although $T$ is finite (and extensional), sections are always intensional,
+so it is necessary to to convert $[T~unimg ]$ to its extensional
+equivalent.
+This is accomplished with the RPL $restrict$ operation, which converts
+an intensional relation to an extensional relation by restricting
+its domain to a finite set.
+Hence we define:
+.DS 2
+$rom unimage~T~~==~~dom~T~~restrict~~[T~unimg ]$
+.DE
+.P
+The following is an example RPL session that defines the $rom freq$ function
+and applies it to a particular text (`?>' is the RPL prompt):
+.DS 1
+?> $rom unimage~T~~==~~dom T~restrict~[T~unimg ]$
+
+?> $rom freq~S~~==~~ rom unimage~ S sup -1   ~rp~card $
+
+?> $freq$ <``to'', ``be'', ``or'', ``not'', ``to'', ``be''>
+
+{``be'':2, ``to'':2, ``not'':1, ``or'':1}
+
+?> $done$
+.DE
+.H 1 "Employee File Update"
+.EQ
+define sumhrs ' RR "\f5sumhrs\f1" '
+define upd ' RR "\f5upd\f1" '
+define OldMaster ' RR "\f5OldMaster\f1" '
+define NewMaster ' RR "\f5NewMaster\f1" '
+define Updates ' RR "\f5Updates\f1" '
+.EN
+Next we consider a simple data processing example adapted from [MacLennan83].
+We are given an employee file $F$ indexed by employee number.
+That is, $F~sel~n$ is the record for employee number $n$.
+The employee records themselves are represented by functions from
+attribute names into attribute values.
+For example, if $R$ is an employee record, then $R~sel~LQ rom N RQ$
+is the employee's name, $R~sel~LQ rom R RQ$ is his hourly rate,
+and $R~sel~LQ rom H RQ$ is the hours worked this pay period.
+Here is an example employee file containing three records:
+.DS 1
+$F~~==~mark~${124 : {``N'' : ``John'', ``R'' : 10, ``H'' : 100},
+$lineup~$  118 : {``N'' : ``Bill'', ``R'' : 15, ``H'' : 120},
+$lineup~$  207 : {``N'' : ``Sally'', ``R'' : 14, ``H'' : 115}}
+.DE
+We are also given an update file $U$ such that $U~sel~n$ is the
+number of hours worked this week by employee number $n$.
+For example:
+.DS 1
+$U~~==~~ "{"   118~:~6 , ~  124~:~40 , ~  207~:~40 "}"$
+.DE
+Our task is to generate an updated employee file $F'$ in which
+the hours worked (``H'') field has been updated for each employee.
+.P
+First we define `$rom sumhrs$' so that if $R$ is
+an employee record and $h$ is the hours worked this week, then
+$rom sumhrs~<R,~h>$ is the new total hours.
+Clearly,
+.DS 2
+$rom sumhrs~<R,~h>~~==~~(R~sel~LQ rom H RQ )~+~h$
+.DE
+Alternately, we can define this function in a variable-free style:
+.DS 2
+$rom sumhrs~~==~~[ + ]~o~([ sel~LQ rom H RQ ]~||~I )$
+.DE
+where the parallel construction operation `$||$' is defined $(f~||~g)~<x,~y>$ = $<fx,~gy>$.
+It is easy to see the two are equivalent:
+.DS 1
+$rom sumhrs~<R,~h>~~mark =~~([ + ]~o~([ sel~LQ rom H RQ ]~||~I ))~<R,~h>$
+$lineup =~~[ + ]~(( [ sel~LQ rom H RQ ]~||~I )~<R,~h>)$
+$lineup =~~[ + ]~< [ sel~LQ rom H RQ ]~R,~I~h>$
+$lineup =~~(R~sel~LQ rom H RQ )~+~h$
+.DE
+.P
+Our next task is to replace the old value of ``H'' field by $h'$.
+This can be accomplished by the
+.ul
+ordered union
+operation `$;$'.
+For example, 
+..DS 2
+{``H'' : $h'$} ; $R$
+..DE
+will return a record $R'$ in which $R'~sel~LQ rom H RQ$ = $h'$
+but all other fields of $R'$ are the same as in $R$.
+How do we get the relation {``H'' : $h'$}?
+Since this is just a (relational) sequence that's equivalent to the 
+array $< LQ rom H RQ ,~h' >$,
+we can use the $as$ operation to convert the array to a sequence.
+We solve for the function $f$ that computes {``H'' : $h'$} from
+$<R,~h>$ as follows:
+.DS 1
+$f~<R,~h>~~mark =~~"{" LQ rom H RQ~:~rom sumhrs~<R,~h> "}"$
+$lineup =~~as~< LQ rom H RQ ,~rom sumhrs~<R,~h> >$
+$lineup =~~as~( [ LQ rom H RQ~, ]~( rom sumhrs~<R,~h> ) )$
+$lineup =~~( as~o~[ LQ rom H RQ~, ]~o~rom sumhrs )~<R,~h>$
+.DE
+Hence,
+..DS 2
+$f~~==~~as~o~[ LQ rom H RQ~, ]~o~rom sumhrs$.
+..DE
+.P
+It's necessary to get the corresponding records from the $F$ and $U$
+files together so that they can be processed by $f$.
+This is accomplished by the extensional construction operation `$#$'
+defined so that $(F~#~U)~sel~n$ = $<F~sel~n,~U~sel~n>$.
+With the given example files we have:
+.DS 1
+$F~#~U~~=~~mark "{"$ 124 : <{``N'' : ``John'', ``R'' : 10, ``H'': 100}, 40>,
+$lineup~$ 118 : <{``N'' : ``Bill'', ``R'' : 15, ``H'' : 120}, 6>,
+$lineup~$ 207 : <{``N'' : ``Sally'', ``R'' : 14, ``H'' : 115}, 40>}
+.DE
+Notice that the pairs $<F~sel~n,~U~sel~n>$ are just the inputs
+required for $f$.
+We combine the preceding results into a update file `$rom upd$'
+defined so that $rom upd~sel~n$ is {``H'' : $h'$},
+representing the new hours worked field for employee number $n$.
+In this case,
+.DS 2
+$rom upd$  =  { 124 : {``H'' : 140},  118 : {``H'' : 126},  207 : {``H'' : 155} }
+.DE
+It's easy to solve for $rom upd$ by using the relative product:
+.DS 2
+$rom upd~sel~n~~~mark =~~~f~( (F~#~U)~sel~n)~~~=~~~((F~#~U)~rp~f)~sel~n$
+.DE
+Hence, $rom upd~=~(F~#~U)~rp~f$.
+Substituting for $f$ yields:
+.DS 2
+$rom upd~~==~~(F~#~U)~rp~( as~o~[ LQ rom H RQ~, ]~o~rom sumhrs )$
+.DE
+Now we're almost done.
+We want each record in $F'$ to be the ordered union of the
+corresponding update record in $rom upd$ and old record in $F$.
+Hence we solve:
+.DS 1
+$F'~sel~n~~mark =~~( rom upd~sel~n )~;~(F~sel~n)$
+$lineup =~~[ ; ]~< rom upd~sel~n,~F~sel~n>$
+$lineup =~~[ ; ]~(( rom upd~#~F)~sel~n)$
+$lineup =~~(( rom upd~#~F)~rp~[ ; ])~sel~n$
+.DE
+Hence,
+..DS 2
+$F'~~=~~( rom upd~#~F)~rp~[ ; ]$.
+..DE
+The complete session follows:
+
+-- The Files
+.DS 1
+$F~~==~mark~${124 : {``N'' : ``John'', ``R'' : 10, ``H'' : 100},
+$lineup~$  118 : {``N'' : ``Bill'', ``R'' : 15, ``H'' : 120},
+$lineup~$  207 : {``N'' : ``Sally'', ``R'' : 14, ``H'' : 115}}
+
+$U~~==~~ "{"   118~:~6 , ~  124~:~40 , ~  207~:~40 "}"$
+.DE
+-- Computing the New File
+.DS 1
+$rom sumhrs~~mark ==~~  [ + ] ~o~ (  [ sel~LQ rom H RQ ] ~||~I ) $
+
+$rom upd~~lineup ==~~  ( F~#~U ) ~rp~ ( as~o~  [ LQ rom H RQ~, ] ~o~rom sumhrs  ) $
+
+$F'~~lineup ==~~  ( rom upd~#~F ) ~rp~ [ ; ]   $
+.DE
+-- The New File
+.DS 1
+$val~F'$
+
+  {$mark 124$ : {``H'' : 140, ``N'' : ``John'', ``R'' : 10},
+$lineup 118$ : {``H'' : 126, ``N'' : ``Bill'', ``R'' : 15},
+$lineup 207$ : {``H'' : 155, ``N'' : ``Sally'', ``R'' : 14} }
+.DE
+(The $val$ command prints the value of an identifier.)
+This result correctly reflects the fact that John (employee 124) has worked
+140 hours, Bill (employee 118) has worked 126 hours,
+and Sally (employee 207) has worked 155 hours.
+.P
+It is simple to modify the program so that it uses the input files
+OldMaster and Updates, and defines the output file NewMaster:
+.DS 1
+$~~~~~~~~F~~mark ==~~file~LQ rom OldMaster RQ$
+$U~~lineup ==~~file~LQ rom Updates RQ$
+$rom sumhrs~~lineup ==~~[ + ]~o~([ sel~LQ rom H RQ ]~||~I )$
+$rom upd~~lineup ==~~(F~#~U)~rp~( as~o~[ LQ rom H RQ~, ]~o~rom sumhrs )$
+$file~lineup LQ rom NewMaster RQ~~==~~( rom upd~#~F)~rp~[ ; ]$
+.DE
+.H 1 "Gaussian Elimination"
+.EQ
+define RR ' roman '
+define con ' RR "\f5con\f1" '
+define transmap ' RR "\f5transmap\f1" '
+define vecdif ' RR "\f5vecdif\f1" '
+define scaprod ' RR "\f5scaprod\f1" '
+define outerprod ' RR "\f5outerprod\f1" '
+define matdif ' RR "\f5matdif\f1" '
+define column ' RR "\f5column\f1" '
+define unit ' RR "\f5unit\f1" '
+define diag ' RR "\f5diag\f1" '
+define elim ' RR "\f5elim\f1" '
+define Gauss ' RR "\f5Gauss\f1" '
+define for ' RR "\f5for\f1" '
+.EN
+The matrix is represented as a vector of vectors:
+.DS 2
+$M~~~~=~~~~matrix { 
+ rcol { < < above < above ~ above < }
+ ccol { a sub 11 above a sub 21 above 3dot above a sub n1 }
+ ccol { ,..., above ,..., above ~ above ,..., }
+ ccol { a sub 1n , above a sub 2n , above 3dot above a sub nn , }
+ ccol { b sub 1  above b sub 2  above 3dot above b sub n  }
+ ccol { >, above >, above ~ above > > } }$
+.DE
+For the sake of simplicity we assume all the $a sub ij$
+are nonzero.
+We use the operator `$sel$' to select the an element of
+a vector.
+Thus `$M~sel~k$' is the $k$th row of $M$ and
+`$M~rp~[ sel~k]$' is the $k$th column of $M$.
+.P
+The Gauss Elimination function will use $n$ successive steps.
+Each of these steps will accomplish the transformation
+.DS 2
+$<M,~k>~-->~<M' ,~k+1 >$
+.DE
+where $M prime$ is obtained from $M$ by performing the
+elimination process on the $k$th column:
+.DS 2
+$M prime~~=~~elim~<M,~k>$
+.DE
+Thus the complete process is defined:
+.DS 2
+$Gauss~M~~=~~( elim~for~<1~to~n>)~M$
+.DE
+Here we make use of the functional `$(f~for~S)~x$'
+which computes the sequence of values
+.DS 1
+$y sub 1~~mark =~~f<x,~S sub 1 >$
+$y sub 2~~lineup =~~f<y sub 1 ,~S sub 2 >$
+$lineup 3dot$
+$y sub n~~lineup =~~f<y sub n-1 ,~S sub n >$
+.DE
+and returns $y sub n$.
+The $for$ functional is defined in terms of the builtin reduction operator ($red$) as follows:
+.DS 2
+$f~for~S~~==~~[ @~S]~o~[ f~red ]$
+.DE
+Here $@$ is an explicit application operator, $f @ x~=~fx$.
+This definition of $for$ can be understood by the expansion:
+.DS 1
+$(f~for~S)~x~~mark =~~([ @~S]~o~[f~red ])~x~~=~~[ @~S]~([f~red ]~x)$
+$lineup =~~[ @~S]~(f~red~x)~~=~~(f~red~x)~@~S$
+$lineup =~~(f~red~x)~S$
+.DE
+The latter is the reduction from the left
+of array $S$ by the function $f$ with the starting value $x$:
+.DS 2
+$(f~red~x)~S~~=~~f<f<~...~f<f<x,~S sel 1>,~S sel 2> ,...,~S sel (n - 1)>,~S sel n>$
+.DE
+.P
+We turn now to the elimination process.
+We want $M prime~=~elim~<M,~k>$, where $M prime$ results from $M$
+by zeroing all entries in column $k$ of $M$, except the entry in row $k$,
+which is set to one.
+This can be accomplished by subtracting an appropriate matrix $E$
+from $M$:
+.DS 2
+$M prime~~=~~matdif~<M,~E>$
+.DE
+Here $matdif$ is a component-wise matrix difference function.
+.P
+The matrix $E$ is produced by multiplying the appropriate factors
+by the individual rows of $M$.
+For the first elimination step $E$ is:
+.DS 2
+$E sub 1~~~~=~~~~matrix { rcol { < above ~ above ~ above ~ }
+  ccol { (1-1 / a sub 11 )M sub 1 ,
+    above (a sub 21 / a sub 11 )M sub 1 ,
+    above 3dot
+    above (a sub n1 / a sub 11 )M sub 1 }
+  lcol { ~ above ~ above ~ above > } }$
+.DE
+The matrix resulting from subtracting $E sub 1$ from $M$ is
+.DS 2
+$M sub 1~~~~=~~~~matrix { rcol { < < above < above ~ above < }
+  ccol { 1, above 0, above 3dot above 0, }
+  ccol { a sub 12 ' , above a sub 22 ' , above 3dot above a sub n2 ' , }
+  ccol { ... above ... above ~ above ... }
+  ccol { a sub 1n ' , above a sub 2n ' , above 3dot above a sub nn ' , }
+  ccol { b sub 1 ' above b sub 2 ' above 3dot above b sub n '  }
+  lcol { >, above >, above ~ above > > }}$
+.DE
+.P
+At the next stage the elimination matrix is:
+.DS 2
+$E sub 2~~~~=~~~~matrix { rcol { < above ~ above ~ above ~ }
+  ccol { (a sub 12 ' / a sub 22 ' )M sub 2 ' ,
+    above (1-1 / a sub 22 ' )M sub 2 ' ,
+    above 3dot
+    above (a sub n2 ' / a sub 22 ' )M sub 2 ' }
+  lcol { ~ above ~ above ~ above > } }$
+.DE
+In general, if $M''$ is the matrix resulting from the $k-1$st
+elimination step, then the elimination matrix for the $k$th step is
+.DS 2
+$E sub k~~~~=~~~~matrix { rcol { < above ~ above ~ above ~ above ~ }
+  ccol { (a sub 1k '' / a sub kk '' )M sub k '' ,
+    above 3dot
+    above ([a sub kk '' -1] / a sub kk '' )M sub k '' ,
+    above 3dot
+    above (a sub nk '' / a sub kk '' )M sub k '' }
+  lcol { ~ above ~ above ~ above ~ above > } }$
+.DE
+It is easy to see that $E sub k$ results from multiplying a vector $V sub k$
+by the $k$th row of $M''$.
+This is just the outer product of $V sub k$ and the $k$th row of $M''$:
+.DS 2
+$E sub k~~=~~outerprod~<V sub k ,~M'' sel k >$
+.DE
+The vector $V sub k$ is
+.DS 2
+$V sub k~~~~=~~~~matrix { rcol { < above ~ above ~ above ~ above ~ }
+  ccol { a sub 1k '' / a sub kk '' ,
+    above 3dot
+    above (a sub kk '' -1) / a sub kk '' ,
+    above 3dot
+    above a sub nk '' / a sub kk '' }
+  lcol { ~ above ~ above ~ above ~ above > }  }$
+.DE
+This is obtained by forming the scalar product of $1 / a sub kk ''$ and
+the vector
+.DS 2
+$U sub k~~=~~<a sub 1k '' ,~a sub 2k '' ,..., a sub kk '' -1 ,...,
+  a sub nk '' >$
+.DE
+This in turn is the result of subtracting from the $k$th column of $M''$
+the
+.ul
+unit vector
+$unit~<M,~k>$, which has a 1 in the $k$th position, and a 0 in all
+others.
+.P
+We now develop an explicit relational formula for $V sub k$.
+For this purpose it will be convenient to treat it as a binary function
+$V sub k~=~V~<M,~k>$.
+This function is a scalar product,
+.DS 1
+$V~<M,~k>~~mark =~~scaprod~< 1~/~diag~<M,~k>,~U sub k >$
+$lineup =~~scaprod~<1~/~diag~<M,~k>,~vecdif~< column~<M,~k>,~unit~<M,~k> > >$
+.DE
+The parameter $<M,~k>$ can be factored out by use of the intensional construction
+operation `$~, bar~$', which is defined so that $(f~, bar~g)x~=~<fx,~gx>$.
+Factoring, we have:
+.DS 1
+$V~<M,~k>~~mark =~~scaprod~<1~/~diag~<M,~k>,~vecdif~< column~<M,~k>,~unit~<M,~k> > >$
+$lineup =~~scaprod~<([1~/ ]~o~diag )~<M,~k>,~vecdif~(( column~, bar~unit )~<M,~k> ) >$
+$lineup =~~scaprod~<([1~/ ]~o~diag )~<M,~k>,~( vecdif~o~( column~, bar~unit ))~<M,~k> >$
+$lineup =~~scaprod~((([1~/ ]~o~diag )~, bar~( vecdif~o~( column~, bar~unit )))~<M,~k> )$
+$lineup =~~( scaprod~o~((1~/ ]~o~diag )~, bar~( vecdif~o~( column~, bar~unit )))~<M,~k>$
+.DE
+Canceling $<M,~k>$ from both sides yields an explicit formula for $V$:
+.DS 2
+$V~~==~~scaprod~o~(([1~/ ]~o~diag )~, bar~( vecdif~o~( column~, bar~unit )))$
+.DE
+.P
+We proceed similarly to get a formula for $elim$:
+.DS 1
+$elim~<M,~k>~~mark =~~matdif~<M,~E sub k >$
+$lineup =~~matdif~<M,~outerprod~<V sub k ,~M~sel~k > >$
+$lineup =~~matdif~<M,~outerprod~<V~<M,~k>,~M~sel~k > >$
+.DE
+We perform some minor rearrangements so that $<M,~k>$ can be factored
+out of the right-hand side:
+.DS 1
+$elim~<M,~k>~~mark =~~matdif~<M,~outerprod~<V~<M,~k>,~[ sel ]~<M,~k> > >$
+$lineup =~~matdif~<M,~( outerprod~o~(V~, bar~[ sel ]))~<M,~k> >$
+$lineup =~~matdif~<[ sel~1]~<M,~k>,~( outerprod~o~(V~, bar~[ sel ]))~<M,~k> >$
+$lineup =~~( matdif~o~([ sel~1]~, bar~( outerprod~o~(V~, bar~[ sel ]))))~<M,~k>$
+.DE
+Canceling $<M,~k>$ from both sides yields an explicit formula for $elim$:
+.DS 2
+$elim~~==~~matdif~o~([ sel~1]~, bar~( outerprod~o~(V~, bar~[ sel ])))$
+.DE
+.P
+A complete RPL session demonstrating the Gaussian elimination
+function follows.
+Notice the simple definitions of the matrix and vector operations
+($scaprod$, $matdif$, etc.).
+
+-- Utility Functions
+.DS 1
+         $con~k~~mark ==~~ func~x~k $
+$transmap~f~~lineup ==~~  [ rp~f ] ~o~ [ # ]  $
+$vecdif~~lineup ==~~ transmap~ [ - ]  $
+$scaprod~ < k,~v > ~~lineup ==~~ v~rp~ [ k~times ]  $
+$outerprod~ < u,~v > ~~lineup ==~~ u~rp~ ( scaprod~o~ [ ,~v ]  )  $
+$matdif~~lineup ==~~ transmap~vecdif $
+$column~ < M,~k > ~~lineup ==~~ M~rp~ [ sel~k ]  $
+$unit~ < M,~k > ~~lineup ==~~  < 1~to~  card~M  > ~rp~ [  [ =~k ] ~->~ con~1 ;~ con~0 ]  $
+$diag~ < M,~k > ~~lineup ==~~  M~sel~k ~sel~k $
+$f~for~S~~lineup ==~~  [ @~S ] ~o~ [ f~red ]  $
+.DE
+-- Gaussian Elimination
+.DS 1
+$V~~lineup ==~~ scaprod~o~ (  (  [ 1.0~divide ] ~o~diag ) ~ , bar ~ ( vecdif~o~ ( column~ , bar ~unit )  )  )  $
+$elim~~lineup ==~~ matdif~o~ (  [ sel~1 ] ~ , bar ~ ( outerprod~o~ ( V~ , bar ~ [ sel ] ~ )  )  )  $
+$Gauss~M~~lineup ==~~  ( elim~for~ <1~to~ card~M >  ) ~M $
+.DE
+-- Example Matrix
+.DS 1
+$M~~lineup ==~~ <  < 3,~9,~33 >, ~ < 2,~-1,~1 > >  $
+.DE
+-- Execution
+.DS 1
+$Gauss~M$
+
+  $matrix { rcol { < <~1.0, above <~0.0, }
+    ccol { -2.38419 rom "\f5E\f1" -7, above 1.0, }
+    lcol { 2.0 >, above 3.0 > >} }$
+.DE
+The matrix $M$ represents the equations
+.DS 1
+$3x~+~9y~~mark =~~33$
+$2x~-~y~~lineup =~~1$
+.DE
+The result of $Gauss~M$ correctly reflects the solution $x~=~2$, $y~=~3$.
+.H 1 "Minimization of Deterministic Finite Automata"
+.EQ
+define eclass ' rom "\f5eclass\f1" '
+define equiv ' rom "\f5equiv\f1" '
+.EN
+The next example program is the equivalence
+and minimization of deterministic finite automata
+by an algorithm developed by Robert Floyd.\*F
+.FS
+Private communication, 1985.
+.FE
+We assume that we have a finite alphabet $SIGMA$ and
+a finite set $Q$ of states.
+The set $F~!subset~Q$ represents the 
+.ul
+final 
+(accepting) states.
+The finite relation $T$ is such that for $a member SIGMA$,
+$T sel a$ is the transition relation for the symbol $a$.
+That is, $<q ,~q' >~member~T~sel~a$ if and only if the
+symbol $a$ takes state $q$ into state $q'$.
+.P
+Our goal is to define a relation $R sub inf$ such that
+$<q ,~q' >~member~R sub inf$ if and only if $q$ and $q'$ are
+.ul
+not
+equivalent states.
+This is done in a series of steps, starting from pairs of
+states that are known to be inequivalent, namely the
+final and nonfinal states ($setdif$ is set difference):
+.DS 2
+$R sub 0~~==~~F~cart~(Q~setdif~F)$
+.DE
+We now work backward:  any states that under the same input lead
+to inequivalent states are themselves considered inequivalent.
+For example, $R sub 0$ relates inequivalent states;
+$R sub 1$ relates states related by $R sub 0$ together with those
+that under the same input character
+are taken into states related by $R sub 0$; $R sub 2$ relates states 
+related by $R sub 0$ together with those that under the same one
+or two input characters lead to states
+related by $R sub 0$; and so on.
+Each step of this process is accomplished by a function $psi$;
+that is, we will define $psi$ so that $R sub i+1~~=~~psi~R sub i$.
+It will be easy to see that this process converges in $n~=~( card~Q) sup 2$
+steps, so
+.DS 2
+$R sub inf~~==~~psi sup n ~R sub 0$
+.DE
+Next we consider $psi$.
+.P
+As a preliminary we define the
+.ul
+polymorphic image
+of one relation under another relation.
+If $R$ and $S$ are two relations, then the polymorphic image under $R$
+of $S$, or more briefly the $R$-image of $S$, is defined
+.DS 2
+$R~ppd~S~~==~~R~|~S~|~R sup -1$
+.DE
+This has the following property:
+$R~ppd~S$ relates $x$ to $y$ if and only if there are $u$ and $v$
+such that $R$ relates $x$ to $u$ and $y$ to $v$, and $S$ relates
+$u$ to $v$.
+That is, $<x,~y>~member~R~ppd~S$ if and only if there are $u$ and $v$
+such that $<x,~u>~member~R$, $<y,~v>~member~R$ and $<u,~v>~member~S$.
+This can be visualized:
+.DS 
+.PS
+boxwid = .25i
+boxht = .25i
+move right 3i
+X: box invis "$x$"
+arrow right "$R$" above
+U: box invis "$u$"
+arrow down from U.s "$~S$" ljust
+V: box invis "$v$"
+arrow <- left from V.w "$R$" below
+Y: box invis "$y$"
+arrow "$R~ppd~S~$" rjust dotted from X.s to Y.n
+.PE
+.DE
+.P
+Now, if we have that $R sub i$ relates inequivalent states,
+then $(T~sel~a)~ppd~R sub i$ will relate those states that
+are carried by symbol $a$ into states inequivalent by $R sub i$.
+Thus, we define $R sub i+1$ so that it relates those states that are related by
+$R sub i$ together with those related by $(T~sel~a)~ppd~R sub i$,
+for any $a~member~SIGMA$.
+Now, the right section $[ ppd~R sub i ]$ is the function that computes
+a polymorphic image of $R sub i$, that is,
+..DS 2
+$[ ppd~R sub i ]~x~~=~~x~ppd~R sub i$,
+..DE
+so it is easy to see that
+.DS 2
+$(T~|~[ ppd~R sub i ])~sel~a~~=~~[ ppd~R sub i ]~(T~sel~a)~~=~~(T~sel~a)~ppd~R sub i$
+.DE
+Hence, the union of $(T~sel~a)~ppd~R sub i$, for all $a~member~SIGMA$,
+is just the union of the
+range of the relation $T~|~[ ppd~R sub i ]$.
+This yields the definition of $R sub i+1$ and hence $psi$:
+.DS 2
+$R sub i+1~~~==~~~psi~R sub i~~~==~~~R sub i~~cup~~union ( rng~(T~|~[ ppd~R sub i ]) )$
+.DE
+This completes the definition of the inequivalence relation $R sub inf$.
+Two states are now equivalent if they are not inequivalent:
+.DS 2
+$R sub = ~~==~~Q sup 2~setdif~(R sub inf ~cup~R sub inf sup -1  )$
+.DE
+where $Q sup 2$ means $Q~cart~Q$.
+.P
+The minimal machine is constructed on the basis of the equivalence
+classes of states under $R sub =$.
+The equivalence class of a state $q$ is just the unit image under
+$R sub =$ of $q$:
+.DS 2
+$rom eclass~q~~==~~R sub =~unimg~q$
+.DE
+The set of all such equivalence classes results from taking
+the image of $Q$ under $rom eclass$:
+.DS 2
+$Q sub =~~==~~rom eclass~img~Q$
+.DE
+The $img$ operation is defined so that $y~member~f~img~S$
+if and only if $y~=~fx$ for some $x~member~S$.
+In general, we define 
+.DS 2
+$rom equiv~~==~~[ rom eclass~img ]$,
+.DE
+so $Q sub =~~==~~rom equiv~Q$.
+We take $Q sub =$ to be the states in the minimal machine.
+.P
+It remains to construct the transition relation $T sub =$
+of the minimal machine.
+For all $<q,~q' >~member~T~sel~a$ we want
+.DS 2
+$< rom eclass~q,~rom eclass~q' >~member~T sub =~sel~a$
+.DE
+Thus $T sub =~sel~a$ is the
+.ul
+homomorphic image
+under $rom eclass$ of $T~sel~a$:
+.DS 2
+$T sub =~sel~a~~=~~rom eclass~isom~(T~sel~a)$
+.DE
+In general, $<fx,~fy>~member~f isom R$ if and only if $<x,~y>~member~R$.
+Thus $T sub =$ is the (finite) composition of $[ rom eclass~isom ]$
+and $T$, which is the same as the (finite) relative product of $T$
+and $[ rom eclass~isom ]$:
+.DS 2
+$T sub =~~==~~T~|~[ rom eclass~isom ]$
+.DE
+The remainder of the minimal machine is easy to construct.
+For example, the final states of the new machine are just the equivalence
+classes of the original final states:
+.DS 2
+$F sub =~~==~~rom equiv~F$
+.DE
+There follows the actual relational program to minimize
+a small automaton.
+It makes use of two auxiliary functions $sigma$ and $rho$
+for defining the union of a set of sets:
+
+-- DFA Minimization
+
+-- Utility Functions
+.DS 1
+         $1st~~mark ==~~ [ sel~1 ] $
+$2nd~~lineup ==~~ [ sel~2 ] $
+$r~ppd~s~~lineup ==~~ r~|~  s~|~r sup -1 $
+$sigma~f~~lineup ==~~  ( f~o~ ( 1st~ , bar ~ ( epsilon~o~2nd )  )  ) ~ , bar ~ (  [ setdif ] ~o~   ( I~ , bar ~ ( un~o~epsilon )  ) ~o~2nd   )  ) $
+$f~rho~i~~lineup ==~~ 1st~o~   (   sigma~f  ~while~ (  [ !=~empty ] ~o~2nd )  ) ~o~ [ i~, ]    $
+$union~~lineup ==~~  [ cup ] ~rho~empty  $
+.DE
+-- Example 3 State DFA
+.DS 1
+$SIGMA~~lineup ==~~ "{" 1,~2 "}" $
+$T~~lineup ==~~ "{"  1~:~ "{"  10~:~10 , ~ 20~:~20 "}", ~  2~:~ "{"   10~:~30 , ~  20~:~30"}" "}"$
+$Q~~lineup ==~~ "{" 10,~20,~30 "}" $
+$F~~lineup ==~~ "{" 30 "}" $
+.DE
+-- Minimization
+.DS 1
+$Q sup 2~~lineup ==~~ Q~cart~Q  $
+$n~~lineup ==~~ card~Q sup 2  $
+$R sub 0~~lineup ==~~ F~cart~ ( Q~setdif~F )  $
+$psi~R~~lineup ==~~ R~cup~  union ( rng~ ( T~rp~ [ ppd~R ]    )  ) $
+$R sub inf~~lineup ==~~  psi sup n  ~R sub 0  $
+$R sub =~~lineup ==~~  Q sup 2~setdif~(R sub inf ~cup~ R sub inf sup -1 )   $
+$rom eclass~~lineup ==~~ [ R sub =~unimg ] $
+$rom equiv~~lineup ==~~  [ rom eclass~img ]$
+$Q sub =~~lineup ==~~ rom equiv~Q$
+$T sub =~~lineup ==~~ T~rp~ [ rom eclass~isom ]  $
+$F sub =~~lineup ==~~ rom equiv~F$
+.DE
+-- Minimized DFA
+.DS 1
+$val~Q sub =$
+  { {10, 20}, {30} }
+$val~T sub =$
+  { $mark 1$ : { {10, 20} : {10, 20} },
+$lineup 2$ : { {10, 20} : {30} } }
+$val~F sub =$
+  { {30} }
+.DE
+.H 1 "References"
+.VL 4
+.LI [Brown&Mitton]
+Brown, J. R., and Mitton, S. J.,
+.ul
+Relational Programming:  Design and Implementation of a Prototype Interpreter,
+MS thesis, Naval Postgraduate School, June 1985.
+.LI [MacLennan83]
+MacLennan, B. J.,
+``Relational Programming,''
+Naval Postgraduate School Computer Science Department Technical Report
+NPS52-83-012, September 1983.
+.LE
