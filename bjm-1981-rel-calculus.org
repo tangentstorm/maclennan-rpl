@@ -4,7 +4,7 @@
 
 * PROGRAMMING WITH A RELATIONAL CALCULUS 
 
-B. J. MacLennan. 30/10/21. 
+B. J. MacLennan. 80/10/21. 
 
 Naval Postgraduate School 
 
@@ -94,7 +94,7 @@ Relations can be portrayed by "arrow diagrams" (Haase diagrams). In such a diagr
 For instance, 
 
 #+begin_src dot
-  graph {
+  digraph {
     b -> a
     b -> e
     c -> b
@@ -111,7 +111,7 @@ represents the relation =R= such that
 and =¬xRy= for all other cases. The effect of the converse operator is to reverse all of the arrows. Hence, =R⁻¹= is diagrammed: 
 
 #+begin_src dot
-  graph {
+  digraph {
     b <- a
     b <- e
     c <- b
@@ -139,11 +139,11 @@ The converse of a relation is obtained by simply exchanging the columns of the t
 | a | b |
 | b | c |
 | b | d |
-| d | i |
+| d | e |
 | e | e |
 | e | b |
 
-Of course, classes are represented by one column tables, instance the class C of primes less than ten is: 
+Of course, classes are represented by one column tables. For instance, the class C of primes less than ten is: 
 
 | 2 |
 | 3 |
@@ -179,10 +179,10 @@ Functions and relations are closely related. Consider the predecessor relation, 
 
 : x pred y ⇔ x = y-1 
 
-Thus, x pred y says that x is the predecessor of y corresponding arrow diagram is: 
+Thus, x pred y says that x is the predecessor of y. The corresponding arrow diagram is: 
 
 #+begin_src dot
-graph { 
+digraph { 
 1 -> 2
 2 -> 3
 3 -> 4
@@ -197,11 +197,11 @@ and the corresponding table is:
 |   2 |   3 |
 |   3 |   4 |
 |   4 |   5 |
-| ... | ... |
+| ⋮ | ⋮ |
 
 since =1 pred 2=, =2 pred 3=, etc. Notice that, in this case, for each right member =x= there is a unique left member =y= such that =y pred x=. This =y= can be written using Whitehead and Russell's [16] /definite description/: 
 
-: Ɂy (y pred x) 
+: ℩y (y pred x) 
 
 This can be read: /the/ =y= such that =y= is a predecessor of =x=. A more convenient way to write this is: 
 
@@ -209,7 +209,7 @@ This can be read: /the/ =y= such that =y= is a predecessor of =x=. A more conven
 
 In general, =R:x= means "the unique =y= such that =y R x=", i.e. 
 
-: R:x = Ɂy(yRx) 
+: R:x = ℩y(yRx) 
 
 This notation is meaningful only if there is a unique =y= such that =yRx= , i.e. 
 
@@ -221,7 +221,7 @@ That is, there is only one arrow leading to =x=. When this condition is satisfie
 
 The left univalent relations are more commonly called /functions/. In a left univalent relation there is exactly one arrow leading to each node. Consider the "absolute reciprocal" relation: 
 
-: xRy ⇔ x = |l/y|
+: xRy ⇔ x = |1/y|
 
 This is diagrammed: 
 
@@ -231,7 +231,7 @@ This is diagrammed:
 | ½   |  -2 |
 | ⅓   |   3 |
 | ⅓   |  -3 |
-| ... | ... |
+| ⋮ | ⋮ |
 
 Since =R∈lun= it is meaningful to write =R:x=, so we observe =R:(-3) = ⅓=. We can find =R:x= by following back the arrow pointing to =x= or by looking down the right column for =x= and taking the corresponding element from the left column. 
 
@@ -277,7 +277,7 @@ The tabular interpretation of =F!:C= is simple:
 
 We see that, if =F= is any function, then =F!:S= is the image of the class =S= under that function. Notice that the operation =F!:S= is defined for all relations =F= and classes =S=, regardless of whether =F∈lun= or the members of =S= are right members of =F=. For these reasons, it is generally safer to write =F!:C= than =F:x=.
 
-Related ideas are the image and converse image of an individual. If =R= is a relation, then =c R x= means that =c= is the class of individuals related to =x=. This class is called the /referents/ of =x=, and is defined: 
+Related ideas are the image and converse image of an individual. If =R= is a relation, then =c R⃗ x= means that =c= is the class of individuals related to =x=. This class is called the /referents/ of =x=, and is defined: 
 
 : R⃗:x = ŷ(yRx) 
 
@@ -287,32 +287,32 @@ The converse idea is that of the /relata/ of y:
 
 Like the plural description, =R⃖= and =R⃗= are defined for all =R= and all arguments. 
 
-Consider now the function ~=⃗~: 
+Consider now the function ==⃗=: 
 
 : =⃗:x = ŷ(y=x) 
 
-Hence, ~=⃗:y~ is just the /unit class/ containing =y=. Russell and Whitehead [16] write this =i:y=. Conversely, if =C= is a single element class, then ~(=⃗⁻¹):C~ selects the unique member of that class: 
+Hence, ~=⃗:y~ is just the /unit class/ containing =y=. Russell and Whitehead [16] write this =i:y=. Conversely, if =C= is a single element class, then =(=⃗⁻¹):C= selects the unique member of that class: 
 
-: (=⃗⁻¹):C = Ɂx(x∈C) 
+: (=⃗⁻¹):C = ℩x(x∈C) 
 
-It is thus a uniqueness filter. We will write this as =Θ:C=:
+It is thus a uniqueness filter. We will write this as =θ:C=:
 
-: Θ = =⃗⁻¹
+: θ = =⃗⁻¹
 
-The expression =Θ:C= can be read "the C".
+The expression =θ:C= can be read "the C".
 
-We will occasionally need to refer to the relations that hold between =R= and =R⃗= or =R= and =R⃖=, which we write =-⃗= and =-⃖=, respectively: 
+We will occasionally need to refer to the relations that hold between =R= and =R⃗= or =R= and =R⃖=, which we write ==⃗= and ==⃖=, respectively: 
 
-: R -⃗ S ⇔ R = S⃗
-: R -⃖ S ⇔ R = S⃖
+: R =⃗ S ⇔ R = S⃗
+: R =⃖ S ⇔ R = S⃖
 
 The following are some properties of these operations: 
 
 : →(R⁻¹) = R⃖
 : ←(R⁻¹) = R⃗
 : R⃗:y   = R!:(=⃗:y)
-: R⃗  = -⃗:R
-: R⃖  = -⃖:R
+: R⃗  = =⃗:R
+: R⃖  = =⃖:R
 
 It is often convenient to have names for domain extracting functions, e.g., =lem:R= is the class of left members of =R=. These are simply defined using images:
 
@@ -361,7 +361,7 @@ The logical connectives satisfy the usual properties of a Boolean algebra (e.g.,
 
 As an example of the use of these operations, we will define the /closed interval/ function, =m..n=, which is the set of integers =m, m+1, ..., n=. It is just: 
 
-: m .. n = ≥⃗:m ∧ ≤⃗:m
+: m .. n = ≥⃗:m ∧ ≤⃗:n
 
 where ≥ and ≤ are the relations on integers. 
 
@@ -370,9 +370,9 @@ where ≥ and ≤ are the relations on integers.
 It is useful to have names for the empty class and relation: 
 
 : Φ = x̂(x≠x)
-: ⊜ = x̂ŷ(x≠x)
+: Θ = x̂ŷ(x≠x)
 
-Hence, =xΦ= is always false, as is =x⊜y=. These are most often used for stating properties of relations and classes. For instance, 
+Hence, =xΦ= is always false, as is =xΘy=. These are most often used for stating properties of relations and classes. For instance, 
 
 : S∧T = Φ
 
@@ -380,71 +380,71 @@ means that classes =S= and =T= have no members in common.
 
 The universal classes and relations are also useful: 
 
-: Φ̅̅ = ¬Φ
-: ⊜̅ = ¬⊜
+: Φ̅ = ¬Φ
+: Θ̅ = ¬Θ
 
 For instance, 
 
-: S ∨ T = ⊜̅
+: S ∨ T = Φ̅
 
 means that every individual is either a member of S or of T.
 
 Notice that the class of the right members of a relation is just the image of the universe under that relation, i.e., 
 
-: rim:R = R!:Φ̅̅
-: lem:R = (R⁻¹) !: I 
-: mem:R = (R ∨ R⁻¹) !: Φ̅̅
+: rim:R = R!:Φ̅
+: lem:R = (R⁻¹) !: Φ̅ 
+: mem:R = (R ∨ R⁻¹) !: Φ̅
 
 ** 5.3 Cartesian product 
 
 It is often useful to have the maximum relation that can hold between two classes, i.e., the /Cartesian product/ of those classes. This is defined: 
 
-: S$T = x̂ŷ(xS A yT) 
+: S*T = x̂ŷ(xS ∧ yT) 
 
 The Cartesian product satisfies the following properties: 
 
-: (s$t)⁻¹ = t$s 
-: lem:(s$t) = s 
-: rim:(s$t) = t 
-: mem:(s$t) = s ∨ t 
+: (s*t)⁻¹ = t*s 
+: lem:(s*t) = s 
+: rim:(s*t) = t 
+: mem:(s*t) = s ∨ t 
 : 
-: s$(t ∧ u) = (s$t) ∧ (s$u) 
-: s$(t ∨ u) = (s$t) ∨ (s$u) 
-: s$(t - u) = (s$t) ∧ (s$¬u) 
-: s$(t → u) = (s$¬t) ∨ (s$u) 
+: s*(t ∧ u) = (s*t) ∧ (s*u) 
+: s*(t ∨ u) = (s*t) ∨ (s*u) 
+: s*(t - u) = (s*t) ∧ (s*¬u) 
+: s*(t → u) = (s*¬t) ∨ (s*u) 
 : 
-: θ̅ = Φ̅$Φ̅̅ 
+: Θ̅ = Φ̅*Φ̅ 
 : 
-: s$Φ̅̅ = Φ$s = Φ$Φ = θ̅
-: s$t = (s$Φ̅) ∧ (Φ̅ $ t) 
+: s*Φ̅ = Φ*s = Φ*Φ = Θ̅
+: s*t = (s*Φ̅) ∧ (Φ̅ * t) 
 
 ** 5.4 subset relation 
 
 Finally, we define the subclass and subrelation operations: 
 
-: S⊂T ⇔ ∀x(xS → xT) 
-: R⊂S ⇔ ∀xy(xRy → xSy) 
+: S⊆T ⇔ ∀x(xS → xT) 
+: R⊆S ⇔ ∀xy(xRy → xSy) 
 
 The following are true: 
 
-: s⊆t ⇒ (s$u)⊆(t$u) 
-: s⊆t ⇒ (r$s)⊆(r$t) 
-: s⊆t ∧ u⊆v ⇒ (s$u)⊆(t$v) 
-: r∈Rel ⇒ r⊆θ 
-: r∈Rel ⇒ θ⊆r 
-: s∈Cls ⇒ s⊆Φ
+: s⊆t ⇒ (s*u)⊆(t*u) 
+: s⊆t ⇒ (r*s)⊆(r*t) 
+: s⊆t ∧ u⊆v ⇒ (s*u)⊆(t*v) 
+: r∈Rel ⇒ r⊆Θ̅ 
+: r∈Rel ⇒ Θ⊆r 
+: s∈Cls ⇒ s⊆Φ̅
 : s∈Cls ⇒ Φ⊆s 
 
 where =Cls= is the class of all classes and =Rel= is the class of all relations (we are ignoring typing here). These can be defined: 
 
-: Rel = ⊆⃗:θ̅ = ⊆⃖:θ
+: Rel = ⊆⃗:Θ̅ = ⊆⃖:Θ
 : Cls = ⊆⃗:Φ̅ = ⊆⃖:Φ
 
 * 6. Limiting and Restriction 
 
-It is often useful to limit the left or right domain of a relation. Consider the relation =x sin⁻¹ y=, which means that =x= is an arcsine of =y=. We cannot write =x = sin⁻¹:y= because =sin⁻¹= is not left univalent (i.e. it is not a function). If we restrict =y=, the argument of =sin=, to the range -π/4 to π/4, then there is a unique =x= such that =x sin⁻¹ y=. Let =S= be the class of reals in the range —π/4 to π/4: 
+It is often useful to limit the left or right domain of a relation. Consider the relation =x sin⁻¹ y=, which means that =x= is an arcsine of =y=. We cannot write =x = sin⁻¹:y= because =sin⁻¹= is not left univalent (i.e. it is not a function). If we restrict =y=, the argument of =sin=, to the range -π/4 to π/4, then there is a unique =x= such that =x sin⁻¹ y=. Let =S= be the class of reals in the range -π/4 to π/4: 
 
-: xS ⇔ (-π/4<x) A (x<π/4) 
+: xS ⇔ (-π/4≤x) ∧ (x≤π/4) 
 
 then we will write 
 
@@ -476,14 +476,14 @@ For instance, =<|P=, where =xP ⇔ x>0=, is the less-than relation restricted to
 
 The restriction operations are easily defined in terms of intersection and Cartesian product: 
 
-: s{r}t = r ∧ (s$t) 
-: r|s = r ∧ (s$s) 
-: s{r = r ∧ (s$Φ̅) 
-: r}s = r ∧ (Φ̅$s) 
+: s{r}t = r ∧ (s*t) 
+: r|s = r ∧ (s*s) 
+: s{r = r ∧ (s*Φ̅) 
+: r}s = r ∧ (Φ̅*s) 
 
 Other properties satisfied by these operations are 
 
-: s$t = s{⊜̅}t 
+: s*t = s{Θ̅}t 
 : lem:(s{r) = s ∧ lem:r 
 : rim:(r}s) = s ∧ rim:r 
 : lem:(r}s) = r!:s 
@@ -491,14 +491,14 @@ Other properties satisfied by these operations are
 
 : (s{r)⁻¹   = (r⁻¹)}s 
 : (s{r}t)⁻¹ = t{(r⁻¹)}s 
-: (r|s)⁻¹   =(r⁻¹)|s 
+: (r|s)⁻¹   = (r⁻¹)|s 
 
 : (r}s)⃗ = r⃗}s
 : (s{r)⃖ = s{r⃖
 
 : r}s ∧ r}t = r}(s ∧ t) 
 : r}s ∨ r}t = r}(s ∨ t) 
-: (r$Φ̅̅)}s = r$s 
+: (r*Φ̅)}s = r*s 
 
 * 7. Relative Product 
 :PROPERTIES:
@@ -521,7 +521,7 @@ Where there is little chance of confusion, we will write =RS= for =R&S=. If =f= 
 
 Hence, =fg:x = f:(g:x)=. 
 
-It is convenient to have a notation for relative products of a relation with itself. For instance, the "grandparent" relation can be written =parent|parent=, which we abbreviate =parent²=. In general,
+It is convenient to have a notation for relative products of a relation with itself. For instance, the "grandparent" relation can be written =parent&parent=, which we abbreviate =parent²=. In general,
 
 : R⁰ = |(mem:R)
 : R¹ = R
@@ -548,7 +548,7 @@ Some obvious properties of the relative product are
 : rim:rs ⊆ rim:s
 : Lm = Rm′
 : Rm = Lm′
-: rθ = θr = θ
+: rΘ = Θr = Θ
 : rI = Ir = r  where I = x̂ŷ(x=y)
 
 * 8. Structures 
@@ -556,7 +556,7 @@ Some obvious properties of the relative product are
 We have previously seen the use of arrow diagrams to present a relation. For instance, 
 
 #+begin_src dot
-  graph {
+  digraph {
     a -> g
     g -> h
     g -> f
@@ -607,12 +607,12 @@ For instance, a sequence is represented by a relation with the structure:
 In this case =init:S= is the unit class containing the head (first element) of the relation (i.e., =a₁=) and =term:S= is the unit class 
 containing the last element of the sequence (i.e., =aᵢ=). Similarly, =S⊁(¬init:S)= is the sequence with its first element deleted : 
 
-:          a₂ → a₃ → ... → aᵢ₋₁ → aᵢ
+:          a₂ → a₃ → ⋯ → aᵢ₋₁ → aᵢ
 
 Hence, the following common sequence manipulation functions can be defined (represented by lower and upper case alphas and omegas) : 
 
-: α:S = ⊜ init: S        "first" 
-: ω:S = ⊜ term: S        "last" 
+: α:S = θ init: S        "first" 
+: ω:S = θ term: S        "last" 
 : Ω:S = S}(¬init:S)      "final" 
 : Α:S = (¬term:S){S      "initial" 
 
@@ -627,8 +627,9 @@ More operations on sequences are discussed in the next section.
 
 As another example of the use of =init= and =term=, consider this relation representing a tree: 
 
+: T =
 #+begin_src dot
-  T = graph {
+  digraph {
     a -> b
     a -> c
     b -> d
@@ -641,12 +642,13 @@ As another example of the use of =init= and =term=, consider this relation repre
   }
 #+end_src 
 
-Then, =⊜ init: T= is 'a', the root of the tree, and =term:T= is ={d, i, f, j, k }=, the leaves of the tree.
+Then, =θ init: T= is 'a', the root of the tree, and =term:T= is ={d, i, f, h, j, k }=, the leaves of the tree.
 
 The result is analogous for forests. Given 
 
+: F =
 #+begin_src dot
-  F = graph {
+  digraph {
     a -> b
     b -> c
     b -> d
@@ -673,23 +675,24 @@ The result is analogous for forests. Given
 
 The set of roots is =init:F= and the set of leaves is =term:F= :
 
-: init:F = { a, i, g }
-: term:F = { c, e, f, g, h, j, k, 1, m, n, t, u, v, w } 
+: init:F = { a, i, q }
+: term:F = { c, e, f, g, j, k, l, m, n, t, u, v, w } 
 
 ** 8.2 higher level operations 
 
 The set of nodes whose parent is =n= is just =→(F⁻¹):n= . For instance, the set of nodes directly descended from a root is 
 
-: F⁻¹ !: (init:F) = { b, h, j, o, p, r } 
+: F⁻¹ !: (init:F) = { b, j, o, p, r } 
 
 The set of nodes that point to leaves is 
 
-: F!:(term:F) = { b, d, a, i, o, p, s, r } 
+: F⁻¹!:(term:F) = { b, d, i, o, p, s, r } 
 
 These operations can be used for obtaining the maximum and minimum of sets. Suppose =<= is the less-than relation on integers and =S= is some set of integers, say ={3,5,9}=. Then 
 
+: <|S =
 #+begin_src dot
-<|S =  graph {
+digraph {
   3 -> 5
   5 -> 9
   3 -> 9
@@ -714,22 +717,22 @@ The following are simple properties of these operations
 : term:r = init:(r⁻¹)
 : init ⊆ lem
 : term ⊆ rim
-: init (r|s) = term:(r⁻¹|s)
+: init:(r|s) = term:(r⁻¹|s)
 
 : init:(r∨s) ⊆ init:r ∨ init:s 
 : init:r ∧ init:s ⊆ init: (r∧s) 
-: term:(r∨s) ⊆ term:r V term:s 
+: term:(r∨s) ⊆ term:r ∨ term:s 
 : term:r ∧ term:s ⊆ term: (r∧s) 
-: init:(s$t) = s-t 
-: term:(s$t) = init:(s$t)⁻¹  = init(t$s) = t-s
+: init:(s*t) = s-t 
+: term:(s*t) = init:((s*t)⁻¹) = init:(t*s) = t-s
 
 * 9. Sequences 
-** 9. 1 ordinal couples 
+** 9.1 ordinal couples 
 
 In this section we will continue the discussion of sequences begun in the last section. We saw that it was easy to define the following operations on sequences: 
 
-: α:S = ⊜ init: S
-: ω:S = ⊜ term: S
+: α:S = θ init: S
+: ω:S = θ term: S
 : Ω:S = (¬init:S)⊀S
 : Α:S = S⊁(¬term:S)
 
@@ -768,15 +771,15 @@ This notation is extended for relations of more than one pair:
 
 The class of all the ordinal couples (or pairs) that can be made from the classes =S= and =T= is: 
 
-: S×T = p̂(∃xy[x∈s ∧ y∈T ∧ P=(x,y) ])
+: S×T = p̂(∃xy[x∈S ∧ y∈T ∧ p=(x,y) ])
 
-There is obviously a close relation between =s×t= and =s$t=. Later we will say that =s$t= is a /Currying/ of =s×t=. Note that 
+There is obviously a close relation between =s×t= and =s*t=. Later we will say that =s*t= is a /Currying/ of =s×t=. Note that 
 
-: (x,y)∈S×T ⇔ x [S$T] y 
+: (x,y)∈S×T ⇔ x [S*T] y 
 
 We will define a convenient notation for sequences of two or more elements: 
 
-: < x₁, x₂, ... xᵢ > = (x₁, x₂) ∨ (x₂,x₃) ∨ ... ∨ (xᵢ₋₁,xᵢ)
+: < x₁, x₂, ⋯ xᵢ > = (x₁, x₂) ∨ (x₂,x₃) ∨ ... ∨ (xᵢ₋₁,xᵢ)
 
 Therefore the sequence =<a,b,c,d,e>= is just 
 
@@ -794,10 +797,10 @@ Also, note that,
 
 | x₁   | x₂  |
 | x₂   | x₃  |
-| ...  | ... |
+| ⋮ | ⋮ |
 | xᵢ₋₁ | xᵢ  |
 
-** 9. 2 catenation and consing 
+** 9.2 catenation and consing 
 
 If =s= and =t= are sequences then we can define an operation =s^t=, which is the catenation of =s= and =t=. To form this catenation we must hook the last element of =s= to the first element of =t=: 
 
@@ -814,7 +817,7 @@ The catenation operation is only defined for sequences, which are required to ha
 : s ∨ (= | mem:s) 
 
 #+begin_src dot
-  graph {
+  digraph {
     s1 -> s1
     s1 -> s2
     s2 -> s2
@@ -828,8 +831,9 @@ The catenation operation is only defined for sequences, which are required to ha
 The one element sequence is then: 
 
 #+begin_src dot
-  graph { s0 -> s0 } = (s0, s0)
+  digraph { s0 -> s0 }
 #+end_src
+: = (s0, s0)
 
 The full ramifications of this definition of sequence have not been investigated. 
 
@@ -837,7 +841,7 @@ How do we add a single element to the left or right of a sequence? The =cons lef
 
 : x cl s₁ → ⋯ → sₙ  ⇒  x → s₁ → ⋯ → sₙ
 : x cl s = (x, α:s) ∨ s 
-: s cr s = s ∨ (ω:s, y) 
+: s cr y = s ∨ (ω:s, y) 
 
 It is easy to show that if =s= is a sequence, then: 
 
@@ -860,18 +864,18 @@ If =s= is a sequence, then =s⁻¹= is the reverse of =s=. Hence,
 : ω:s = α:s⁻¹
 
 : Α:s = (Ω:s⁻¹)⁻¹
-: Ω:s = (Α:s⁻¹)
+: Ω:s = (Α:s⁻¹)⁻¹
 
 : (s^t)⁻¹ = t⁻¹ ^ s⁻¹
 : (x cl s)⁻¹ = s⁻¹ cr x
 : (s cr x)⁻¹ = x cl s⁻¹ 
 
 : (x, y)⁻¹ = (y, x)
-: <x₁, x₂, … xₙ>⁻¹ = <xₙ, …, x₂, x₁>⁻¹
+: <x₁, x₂, … xₙ>⁻¹ = <xₙ, …, x₂, x₁>
 
-: ┏            ┓   ┏            ┓
+: ┏            ┓⁻¹ ┏            ┓
 : ┃x₁ x₂ ... xₙ┃ = ┃y₁ y₂ ... yₙ┃
-: ┃y₁ y₂ ... yₙ┃ = ┃x₁ x₂ ... xₙ┃
+: ┃y₁ y₂ ... yₙ┃   ┃x₁ x₂ ... xₙ┃
 : ┗            ┛   ┗            ┛
 
 If =S= is a sequence and =x Mm S=, then =S⁻¹:x= is the successor of =x= in =S= and =S:x= is the predecessor of =x= in =S= (if these exist).
@@ -889,8 +893,8 @@ Some additional identities are:
 : ┃y┃ ┃z┃   ┃z┃
 : ┗ ┛ ┗ ┛   ┗ ┛
 
-: α:(S×T) = S
-: ω:(S×T) = T
+: α!:(S×T) = S
+: ω!:(S×T) = T
 
 Finally, we will state the formal definition of a sequence: a relation is a sequence if it is a connected irreflexive bijection. That is, 
 
@@ -926,11 +930,11 @@ Now, it would be inconvenient to have to invent names, such as =sum=, for each o
 
 : x+̲(y,z) ⇔ x = +̲:(y,z) ⇔ x = y+z 
 
-In fact, if =π= is any infix operation symbol, we will explicitly define its meaning by:
+In fact, if =π̲= is any infix operation symbol, we will explicitly define its meaning by:
 
-: xπy = π̲:(x,y)
+: xπ̲y = π̲:(x,y)
 
-This notation will permit us to manipulate in a more regular fashion the usual arithmetic operations =(+, -, *, /)= as well as the relational operations (e.g. =∧, ∨, ×, ⊀, ⊁, ',', |, $=). For instance, if =S= is a class of classes, then 
+This notation will permit us to manipulate in a more regular fashion the usual arithmetic operations =(+, -, *, /)= as well as the relational operations (e.g. =∧, ∨, ×, ⊀, ⊁, ',', |, *=). For instance, if =S= is a class of classes, then 
 
 : (∧) !: S×S 
 
@@ -938,10 +942,10 @@ is the class of all pairwise intersections of members of S.
 
 ** 10.2 operations on binary operations 
 
-It is often convenient to be able to generate simple relations from a binary operation. Following Russell and Whitehead, let π represent any binary operation. We define: 
+It is often convenient to be able to generate simple relations from a binary operation. Following Russell and Whitehead, let π̲ represent any binary operation. We define: 
 
-: πz = x̂ŷ(x = yπz) 
-: yπ = x̂ẑ(x = yπz) 
+: π̲z = x̂ŷ(x = yπ̲z) 
+: yπ̲ = x̂ẑ(x = yπ̲z) 
 
 Hence, 
 
@@ -949,7 +953,7 @@ Hence,
 
 therefore (-1) is the predecessor relation. Similarly, 
 
-: x(+1)y ⇔ x = y+1 
+: x(1+)y ⇔ x = 1+y 
 
 therefore (1+) (or (+1)) is the successor relation. These can be used as functions: 
 
@@ -975,27 +979,27 @@ Now observe the action of the =(x,)= and =(,y)= functions:
 : (x,):y = (x,y) 
 : (,y):x = (x,y) 
 
-Therefore, for any binary operation =π= (except ',') we can define 
+Therefore, for any binary operation =π̲= (except ',') we can define 
 
-: πz = π(,z) 
-: yπ = π(y,)
+: π̲z = π̲(,z) 
+: yπ̲ = π̲(y,)
 
 Let's see why this works: 
 
-: (yπ):z = [π(y,)] :z 
-:        = π:[(y,):z] 
-:        = π:[y,z] 
-:        = yπz 
+: (yπ̲):z = [π̲(y,)] :z 
+:        = π̲:[(y,):z] 
+:        = π̲:[y,z] 
+:        = yπ̲z 
 
-=(πz):y= is analogous. In general, if =f= is a binary function, then =f(x,)= and =f(,y)= are the "partially instantiated" unary functions. This is the effect of Curry and Feys "B" combinator [5]. 
+=(π̲z):y= is analogous. In general, if =f= is a binary function, then =f(x,)= and =f(,y)= are the "partially instantiated" unary functions. This is the effect of Curry and Feys "B" combinator [5]. 
 
-Since =S⁻¹= is the reverse of a sequence, =π|′= is the reverse form of an operation. For instance, =-′= is the reverse subtract operation : 
+Since =S⁻¹= is the reverse of a sequence, =π̲|′= is the reverse form of an operation. For instance, =-̲′= is the reverse subtract operation : 
 
-: -′:(x,y) = -̲:(′:(x,y))
+: -̲′:(x,y) = -̲:(′:(x,y))
 :          = -̲:(y,x)
 :          = y-x
 
-Thus =-′= can be read "subtract from" and =/′= can be read "divide into". This is Curry and Feys "C" combinator (see the next section). 
+Thus =-̲′= can be read "subtract from" and =/̲′= can be read "divide into". This is Curry and Feys "C" combinator (see the next section). 
 
 * 11. Combinators 
 
@@ -1007,14 +1011,14 @@ The first combinator we will discuss is the paralleling relations, (=R= % =S=), 
 
 : ┏ ┓┏ ┓┏ ┓
 : ┃u┃┃R┃┃x┃  ⇔  uRx ∧ vSy
-: ┃v┃┃S̅┃┃y┃
+: ┃v┃┃S┃┃y┃
 : ┗ ┛┗ ┛┗ ┛
 
 So, if =f= and =g= are functions, 
 
 : ┏ ┓ ┏ ┓ ┏   ┓
 : ┃f┃:┃x┃=┃f:x┃
-: ┃̅g̅┃ ┃y┃ ┃g:y┃
+: ┃g┃ ┃y┃ ┃g:y┃
 : ┗ ┛ ┗ ┛ ┗   ┛
 
 Hence, (=f % g=) is the element-wise combination of =f= and =g=. For example, if we want =f:(x,y) = sin:x + sin:y=, we can write 
@@ -1030,16 +1034,16 @@ since
 
 One of the simplest combinators described by Curry and Feys is the /elementary cancellator/, =K=, defined so that =K:x= is a function such that =(K:x):y = x= for all =y=. That is, =K= generates constant functions. Since =K:x= is a relation that relates =x= to everything, we can define it: 
 
-: K̲ = ($Φ̅)i 
+: K̲ = (*Φ̅)i 
 
-where =i=⊜⁻¹= is the unit class generator. To see that this works, note that
+where =i=θ⁻¹= is the unit class generator. To see that this works, note that
 
-: K̲:x = ($Φ̅)i:x = (i:x)$Φ̅
+: K̲:x = (*Φ̅)i:x = (i:x)*Φ̅
 
 and therefore that 
 
-: u(K̲:x)v ⇔ u[(i:x))$Φ̅] v 
-:          ⇔ u∈(i:x) ∧ v∈(Φ̅)
+: u(K̲:x)v ⇔ u[(i:x)*Φ̅] v 
+:          ⇔ u∈(i:x) ∧ v∈Φ̅
 :          ⇔ u = x
 
 Therefore, =(K̲:x):v = x=. 
@@ -1058,8 +1062,8 @@ If we define =△:x = (x,x)= then it is easy to see that =W:f= is just =f△.= F
 It should be clear that Backus' =[f,g]= combining form is just our =(f % g)△= since 
 
 :    (f % g)△:x
-:  = (f % g):(x; x)
-:  = (f:x ; g:x)
+:  = (f % g):(x,x)
+:  = (f:x, g:x)
 
 
 Since this combination is so common we will adopt a special notation for it: 
@@ -1068,19 +1072,19 @@ Since this combination is so common we will adopt a special notation for it:
 
 # note: again, maclellan uses a 2d syntax that isn't easy to duplicate
 
-Hence, =f@g:x = (f:x ; g:x)=.
+Hence, =f@g:x = (f:x, g:x)=.
 
 Some of the properties satisfied by these combinators are: 
 
 : R%S T%U  = RT % SU 
 : (R%S)ⁿ = Rⁿ % Sⁿ
 : (R@S) T = RT % ST
-: R%S T@U = RT % SU
+: R%S T@U = RT @ SU
 : △R = R@R
 : (R%S)′ = S%R = ′(R%S)
 : ′(R@S) = (S@R)
 : α(R@S) = R ⊁ (Rm⃗:S)
-: ω(R@S) = S ⊁ (Rm⃗:R)
+: ω(R@S) = S ⊁ (R⃗m:R)
 : R%S = Rα @ Sω
 : cl = (α@Ω)⁻¹
 : cr = (Α@ω)⁻¹
@@ -1099,17 +1103,17 @@ For instance, =[(!)′]::init= is the operation that gives the set of descendent
 
 : ([(!)′]::init):F = (F⁻¹!):(init:F) . 
 
-The /formalizing combinator/, =Φ=, is defined so that
+The /formalizing combinator/, =Φ̲=, is defined so that
 
-: (Φ : (f, a, b)) : x = f:(a:x,b:x) 
+: (Φ̲ : (f, a, b)) : x = f:(a:x,b:x) 
 
 It is easy to see that 
 
-: Φ:(f,a,b) = f(a % b)
+: Φ̲:(f,a,b) = f(a % b)
 
 For instance, 
 
-: f = Φ:((+), (*)△, 2*)
+: f = Φ̲:((+), (*)△, 2*)
 
 is just the function =f:x = x²+2x=
 
@@ -1117,26 +1121,26 @@ This can be written more clearly using the notation of our relational calculus:
 
 :   f = (+)(((*)△)@(2*))
 
-Another combinator defined by Curry and Feys is the =ψ= combi- 
+Another combinator defined by Curry and Feys is the =Ψ̲= combi- 
 nator : 
 
-: [ψ:(f,g)]:(x,y) = f:(g:x,g:y) 
+: [Ψ̲:(f,g)]:(x,y) = f:(g:x,g:y) 
 
 This is simply defined by 
 
-: ψ:(f,g) = f (g@g)
+: Ψ̲:(f,g) = f (g%g)
 
 so that 
 
-: ψ = (|)( I % (/)△)
+: Ψ̲ = (|)( I % (/)△)
 
 Therefore, if 
 
-: f = ψ:((+), (*)△)
+: f = Ψ̲:((+), (*)△)
 
 then =f:x = x²+y²=. 
 
-One final operation we wish to define in this section is"Currying". This relates a relation to the correponding class of pairs. If =S= is a class of pairs, then =Curry:S=, the Currying of =S=, is the relation =R= such that =xRy= if and only if =(x,y)∈S=. Formally, 
+One final operation we wish to define in this section is "Currying". This relates a relation to the correponding class of pairs. If =S= is a class of pairs, then =Curry:S=, the Currying of =S=, is the relation =R= such that =xRy= if and only if =(x,y)∈S=. Formally, 
 
 : Curry:S = x̂ŷ[(x,y)∈S]
 
@@ -1157,7 +1161,7 @@ Carnap [2] defines the relation of a property =p= being hereditary with respect 
 : p Her r ⇔ ∀xy{x∈p ∧ x r y ⇒ y∈p} 
 :         ⇔ r⁻¹ !:p ⊆ p 
 
-Ihis leads to the definition of the /ancestral of R of the first kind/ as that relation which preserves all the hereditary proper- 
+This leads to the definition of the /ancestral of R of the first kind/ as that relation which preserves all the hereditary proper- 
 ties of R. This is also called the /transitive closure/ of R: 
 
 : x R⃰ y ⇔ x Mm R ∧ ∀p[p Her R ∧ x∈p ⇒ y∈p] 
@@ -1185,12 +1189,12 @@ Here are some useful properties of the ancestrals:
 : R|R⁺ = R⁺
 : R⁺ ⊆ R⃰
 : R⁺ = R|R⃰
-: R* = R⁰ ∨ R⁺
+: R⃰ = R⁰ ∨ R⁺
 
 : (R⃰)⁻¹ = (R⁻¹)⃰
 : (R⁺)⁻¹ = (R⁻¹)⁺
 
-: (r|s)⃰ = r⃰|s
+: (r×s)⃰ ⊆ r⃰×s
 
 Ancestral relations are always transitive. Notice that =≥= and =>= for integers can be defined: 
 
@@ -1203,8 +1207,9 @@ The ancestral "fills out" all of the paths in a structure. For instance, if
 
 then
 
+: R⃰ =
 #+begin_src dot
-  R⃰ = graph {
+  digraph {
      a1->a1, a1->a2, a1->a3, a1->a4
      a2->a2, a2->a3, a2->a4
      a3->a3, a3->a4
@@ -1214,11 +1219,11 @@ then
 
 ** TODO 12.2 applications 
 
-Suppose that =S= is a sequence and we wish to find the first member of =S= which satisfies some property P. First form the closure =S⁺= , so that for any two members of =S⁺= we can tell which is first. Next, eliminate from =S⁺= any members that do not satisfy =S⁺$P=. Then, =α:S⁺$P= is the first member of =S= satisfying =P=.
+Suppose that =S= is a sequence and we wish to find the first member of =S= which satisfies some property P. First form the closure =S⁺= , so that for any two members of =S⁺= we can tell which is first. Next, eliminate from =S⁺= any members that do not satisfy =S⁺×P=. Then, =α:S⁺×P= is the first member of =S= satisfying =P=.
 
 Next we will consider a simple character manipulation example: stripping leading blanks from a string. Note that =x = (y cl)⃰ z= means that =x= is a result of consing 0 or more =y='s on to the front of =z=. Hence,
 
-: z [ (y cl)*]⁻¹ x
+: z [ (y cl)⃰]⁻¹ x
 
 is a result of stripping one or more =y='s from the front of =x=. To get the desired result it is only necessary to restrict the left domain of this function to be sequences that can't begin with a =y=. Suppose =Y= is the property of beginning with a =y=:
 
@@ -1226,7 +1231,7 @@ is a result of stripping one or more =y='s from the front of =x=. To get the des
 
 Therefore, the function to strip leading =y='s from a sequence is: 
 
-: ¬α:y < [ (y cl)*l ]
+: (¬α⃖:y) < [(y cl)⃰]⁻¹
 
 
 
@@ -2531,10 +2536,10 @@ Monterey, CA 93940
 | R⃗:x     | ŷ(yRx) -- individuals related to x |
 | R⃖:y     | ŷ(yRx) -- individuals related to y |
 | Φ       | the empty class                    |
-| ⊜       | the empty relation                 |
-| Φ̅̅       | the universal class                |
-| ⊜̅       | the universal relation             |
-| $       | cartesian product                  |
+| Θ       | the empty relation                 |
+| Φ̅       | the universal class                |
+| Θ̅       | the universal relation             |
+| *       | cartesian product                  |
 | α       | head                               |
 | R}S     | x (R}S)y ⇔ xRy ∧ yS                |
 | S{R     | x (S{R)y ⇔ xS ∧ xRy                |
