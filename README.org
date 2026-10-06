@@ -1,3 +1,6 @@
+* About this archive
+
+*maclennan-rpl* \u2014 a curated archive of Bruce J. MacLennan's papers on relational programming (1981\u20131986) and the \u03a9 object-oriented/relational language, with links to Internet Archive scans. Uniquely, it also holds original materials sent by MacLennan himself in 2021: troff sources for the papers, example RPL programs, and the lisp source of the RP interpreter \u2014 primary sources that would otherwise be lost.
 
 * relational programming
 
