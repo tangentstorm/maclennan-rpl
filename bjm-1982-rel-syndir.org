@@ -12,7 +12,7 @@ scanned original: https://archive.org/details/relationalprogra00macl
 
 * 1. Introduction
 
-An essential part of the investigation of any new programming method or programming language is the evaluation of its use in typical applications. In this report we present a use of /relational programming/ [[fn:ref4], [fn:ref3], [fn:ref5]] to implement a moderate size application, a syntax-directed editor.
+An essential part of the investigation of any new programming method or programming language is the evaluation of its use in typical applications. In this report we present a use of /relational programming/ [fn:ref4], [fn:ref3], [fn:ref5] to implement a moderate size application, a syntax-directed editor.
 
 The syntax-directed editor described in this report is similar in design to that described in [fn:ref2]. This is a /structure editor/ , that is, an editor which directly constructs and modifies a parse tree. The source form of the program is /unparsed/ from this tree onto the display whenever it is necessary to update the screen. Other than on the user's screen, the source form of the program is never explicitly stored, neither in memory nor on disk.
 
@@ -24,7 +24,7 @@ Both the program-entry and unparsing functions are syntax-directed; i.e., they a
 
 Each alternative in a rule of this grammar has an associated /command key/; by typing this key the user causes that alternative to be used to build a new part of the parse tree, provided, of course, that that alternative is syntactically legal at that point in the tree.
 
-Since an editor is an interactive program that alters a data-base (the parse tree) in time, it is not appropriate to implement it in a purely applicative, or value-oriented, way (see [fn:ref6] for a discussion of this). Hence, we have a few variable- like objects that can be updated by an assignment operation. The most important of these are =T=, the parse tree, and =N=, the current node. Object-oriented operations did not appear in previous descriptions of relational programming; they are still under investigation .
+Since an editor is an interactive program that alters a data-base (the parse tree) in time, it is not appropriate to implement it in a purely applicative, or value-oriented, way (see [fn:ref6] for a discussion of this). Hence, we have a few variable-like objects that can be updated by an assignment operation. The most important of these are =T=, the parse tree, and =N=, the current node. Object-oriented operations did not appear in previous descriptions of relational programming; they are still under investigation .
 
 In the following sections we describe the data structures and relational definitions required to implement the syntax-directed editor. The relational notation is summarized in [[id:w41d4dr0jig0][Appendix 1]], although the reader unfamiliar with the concepts should consult [fn:ref4] for a better introduction. The definitions constituting the syntax-directed editor are collected in [[id:k9h4cer0jig0][Appendix 2]].
 
@@ -38,7 +38,7 @@ In this section we will describe the data structures used by the syntax-directed
 
 : T = Tu | Td | Tc .
 
-Trees are composed of /nodes/ and other values associated with the nodes. The =Tc= relation defines the interconnections between nodes. Thus, ~m = Tc(n, i)~ means that the =i=-th descendent of the node =n= is the node =m=. In other words, =Tc= is a mapping from node-integer pairs into nodes:
+Trees are composed of /nodes/ and other values associated with the nodes. The =Tc= relation defines the interconnections between nodes. Thus, =m = Tc(n, i)= means that the =i=-th descendent of the node =n= is the node =m=. In other words, =Tc= is a mapping from node-integer pairs into nodes:
 
 : Tc ∈ (nodes × ints) → nodes
 
@@ -128,7 +128,7 @@ The language-independent processing function is just the union of pairs, each pa
 
 The individual functions will be described below.
 
-The language-dependent processing is performed by a function, =enter=, which depends on the grammar. Since ~lang_dep(K) = enter(K)~, ~lang dep = enter~. This function is described later.
+The language-dependent processing is performed by a function, =enter=, which depends on the grammar. Since =lang_dep(K) = enter(K)=, =lang_dep = enter=. This function is described later.
 
 ** 3.2 Positioning Commands
 
@@ -150,7 +150,7 @@ Now the parent of =n= is just =m=, so
 
 : parent(n) = first.T⁻¹(n)
 
-It is always possible that the user will try to move to the parent of the root, which doesn't exist. Therefore, if =parent(N)= is undefined we want =out= to be an identity function. To accomplish this we define =total(f)= which makes any function =f= total by extending it with the identity function, ~total(f) = f/Id~. The resulting definition of =out= is:
+It is always possible that the user will try to move to the parent of the root, which doesn't exist. Therefore, if =parent(N)= is undefined we want =out= to be an identity function. To accomplish this we define =total(f)= which makes any function =f= total by extending it with the identity function, =total(f) = f/Id=. The resulting definition of =out= is:
 
 : total = (/Id)
 : parent = first.T⁻¹
@@ -166,7 +166,7 @@ As for =out=, we want =in= to be an identity if there is no first descendent, i.
 
 # page 9
 
-The =next= and =prev= commands move to the right and left siblings, respectively, of the current node. Thus we must say what it means for =n= to be the right sibling of =m=: ~n = rightsib (m)~. This means that =m= and =n= have a common parent =p= such that ~m=T(p,k)~ and ~n=T(p,k+1)~. Thus ~(p,k)=T⁻¹(m)~, so
+The =next= and =prev= commands move to the right and left siblings, respectively, of the current node. Thus we must say what it means for =n= to be the right sibling of =m=: =n = rightsib (m)=. This means that =m= and =n= have a common parent =p= such that =m=T(p,k)= and =n=T(p,k+1)=. Thus =(p,k)=T⁻¹(m)=, so
 
 : n = T.(Id || (+1)).T⁻¹(m)
 
@@ -202,7 +202,7 @@ There are really only two editing commands: deleting the subtree rooted at the c
 
 # page 11
 
-The /get/ command deletes the subtree rooted at the current node, and saves it in the /get-buffer/. The /put/ command reverses this operation by replacing the current node with the tree in the /get-buffer/. The /delete/ command operates the same as /get/, except the deleted subtree is placed in the /save - buffer/. This allows a later /undelete/ command to reverse the effect of the /delete/. /Undelete/ is just like /put/ except that it uses the save-buffer.
+The /get/ command deletes the subtree rooted at the current node, and saves it in the /get-buffer/. The /put/ command reverses this operation by replacing the current node with the tree in the /get-buffer/. The /delete/ command operates the same as /get/, except the deleted subtree is placed in the /save-buffer/. This allows a later /undelete/ command to reverse the effect of the /delete/. /Undelete/ is just like /put/ except that it uses the save-buffer.
 
 To accomplish these functions we will define =remove= and =replace= which take as an argument the buffer.
 
@@ -253,7 +253,7 @@ They are accomplished by:
 : delete = T := T ⋄ non.subnodes N | (T⁻¹N, N, NT N)
 : NT = first.T
 
-The definition of =NT= comes about as follows: ~T(N) = (nt,k)~, the non-terminal key pair that generated node =N=. Hence, ~NT(N) = first. T(N)~. This completes the definition of =remove=.
+The definition of =NT= comes about as follows: =T(N) = (nt,k)=, the non-terminal key pair that generated node =N=. Hence, =NT(N) = first. T(N)=. This completes the definition of =remove=.
 
 Replacing the current node (assumed to be undefined) with the contents of buffer =L= is quite simple: create a link from the parent of =N= to the root of =L=, and add =L= to the program tree:
 
@@ -301,7 +301,7 @@ Hence
 
 : select = [process.Alts / (;).(process.Forw || enter)]
 
-The only function left to define is =process=, which handles the processing of a rule, i.e., which installs the synthesis part of a rule, which is the rule's second component. Hence, the tree to be inserted ~is t=new. second r~, where =r= is the rule and =new= creates a new copy of the tree. The function =replace(t)= will insert this new subtree. Finally, the cursor must be positioned at the first descendent in the new tree. Putting this all together:
+The only function left to define is =process=, which handles the processing of a rule, i.e., which installs the synthesis part of a rule, which is the rule's second component. Hence, the tree to be inserted is =t=new.second r=, where =r= is the rule and =new= creates a new copy of the tree. The function =replace(t)= will insert this new subtree. Finally, the cursor must be positioned at the first descendent in the new tree. Putting this all together:
 
 : process(r) = replace.new.second r; in
 
@@ -317,7 +317,7 @@ The last major function we must discuss is /unparsing/, i.e., the generation of 
 
 : unparse = udf→T / dispnode
 
-The function of =dispnode(n)= is to display a defined node =n=; for this it is necessary to find the grammar rule that generated this node. Since =n= is defined, ~T(n) = (nt, k)~ where =(nt, k)= is the non-terminal name - key pair. If =n= was generated by an alternative, then =Alts(nt,k)= is the rule. Otherwise, it was generated by a forwarding rule and =Forw(nt)= is the rule.
+The function of =dispnode(n)= is to display a defined node =n=; for this it is necessary to find the grammar rule that generated this node. Since =n= is defined, =T(n) = (nt, k)= where =(nt, k)= is the non-terminal name - key pair. If =n= was generated by an alternative, then =Alts(nt,k)= is the rule. Otherwise, it was generated by a forwarding rule and =Forw(nt)= is the rule.
 
 The node =n= is unparsed according to rule =r= by =disprule(n, r)=, defined later. We can now derive the definition of =dispnode=:
 
@@ -337,7 +337,7 @@ Therefore ,
 
 =Disprule(n, r)= takes a node =n= and a rule =r= and converts it to a character string. It will do this using an auxiliary function =Danal(n, r)= which returns a sequence of strings, one corresponding to each item in the analysis part of =r=. These strings must be catenated to form the output of =disprule=. Hence,
 
-: disprule(nt, r)  = [cat @ ''](danal(nt, r))
+: disprule(n, r)  = [cat @ ''](danal(n, r))
 
 Hence,
 
@@ -375,7 +375,7 @@ The definition is
 : disp  = dispnt / third
 
 
-Finally, =dispnt(n, r, ai)= unparses the descendent of =n= corresponding to =ai=. Thus =dispnt= must perform =unparse(T(n, k))=, where =k= is the index of the descendent corresponding to =ai=. The index =k= is given by the =dictionary=, or third, part of a rule, hence ~k = (third r) ai~. This leads to the definition of =dispnt=:
+Finally, =dispnt(n, r, ai)= unparses the descendent of =n= corresponding to =ai=. Thus =dispnt= must perform =unparse(T(n, k))=, where =k= is the index of the descendent corresponding to =ai=. The index =k= is given by the =dictionary=, or third, part of a rule, hence =k = (third r) ai=. This leads to the definition of =dispnt=:
 
 : dispnt (n ,r ,ai)
 :   = unparse(T(n, third r ai))
@@ -392,7 +392,7 @@ This completes the definition of the syntax-directed editor. All of the definiti
 [fn:ref2] MacLennan, B.J., /The Automatic Generation of Syntax Directed Editors/, Naval Postgraduate School Computer Science Department Technical Report NPS52-81-014, October 1981.
 
 [fn:ref3] MacLennan, B.J., Introduction to Relational Programming,
-/Proceedings of ACM Conference on Functional Programming Languages and Computer Architecture/, 213-220, October 18-22, 1981; also Naval Postgraduate School Computer Science Department Technical Report NPS52-8 1 -008 , June 1981.
+/Proceedings of ACM Conference on Functional Programming Languages and Computer Architecture/, 213-220, October 18-22, 1981; also Naval Postgraduate School Computer Science Department Technical Report NPS52-81-008 , June 1981.
 
 [fn:ref4] MacLennan, B.J., /Overview of Relational Programming/, Naval Postgraduate School Computer Science Department Technical Report NPS52-81-017, November 1981.
 
@@ -535,13 +535,13 @@ This completes the definition of the syntax-directed editor. All of the definiti
 
   dispnode = disprule.(Id # [ Alts/Forw . first ]. T)
 
-  disprule = [cat @ ''j.danal
+  disprule = [cat @ ''].danal
 
   danal(n,r) = disp.(n,r,) $ first(r)
 
   disp = dispnt / third
 
-  dispnt(n,r,ai) = unparse.T(n, third r ai))
+  dispnt(n,r,ai) = unparse.T(n, third r ai)
 
 #+end_src
 
